@@ -1,0 +1,48 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+
+    <item
+        android:id="@+id/renameClock"
+        android:icon="@drawable/icon_rename_clock"
+        android:orderInCategory="100"
+        android:title="@string/rename_file"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/saveRotate"
+        android:orderInCategory="100"
+        android:title= "@string/rotate_image"
+        android:icon="@drawable/icon_save"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/markDelete"
+        android:orderInCategory="100"
+        android:title="@string/delete"
+        android:icon="@drawable/icon_delete"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/markWithPlace"
+        android:icon="@drawable/icon_mark_checked"
+        android:orderInCategory="100"
+        android:title="@string/apply_Mark"
+        android:tooltipText="Apply Place, Address and exit"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/copyText"
+        android:icon="@drawable/icon_text_copy"
+        android:orderInCategory="100"
+        android:title="@string/copy_text"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/pasteText"
+        android:icon="@drawable/icon_text_paste"
+        android:orderInCategory="100"
+        android:title="@string/paste_text"
+        app:showAsAction="ifRoom" />
+</menu>
