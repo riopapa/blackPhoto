@@ -113,12 +113,7 @@ class Utils {
     }
 
     ArrayList <File> getFilteredFileList(String fullPath) {
-        File[] fullFileList = new File(fullPath).listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith("jpg");
-            }
-        });
+        File[] fullFileList = new File(fullPath).listFiles((dir, name) -> name.endsWith("jpg"));
         ArrayList<File> sortedFileList = new ArrayList<>();
         if (fullFileList != null)
             sortedFileList.addAll(Arrays.asList(fullFileList));
@@ -265,18 +260,15 @@ class Utils {
     void deleteOldLogFiles() {
 
         String oldDate = PREFIX + sdfDate.format(System.currentTimeMillis() - 2*24*60*60*1000L);
-        File[] files = new File(longFolder).listFiles(new FilenameFilter() {
-            @Override
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".txt");
-            }
-        });
+        File[] files = getPackageDirectory().listFiles((dir, name) -> name.endsWith(".txt"));
         if (files != null) {
             Collator myCollator = Collator.getInstance();
             for (File file : files) {
                 String shortFileName = file.getName();
                 if (myCollator.compare(shortFileName, oldDate) < 0) {
-                    if (!file.delete())
+                    if (file.delete())
+                        utils.log("delete old log",shortFileName);
+                    else
                         Log.e("file", "Delete Error " + file);
                 }
             }
@@ -285,16 +277,13 @@ class Utils {
 
     void deleteOldSAVFiles() {
 
-        Long oldDate = System.currentTimeMillis() - 5*24*60*60*1000L;        // 5 days before
-        File[] files = new File(longFolder).listFiles(new FilenameFilter() {
-             @Override
-             public boolean accept(File dir, String name) {
-                 return name.endsWith("sav");
-             }
-        });
+        long oldDate = System.currentTimeMillis() - 5*24*60*60*1000L;        // 5 days before
+        File[] files = new File(longFolder).listFiles((dir, name) -> name.endsWith("sav"));
         for (File file : files) {
-            Long lastModDate = new Date(file.lastModified()).getTime();
+            long lastModDate = new Date(file.lastModified()).getTime();
             if (lastModDate < oldDate && file.delete())
+                utils.log("delete old SAV",file.getName());
+            else
                     Log.e("file", "Delete " + file);
         }
     }

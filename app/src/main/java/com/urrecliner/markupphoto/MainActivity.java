@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 //            shortFolder = "DCIM/Camera";
 //            longFolder = new File(Environment.getExternalStorageDirectory(), shortFolder).toString();
         }
-        Collections.sort(photoFiles, Collections.<File>reverseOrder());
+        Collections.sort(photoFiles, Collections.reverseOrder());
 
         prepareCards();
         for (File photoFile : photoFiles) {
@@ -107,31 +107,24 @@ public class MainActivity extends AppCompatActivity {
         photoAdapter = new PhotoAdapter();
         photoView.setAdapter(photoAdapter);
         utils.showFolder(this.getSupportActionBar());
-        utils.deleteOldLogFiles();
         final View view = findViewById(R.id.main_layout);
-        view.post(new Runnable() {
-            @Override
-            public void run() {
-                buildDB.fillUp(view);
-            }
-        });
+        view.post(() -> buildDB.fillUp(view));
 
         if (dirNotReady) {
             new Timer().schedule(new TimerTask() {
                 public void run() {
                     Handler mHandler = new Handler(Looper.getMainLooper());
-                    mHandler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            MenuItem item = mainMenu.findItem(R.id.action_Directory);
-                            item.setEnabled(true);
-                            item.getIcon().setAlpha(255);
-                        }
+                    mHandler.postDelayed(() -> {
+                        MenuItem item = mainMenu.findItem(R.id.action_Directory);
+                        item.setEnabled(true);
+                        item.getIcon().setAlpha(255);
                     }, 100);
                     makeDirFolder = new MakeDirFolder();
                 }
             }, 1000);
         }
+        utils.deleteOldLogFiles();
+        utils.deleteOldSAVFiles();
     }
 
     private void prepareCards() {
@@ -205,17 +198,8 @@ public class MainActivity extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
                     builder.setTitle("Delete multiple photos ?");
                     builder.setMessage(msg.toString());
-                    builder.setPositiveButton("Yes",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    DeleteMulti.run();
-                                }
-                            });
-                    builder.setNegativeButton("No",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                }
-                            });
+                    builder.setPositiveButton("Yes", (dialog, which) -> DeleteMulti.run());
+                    builder.setNegativeButton("No", (dialog, which) -> { });
                     showPopup(builder);
                 } else {
                     Toast.makeText(mContext,"Photo selection is required to delete",Toast.LENGTH_LONG).show();
@@ -303,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList findUnAskedPermissions(@NonNull ArrayList<String> wanted) {
-        ArrayList <String> result = new ArrayList<String>();
+        ArrayList <String> result = new ArrayList<>();
         for (String perm : wanted) if (hasPermission(perm)) result.add(perm);
         return result;
     }
@@ -332,13 +316,8 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showDialog(String msg) {
         showMessageOKCancel(msg,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        requestPermissions(permissionsRejected.toArray(
-                                new String[0]), ALL_PERMISSIONS_RESULT);
-                    }
-                });
+                (dialog, which) -> requestPermissions(permissionsRejected.toArray(
+                        new String[0]), ALL_PERMISSIONS_RESULT));
     }
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new android.app.AlertDialog.Builder(mainActivity)
