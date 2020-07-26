@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/scrollbar_shape_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/border_back"
@@ -16,11 +17,12 @@
         app:layoutManager="GridLayoutManager"
         app:spanCount="2"
         android:choiceMode="multipleChoice"
-        android:scrollbars="vertical"
-        android:scrollbarThumbVertical="@color/recycleView"
-        android:scrollbarSize="4dp"
-        android:scrollbarStyle="outsideInset"
+        style="@style/scrollbar_shape_style"
         >
     </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>
+<!--    android:scrollbars="vertical"-->
+<!--    android:scrollbarThumbVertical="@color/recycleView"-->
+<!--    android:scrollbarSize="4dp"-->
+<!--    android:scrollbarStyle="outsideInset"-->
