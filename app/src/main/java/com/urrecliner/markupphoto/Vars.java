@@ -34,7 +34,7 @@ class Vars {
     static int nowPos;
     static String nowPlace,nowPosition, nowComment;
     static int spanCount, spanWidth, sizeX;
-    static String copyPasteText = "\n\n";
+    static String copyPasteText = null;
     static String copyPasteGPS;
     static boolean dirNotReady = true;
 

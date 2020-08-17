@@ -179,6 +179,7 @@ public class MarkupWithPlace extends AppCompatActivity {
         EditText et = findViewById(R.id.placeAddress);
         String text = "\n"+strAddress;
         et.setText(text);
+        et.setSelection(text.indexOf("\n"));
     }
 
     final int REQUEST_PLACE_PICKER = 11;
@@ -335,7 +336,8 @@ public class MarkupWithPlace extends AppCompatActivity {
         item.setEnabled(false);
         item.getIcon().setAlpha(40);
         item = menu.findItem(R.id.pasteText);
-        item.setVisible(copyPasteText.isEmpty());
+//        Log.w("text",copyPasteText+" "+copyPasteGPS);
+//        item.setVisible((copyPasteText == null));
         return true;
     }
 
@@ -372,7 +374,6 @@ public class MarkupWithPlace extends AppCompatActivity {
                 Toast.makeText(mContext, "Text Copied\n"+copyPasteText,Toast.LENGTH_SHORT).show();
                 MenuItem itemP = menuPlace.findItem(R.id.pasteText);
                 itemP.setTitle("Paste <"+copyPasteText+">");
-                itemP.setVisible(true);
                 return true;
 
             case R.id.pasteText:

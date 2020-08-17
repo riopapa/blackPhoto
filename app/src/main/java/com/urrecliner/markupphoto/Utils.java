@@ -113,7 +113,7 @@ class Utils {
     }
 
     ArrayList <File> getFilteredFileList(String fullPath) {
-        File[] fullFileList = new File(fullPath).listFiles((dir, name) -> name.endsWith("jpg"));
+        File[] fullFileList = new File(fullPath).listFiles((dir, name) -> (name.endsWith("jpg") || name.endsWith("JPG")));
         ArrayList<File> sortedFileList = new ArrayList<>();
         if (fullFileList != null)
             sortedFileList.addAll(Arrays.asList(fullFileList));

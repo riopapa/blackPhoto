@@ -281,7 +281,6 @@ public class MainActivity extends AppCompatActivity {
         permissionsToRequest = findUnAskedPermissions(permissions);
         if (permissionsToRequest.size() != 0) {
             requestPermissions(permissionsToRequest.toArray(new String[0]),
-//            requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
                     ALL_PERMISSIONS_RESULT);
         }
     }
