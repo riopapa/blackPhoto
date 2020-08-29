@@ -62,8 +62,8 @@ class GoogleMapsRepository constructor(
     override fun getNearbyPlaces(location: LatLng): Single<List<Place>> {
 
         val locationParam = "${location.latitude},${location.longitude}"
-
-        return googleMapsAPI.searchNearby(locationParam,NearByPlacePicker.mapsApiKey)
+        val language = "ko"
+        return googleMapsAPI.searchNearby(locationParam, language, NearByPlacePicker.mapsApiKey)
             .map { searchResult ->
                 val placeList = mutableListOf<CustomPlace>()
                 for (simplePlace in searchResult.results) {

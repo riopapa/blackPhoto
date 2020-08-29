@@ -9,6 +9,7 @@ interface GoogleMapsAPI {
 
     @GET("place/nearbysearch/json?rankby=distance")
     fun searchNearby(@Query("location") location: String,
+                     @Query("language") language:String,
                      @Query("key") apiKey: String)
             : Single<SearchResult>
 

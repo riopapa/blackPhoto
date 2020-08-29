@@ -21,7 +21,7 @@
 
     <!-- Radius in meters from the map center from
         where to bias the autocomplete search results -->
-    <integer name="autocomplete_search_bias_radius">1000</integer>
+    <integer name="autocomplete_search_bias_radius">2000</integer>
 
     <!-- If true, the map will automatically center (pan) to
         the selected marker -->
