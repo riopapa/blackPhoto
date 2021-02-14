@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -18,6 +19,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
+
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +47,7 @@ import static com.urrecliner.markupphoto.Vars.markTextInColor;
 import static com.urrecliner.markupphoto.Vars.markTextOutColor;
 import static com.urrecliner.markupphoto.Vars.markUpOnePhoto;
 import static com.urrecliner.markupphoto.Vars.multiMode;
+import static com.urrecliner.markupphoto.Vars.nowAddress;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
@@ -266,41 +270,43 @@ public class MainActivity extends AppCompatActivity {
         backKeyPressedTime = System.currentTimeMillis();
     }
 
-    // ↓ ↓ ↓ P E R M I S S I O N    RELATED /////// ↓ ↓ ↓ ↓
-    ArrayList<String> permissions = new ArrayList<>();
+    // ↓ ↓ ↓ P E R M I S S I O N   RELATED /////// ↓ ↓ ↓ ↓  BEST CASE 20/09/27 with no lambda
     private final static int ALL_PERMISSIONS_RESULT = 101;
-    ArrayList<String> permissionsToRequest;
+    ArrayList permissionsToRequest;
     ArrayList<String> permissionsRejected = new ArrayList<>();
+    String [] permissions;
 
     private void askPermission() {
-        permissions.add(Manifest.permission.READ_PHONE_STATE);
-        permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        permissions.add(Manifest.permission.VIBRATE);
-        permissions.add(Manifest.permission.ACCESS_NOTIFICATION_POLICY);
-        permissions.add(Manifest.permission.RECEIVE_BOOT_COMPLETED);
-        permissionsToRequest = findUnAskedPermissions(permissions);
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(getApplicationContext().getPackageName(), PackageManager.GET_PERMISSIONS);
+            permissions = info.requestedPermissions;//This array contain
+        } catch (Exception e) {
+            Log.e("Permission", "Not done", e);
+        }
+
+        permissionsToRequest = findUnAskedPermissions();
         if (permissionsToRequest.size() != 0) {
-            requestPermissions(permissionsToRequest.toArray(new String[0]),
+            requestPermissions((String[]) permissionsToRequest.toArray(new String[0]),
+//            requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]),
                     ALL_PERMISSIONS_RESULT);
         }
     }
 
-    private ArrayList findUnAskedPermissions(@NonNull ArrayList<String> wanted) {
-        ArrayList <String> result = new ArrayList<>();
-        for (String perm : wanted) if (hasPermission(perm)) result.add(perm);
+    private ArrayList findUnAskedPermissions() {
+        ArrayList <String> result = new ArrayList<String>();
+        for (String perm : permissions) if (hasPermission(perm)) result.add(perm);
         return result;
     }
-    private boolean hasPermission(@NonNull String permission) {
+    private boolean hasPermission(String permission) {
         return (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED);
     }
 
-//    @TargetApi(Build.VERSION_CODES.M)
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == ALL_PERMISSIONS_RESULT) {
-            for (String perms : permissionsToRequest) {
-                if (hasPermission(perms)) {
-                    permissionsRejected.add(perms);
+            for (Object perms : permissionsToRequest) {
+                if (hasPermission((String) perms)) {
+                    permissionsRejected.add((String) perms);
                 }
             }
             if (permissionsRejected.size() > 0) {
@@ -308,24 +314,32 @@ public class MainActivity extends AppCompatActivity {
                     String msg = "These permissions are mandatory for the application. Please allow access.";
                     showDialog(msg);
                 }
+                if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                    String msg = "These permissions are mandatory for the application. Please allow access.";
+                    showDialog(msg);
+                }
             }
-            else
-                Toast.makeText(mContext, "Permissions not granted.", Toast.LENGTH_LONG).show();
         }
     }
     private void showDialog(String msg) {
         showMessageOKCancel(msg,
-                (dialog, which) -> requestPermissions(permissionsRejected.toArray(
-                        new String[0]), ALL_PERMISSIONS_RESULT));
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.this.requestPermissions(permissionsRejected.toArray(
+                                new String[0]), ALL_PERMISSIONS_RESULT);
+                    }
+                });
     }
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new android.app.AlertDialog.Builder(mainActivity)
+        new android.app.AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
                 .setNegativeButton("Cancel", null)
                 .create()
                 .show();
     }
+
 // ↑ ↑ ↑ ↑ P E R M I S S I O N    RELATED /////// ↑ ↑ ↑
 
 }

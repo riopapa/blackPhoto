@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.appcompat.app.AlertDialog;
@@ -24,12 +23,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.nearbyplacepicker.NearByPlacePicker;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -44,10 +45,13 @@ import static com.urrecliner.markupphoto.Vars.mainActivity;
 import static com.urrecliner.markupphoto.Vars.markUpOnePhoto;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.nowPos;
-import static com.urrecliner.markupphoto.Vars.nowPosition;
+import static com.urrecliner.markupphoto.Vars.nowLatLng;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
+import static com.urrecliner.markupphoto.Vars.placeInfos;
+import static com.urrecliner.markupphoto.Vars.placeType;
+import static com.urrecliner.markupphoto.Vars.tvPlaceAddress;
 import static com.urrecliner.markupphoto.Vars.utils;
 
 public class MarkupWithPlace extends AppCompatActivity {
@@ -71,6 +75,7 @@ public class MarkupWithPlace extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_markup);
+        tvPlaceAddress = findViewById(R.id.placeAddress);
         photo = photos.get(nowPos);
         photo.setChecked(false);
         photos.set(nowPos, photo);
@@ -108,8 +113,8 @@ public class MarkupWithPlace extends AppCompatActivity {
         iVPlace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                getPlaceInfo();
-                showPlacePicker();
+                placeInfos = new ArrayList<>();
+                getPlaceByLatLng();
             }
         });
         ImageView iVInfo = findViewById(R.id.getInformation);
@@ -174,7 +179,7 @@ public class MarkupWithPlace extends AppCompatActivity {
         longitude = convertDMS(longitudeStr, longitudeR);
         altitude = convertALT(altitudeStr, altitudeR);
         strPlace = "";
-        nowPosition = String.format(Locale.ENGLISH, "%.5f ; %.5f ; %.2f", latitude, longitude, altitude);
+        nowLatLng = String.format(Locale.ENGLISH, "%.5f ; %.5f ; %.0f", latitude, longitude, altitude);
         strAddress = GPS2Address.get(geocoder, latitude, longitude);
         EditText et = findViewById(R.id.placeAddress);
         String text = "\n"+strAddress;
@@ -182,43 +187,41 @@ public class MarkupWithPlace extends AppCompatActivity {
         et.setSelection(text.indexOf("\n"));
     }
 
-    final int REQUEST_PLACE_PICKER = 11;
-    private void showPlacePicker() {
-        NearByPlacePicker.IntentBuilder builder = new NearByPlacePicker.IntentBuilder();
-        builder.setAndroidApiKey(getResources().getString(R.string.app_api_key))
-                .setMapsApiKey(getResources().getString(R.string.maps_api_key));
-
-        builder.setLatLng(new LatLng(latitude, longitude));
-
-        try {
-            Intent placeIntent = builder.build(mainActivity);
-            startActivityForResult(placeIntent, REQUEST_PLACE_PICKER);
-        }
-        catch (Exception ex) {
-            // Google Play services is not available...
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if ((requestCode == REQUEST_PLACE_PICKER) && (resultCode == RESULT_OK)) {
-            NearByPlacePicker.Companion companion = NearByPlacePicker.Companion;
-            com.google.android.libraries.places.api.model.Place place = companion.getPlace(data);
-            if (place != null) {
-                strPlace = place.getName();
-                String text = place.getAddress();
-                if (text.length() > 5)
-                    strAddress = text.replace("대한민국 ", "");
-                EditText et = findViewById(R.id.placeAddress);
-                text = strPlace + "\n\n" + strAddress;
-                et.setText(text);
-                et.setSelection(text.indexOf("\n") + 1);
-                latitude = place.getLatLng().latitude;
-                longitude = place.getLatLng().longitude;
+//    final int REQUEST_PLACE_PICKER = 11;
+    private void getPlaceByLatLng() {
+        new PlaceRetrieve().get(latitude, longitude);
+        new Timer().schedule(new TimerTask() {
+            public void run() {
+                selectPlace();
             }
-        }
+        }, 2000);
     }
+
+    private void selectPlace() {
+        Intent intent = new Intent(mContext, SelectActivity.class);
+        startActivity(intent);
+    }
+
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if ((requestCode == REQUEST_PLACE_PICKER) && (resultCode == RESULT_OK)) {
+//            NearByPlacePicker.Companion companion = NearByPlacePicker.Companion;
+//            com.google.android.libraries.places.api.model.Place place = companion.getPlace(data);
+//            if (place != null) {
+//                strPlace = place.getName();
+//                String text = place.getAddress();
+//                if (text.length() > 5)
+//                    strAddress = text.replace("대한민국 ", "");
+//                EditText et = findViewById(R.id.placeAddress);
+//                text = strPlace + "\n\n" + strAddress;
+//                et.setText(text);
+//                et.setSelection(text.indexOf("\n") + 1);
+//                latitude = place.getLatLng().latitude;
+//                longitude = place.getLatLng().longitude;
+//            }
+//        }
+//    }
 
     private void getPhotoExif(File fileFullName) {
         try {
@@ -425,6 +428,12 @@ public class MarkupWithPlace extends AppCompatActivity {
                 photoAdapter.notifyItemChanged(nowPos, photo);
                 finish();
                 return true;
+            case R.id.typeAll:
+                placeType = "";
+                break;
+            case R.id.typeRestaurant:
+                placeType = "restaurant";
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

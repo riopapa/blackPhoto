@@ -24,7 +24,7 @@ import java.util.Locale;
 import static com.urrecliner.markupphoto.Vars.databaseIO;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
-import static com.urrecliner.markupphoto.Vars.nowPosition;
+import static com.urrecliner.markupphoto.Vars.nowLatLng;
 import static com.urrecliner.markupphoto.Vars.signatureMap;
 import static com.urrecliner.markupphoto.Vars.sizeX;
 import static com.urrecliner.markupphoto.Vars.utils;
@@ -128,16 +128,16 @@ class BuildBitMap {
         Bitmap newMap = Bitmap.createBitmap(width, height, photoMap.getConfig());
         Canvas canvas = new Canvas(newMap);
         canvas.drawBitmap(photoMap, 0f, 0f, null);
-        fontSize = (width>height) ? (width+height)/64 : (width+height)/56;  // date time
+        fontSize = (width>height) ? (width+height)/48 : (width+height)/56;  // date time
         String dateTime = sdfHourMin.format(timeStamp);
-        int sigSize = (width + height) / 24;
+        int sigSize = (width + height) / 16;
         Bitmap sigMap = Bitmap.createScaledBitmap(signatureMap, sigSize, sigSize, false);
         if (nowPlace == null) { // datetime only at bottom
-            int xPos = width / 4;
-            int yPos = height - height / 18;
+            int xPos = width / 5;
+            int yPos = height - height / 20;
             drawTextOnCanvas(canvas, dateTime, fontSize, xPos, yPos);
-            xPos = width - sigSize - width / 25;
-            yPos = height - height / 18 - sigSize;
+            xPos = width - sigSize - width / 20;
+            yPos = height - height / 16 - sigSize;
             canvas.drawBitmap(sigMap, xPos, yPos, null);
             return newMap;
         }
@@ -158,17 +158,18 @@ class BuildBitMap {
             address = split[1];
         if (place.length() == 0) place = " ";
         xPos = width / 2;
-        fontSize = (height + width) / 72;  // gps
-        yPos = height - fontSize - fontSize / 5;
-        yPos = drawTextOnCanvas(canvas, nowPosition, fontSize, xPos, yPos);
-        fontSize = fontSize * 13 / 10;  // address
-        yPos -= fontSize + fontSize / 5;
+        fontSize = (height + width) / 64;  // gps
+        yPos = height - fontSize + fontSize / 5;
+        yPos = drawTextOnCanvas(canvas, nowLatLng, fontSize, xPos, yPos);
+        fontSize = fontSize * 14 / 10;  // address
+        yPos -= fontSize + fontSize / 3;
         yPos = drawTextOnCanvas(canvas, address, fontSize, xPos, yPos);
-        fontSize = fontSize * 14 / 10;  // Place
-        yPos -= fontSize + fontSize / 5;
+        fontSize = fontSize * 16 / 10;  // Place
+        yPos -= fontSize + fontSize / 3;
         if (!comment.equals("")) {
+            fontSize = fontSize * 8 / 10;  // Comment
             yPos = drawTextOnCanvas(canvas, comment, fontSize, xPos, yPos);
-            yPos -= fontSize + fontSize / 5;
+            yPos -= fontSize + fontSize / 3;
         }
         drawTextOnCanvas(canvas, place, fontSize, xPos, yPos);
         return newMap;
@@ -211,7 +212,7 @@ class BuildBitMap {
         paint.setTextSize(textSize);
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setStrokeWidth((int)(textSize/10));
+        paint.setStrokeWidth((int)(textSize/4));
         paint.setTypeface(mContext.getResources().getFont(R.font.nanumbarungothic));
         canvas.drawText(text, xPos, yPos, paint);
 

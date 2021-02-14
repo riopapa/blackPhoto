@@ -5,7 +5,9 @@
     <color name="colorAccent">#43419f</color>
     <color name="markInColor">#FFFFFF88</color>
     <color name="markOutColor">#AA333333</color>
-    <color name="infoColor">#FFFF00</color>
     <color name="recycleView">#fccffc</color>
     <color name="placeAddress">#00838F</color>
+    <color name="black">#FF000000</color>
+    <color name="infoColor">#FFFFFC3B</color>
+
 </resources>

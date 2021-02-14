@@ -99,7 +99,7 @@ class Utils {
     }
 
     File getPackageDirectory() {
-        File directory = new File(Environment.getExternalStorageDirectory(), getAppLabel(mContext));
+        File directory = new File(Environment.getExternalStorageDirectory(),  getAppLabel(mContext));
         try {
             if (!directory.exists()) {
                 if(directory.mkdirs()) {
@@ -113,7 +113,8 @@ class Utils {
     }
 
     ArrayList <File> getFilteredFileList(String fullPath) {
-        File[] fullFileList = new File(fullPath).listFiles((dir, name) -> (name.endsWith("jpg") || name.endsWith("JPG")));
+        File[] fullFileList = new File(fullPath).listFiles((dir, name) ->
+                ((name.endsWith("jpg") || name.endsWith("JPG")) && !name.startsWith(".")));
         ArrayList<File> sortedFileList = new ArrayList<>();
         if (fullFileList != null)
             sortedFileList.addAll(Arrays.asList(fullFileList));
