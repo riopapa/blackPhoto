@@ -434,6 +434,9 @@ public class MarkupWithPlace extends AppCompatActivity {
             case R.id.typeRestaurant:
                 placeType = "restaurant";
                 break;
+            case R.id.typeFood:
+                placeType = "food";
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

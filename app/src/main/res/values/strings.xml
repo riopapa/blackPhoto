@@ -23,6 +23,6 @@
     <string name="select">Select</string>
     <string name="type_all">type All</string>
     <string name="type_restaurant">type Restaurant</string>
-    <string name="type_poi">type POI</string>
+    <string name="type_food">type Food</string>
 
 </resources>

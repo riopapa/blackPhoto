@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         Point size = new Point();
         display.getSize(size);
         sizeX = size.x;
+        makeDirFolder = new MakeDirFolder();
 
         photos = new ArrayList<>();
         sharePrefer = getApplicationContext().getSharedPreferences("myPhoto", MODE_PRIVATE);
@@ -123,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                         item.setEnabled(true);
                         item.getIcon().setAlpha(255);
                     }, 100);
-                    makeDirFolder = new MakeDirFolder();
                 }
             }, 1000);
         }

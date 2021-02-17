@@ -4,15 +4,29 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.urrecliner.markupphoto.Vars.dirFolders;
 import static com.urrecliner.markupphoto.Vars.directoryAdapter;
@@ -24,7 +38,48 @@ public class MakeDirFolder {
 
     MakeDirFolder() {
         dirFolders = getPicFolders();
-        fill();
+        new dirTask().execute("");
+    }
+
+    class dirTask extends AsyncTask<String, String, String> {
+
+        ArrayList<File> photoFiles;
+        @Override
+        protected String doInBackground(String... inputParams) {
+            int index = 0;
+            for (DirectoryFolder df: dirFolders) {
+                photoFiles = utils.getFilteredFileList(df.getLongFolder());
+                if (photoFiles.size() != 0) {
+//               Collections.sort(photoFiles, Collections.<File>reverseOrder());
+                    int photoSize = photoFiles.size();
+                    df.setNumberOfPics(photoSize);
+                    File[] photo4 = new File[4];
+                    if (photoSize > 8) {
+                        photo4[0] = new File(photoFiles.get(0).getAbsolutePath());
+                        photo4[1] = new File(photoFiles.get(photoSize-1).getAbsolutePath());
+                        photo4[2] = new File(photoFiles.get((photoSize-1)/3).getAbsolutePath());
+                        photo4[3] = new File(photoFiles.get((photoSize-1)*2/3).getAbsolutePath());
+                    } else {
+                        int maxCnt = Math.min(photoSize, 4);
+                        for (int i = 0; i < maxCnt; i++)
+                            photo4[i] = new File(photoFiles.get(i).getAbsolutePath());
+                    }
+                    df.setImageBitmap(buildOneDirImage(photo4));
+                    dirFolders.set(index, df);
+                    index++;
+                }
+                else
+                    dirFolders.remove(index);
+//            directoryAdapter.notifyDataSetChanged();
+            }
+            return "";
+        }
+        @Override
+        protected void onCancelled(String result) { }
+
+        @Override
+        protected void onPostExecute(String doI) {
+        }
     }
 
     private ArrayList<DirectoryFolder> getPicFolders() {
@@ -69,34 +124,6 @@ public class MakeDirFolder {
         return picFolders;
     }
 
-    void fill() {
-        int index = 0;
-        for (DirectoryFolder df: dirFolders) {
-            ArrayList<File> photoFiles = utils.getFilteredFileList(df.getLongFolder());
-            if (photoFiles.size() != 0) {
-//               Collections.sort(photoFiles, Collections.<File>reverseOrder());
-                int photoSize = photoFiles.size();
-                df.setNumberOfPics(photoSize);
-                File[] photo4 = new File[4];
-                if (photoSize > 8) {
-                    photo4[0] = new File(photoFiles.get(0).getAbsolutePath());
-                    photo4[1] = new File(photoFiles.get(photoSize-1).getAbsolutePath());
-                    photo4[2] = new File(photoFiles.get((photoSize-1)/3).getAbsolutePath());
-                    photo4[3] = new File(photoFiles.get((photoSize-1)*2/3).getAbsolutePath());
-                } else {
-                    int maxCnt = Math.min(photoSize, 4);
-                    for (int i = 0; i < maxCnt; i++)
-                        photo4[i] = new File(photoFiles.get(i).getAbsolutePath());
-                }
-                df.setImageBitmap(buildOneDirImage(photo4));
-                dirFolders.set(index, df);
-                index++;
-            }
-            else
-                dirFolders.remove(index);
-//            directoryAdapter.notifyDataSetChanged();
-        }
-    }
 
     private Bitmap buildOneDirImage(File [] photo4) {
         int x = 0,y = 0;
