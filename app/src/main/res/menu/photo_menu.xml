@@ -46,22 +46,4 @@
         android:title="@string/paste_text"
         app:showAsAction="ifRoom" />
 
-    <item
-        android:id="@+id/typeAll"
-        android:orderInCategory="100"
-        android:title="@string/type_all"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/typeRestaurant"
-        android:orderInCategory="100"
-        android:title="@string/type_restaurant"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/typeFood"
-        android:orderInCategory="100"
-        android:title="@string/type_food"
-        app:showAsAction="ifRoom" />
-
 </menu>

@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.net.Uri;
 import android.os.Environment;
 import androidx.exifinterface.media.ExifInterface;
@@ -304,4 +309,20 @@ class Utils {
             actionBar.setSubtitle(shortFolder);
         }
     }
+
+    Bitmap maskedIcon(int rawId) {
+
+        Bitmap bitmap1 = BitmapFactory.decodeResource(mContext.getResources(), rawId);
+        Bitmap bitmap2 = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.flag_mask);
+        Bitmap resultingImage=Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), bitmap1.getConfig());
+        Paint paint = new Paint();
+        Canvas canvas = new Canvas(resultingImage);
+        canvas.drawBitmap(bitmap2,0,0,paint);
+//        paint.setColor(Color.BLUE);
+//        canvas.drawRect(0,0,512,512, paint);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
+        canvas.drawBitmap(bitmap1,0,0,paint);
+        return resultingImage;
+    }
+
 }

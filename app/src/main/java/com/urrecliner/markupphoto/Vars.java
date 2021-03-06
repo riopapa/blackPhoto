@@ -17,6 +17,7 @@ class Vars {
     static Context mContext;
     static Activity mainActivity;
     static Activity dirActivity;
+    static Activity placeActivity;
 
     static PhotoAdapter photoAdapter;
     static DirectoryAdapter directoryAdapter;
@@ -61,7 +62,6 @@ class Vars {
 
     /* --- place select related variables --- */
 
-    static String placeType = "";
     static String NO_MORE_PAGE = "<no>";
     static String pageToken = NO_MORE_PAGE;
     static boolean nowDownLoading = false;
@@ -95,6 +95,19 @@ class Vars {
             R.raw.worship_general, R.raw.worship_hindu, R.raw.worship_islam, R.raw.worship_jewish, R.raw.zoo,
             R.raw.park, R.raw.bank, R.raw.worship_dharma, R.raw.pharmacy, R.raw.parking
     };
+
+    static ArrayList<TypeInfo> typeInfos = null;
+    static TypeAdapter typeAdapter;
+    static String placeType = "all";
+    static int typeNumber = 0;
+    static int[] typeIcons = {R.mipmap.place, R.raw.restaurant, R.raw.shopping, R.raw.shopping, R.raw.park,
+            R.raw.worship_christian, R.raw.worship_islam, R.raw.parking, R.raw.school, R.raw.cafe,
+            R.raw.museum, R.raw.amusement, R.raw.shopping, R.raw.university,R.raw.atm, R.raw.zoo,
+            R.mipmap.place};
+    static String[] typeNames = {"all", "restaurant", "store", "shopping_mall", "park",
+            "church","mosque", "parking", "school", "cafe",
+            "museum", "tourist_attraction", "university", "atm", "zoo",
+            "all"};
 
 }
 

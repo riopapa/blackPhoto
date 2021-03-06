@@ -17,7 +17,9 @@ public class PlaceRetrieve {
         StringBuilder url = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         url.append("location=").append(lat).append(",").append(lng);
         url.append("&radius=").append(shareRadius);
-        url.append("&type=").append(placeType);
+        url.append("&fields=formatted_address,name,geometry");
+        if (!placeType.equals("all"))
+            url.append("&type=").append(placeType);
         url.append("&language=ko");
         if (!pageToken.equals(NO_MORE_PAGE)) {
             url.append("&pagetoken=").append(pageToken);

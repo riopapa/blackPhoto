@@ -36,8 +36,14 @@ class MarkUpOnePhoto {
         bitmap = buildBitMap.markDateLocSignature(bitmap, timeStamp);
         String fileName = imgFile.toString();
         String outName = fileName.substring(0, fileName.length() - 4) + "_";
-        if (nowPlace != null)
-            outName += nowPlace.substring(0, nowPlace.indexOf("\n"));
+
+        if (nowPlace != null) {
+            String[] pNames = nowPlace.split("\n");
+            if (pNames.length > 2)
+                outName += pNames[1] + "("+ pNames[0] + ")";    // [0] 음식명, [1] 장소명
+            else
+                outName += pNames[0];
+        }
         outName += SUFFIX_JPG;
         utils.makeBitmapFile(imgFile, outName, bitmap, 1);
         return new File(outName);

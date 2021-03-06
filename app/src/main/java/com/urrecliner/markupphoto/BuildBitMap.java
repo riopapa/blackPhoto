@@ -117,7 +117,6 @@ class BuildBitMap {
         Bitmap bitmap = Bitmap.createBitmap(photoMap, delta2, delta2, width-delta2-delta2, height-delta2-delta2);
         canvas.drawBitmap(bitmap, delta2, delta2, paint);
         return outMap;
-
     }
 
     Bitmap markDateLocSignature(Bitmap photoMap, long timeStamp) {

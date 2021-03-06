@@ -15,6 +15,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,9 +52,14 @@ import static com.urrecliner.markupphoto.Vars.nowLatLng;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
+import static com.urrecliner.markupphoto.Vars.placeActivity;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
 import static com.urrecliner.markupphoto.Vars.placeType;
 import static com.urrecliner.markupphoto.Vars.tvPlaceAddress;
+import static com.urrecliner.markupphoto.Vars.typeAdapter;
+import static com.urrecliner.markupphoto.Vars.typeIcons;
+import static com.urrecliner.markupphoto.Vars.typeInfos;
+import static com.urrecliner.markupphoto.Vars.typeNames;
 import static com.urrecliner.markupphoto.Vars.utils;
 
 public class MarkupWithPlace extends AppCompatActivity {
@@ -75,12 +83,26 @@ public class MarkupWithPlace extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_markup);
+        placeActivity = this;
         tvPlaceAddress = findViewById(R.id.placeAddress);
+        typeInfos = new ArrayList<>();
+        for (int i = 0; i < typeNames.length; i++) {
+            typeInfos.add(new TypeInfo(typeNames[i], typeIcons[i]));
+        }
+        RecyclerView typeRecyclerView = findViewById(R.id.type_recycler);
+//        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager mLinearLayoutManager
+                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        typeRecyclerView.setLayoutManager(mLinearLayoutManager);
+        typeAdapter = new TypeAdapter(typeInfos);
+        typeRecyclerView.setAdapter(typeAdapter);
+
         photo = photos.get(nowPos);
         photo.setChecked(false);
         photos.set(nowPos, photo);
         photoAdapter.notifyItemChanged(nowPos, photo);
         utils.showFolder(this.getSupportActionBar());
+
         buildPhotoScreen();
     }
 
@@ -179,7 +201,7 @@ public class MarkupWithPlace extends AppCompatActivity {
         longitude = convertDMS(longitudeStr, longitudeR);
         altitude = convertALT(altitudeStr, altitudeR);
         strPlace = "";
-        nowLatLng = String.format(Locale.ENGLISH, "%.5f ; %.5f ; %.0f", latitude, longitude, altitude);
+        nowLatLng = String.format(Locale.ENGLISH, "%.5f ; %.5f ; %.1f", latitude, longitude, altitude);
         strAddress = GPS2Address.get(geocoder, latitude, longitude);
         EditText et = findViewById(R.id.placeAddress);
         String text = "\n"+strAddress;
@@ -428,15 +450,6 @@ public class MarkupWithPlace extends AppCompatActivity {
                 photoAdapter.notifyItemChanged(nowPos, photo);
                 finish();
                 return true;
-            case R.id.typeAll:
-                placeType = "";
-                break;
-            case R.id.typeRestaurant:
-                placeType = "restaurant";
-                break;
-            case R.id.typeFood:
-                placeType = "food";
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
