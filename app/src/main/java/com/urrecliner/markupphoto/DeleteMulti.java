@@ -7,8 +7,7 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import static com.urrecliner.markupphoto.Vars.mContext;
-import static com.urrecliner.markupphoto.Vars.mainActivity;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photos;
 
@@ -42,7 +41,7 @@ class DeleteMulti {
                 if (photo.isChecked()) {
                     File file2del = photo.getFullFileName();
                     if (file2del.delete()) {
-                        mainActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file2del)));
+                        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file2del)));
                         deleteCount++;
                         msg.append("\n");
                         msg.append(file2del.getName());
@@ -68,7 +67,7 @@ class DeleteMulti {
             msg.append("\nTotal ");
             msg.append(deleteCount);
             msg.append(" photos deleted");
-            Toast.makeText(mainActivity, msg, Toast.LENGTH_SHORT).show();
+            Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
         }
     }
 }

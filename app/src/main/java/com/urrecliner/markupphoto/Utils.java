@@ -21,7 +21,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.Collator;
 import java.text.ParseException;
@@ -34,7 +33,7 @@ import java.util.Locale;
 import static com.urrecliner.markupphoto.Vars.copyPasteGPS;
 import static com.urrecliner.markupphoto.Vars.longFolder;
 import static com.urrecliner.markupphoto.Vars.mContext;
-import static com.urrecliner.markupphoto.Vars.mainActivity;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.utils;
 
@@ -195,10 +194,10 @@ class Utils {
             os = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
             os.close();
-            mainActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+            mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
         } catch (IOException e) {
             utils.logE("ioException", e.toString());
-            Toast.makeText(mainActivity, e.toString(),Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, e.toString(),Toast.LENGTH_LONG).show();
         }
     }
 

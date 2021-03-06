@@ -16,7 +16,7 @@ import static com.urrecliner.markupphoto.Vars.SUFFIX_JPG;
 import static com.urrecliner.markupphoto.Vars.buildBitMap;
 import static com.urrecliner.markupphoto.Vars.buildDB;
 import static com.urrecliner.markupphoto.Vars.mContext;
-import static com.urrecliner.markupphoto.Vars.mainActivity;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.multiMode;
 import static com.urrecliner.markupphoto.Vars.nowPos;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
@@ -90,7 +90,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             boolean checked = !photo.isChecked();
             iVImage.setImageBitmap(checked ? buildBitMap.makeChecked(photoMap):photoMap);
             Intent intent = new Intent(mContext, MarkupWithPlace.class);
-            mainActivity.startActivity(intent);
+            mActivity.startActivity(intent);
         }
 
         private void toggleCheckBox(int position) {

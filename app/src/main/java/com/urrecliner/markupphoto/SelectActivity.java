@@ -8,18 +8,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.urrecliner.markupphoto.placeNearby.PlaceRetrieve;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static com.urrecliner.markupphoto.GPSTracker.hLatitude;
 import static com.urrecliner.markupphoto.GPSTracker.hLongitude;
-import static com.urrecliner.markupphoto.Vars.NO_MORE_PAGE;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.nowDownLoading;
-import static com.urrecliner.markupphoto.Vars.pageToken;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
+import static com.urrecliner.markupphoto.Vars.placeType;
 import static com.urrecliner.markupphoto.Vars.selectActivity;
+import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.utils;
+import static com.urrecliner.markupphoto.placeNearby.PlaceParser.pageToken;
+import static com.urrecliner.markupphoto.placeNearby.PlaceParser.NO_MORE_PAGE;
 
 public class SelectActivity extends AppCompatActivity {
 
@@ -40,14 +44,14 @@ public class SelectActivity extends AppCompatActivity {
                 if (!nowDownLoading) {
                     waitTimer.cancel();
                     if (!pageToken.equals(NO_MORE_PAGE)) {
-                        new PlaceRetrieve().get(hLatitude, hLongitude);
+                        new PlaceRetrieve(mContext, hLatitude, hLongitude, placeType, pageToken, placeInfos.size(), sharedRadius);
                         new Timer().schedule(new TimerTask() {
                             public void run() {
                                 waitTimer.start();
                             }
                         }, 2000);
                     } else {
-                        placeInfos.sort((arg0, arg1) -> arg0.distance.compareTo(arg1.distance));
+                        placeInfos.sort((arg0, arg1) -> arg0.getDistance().compareTo(arg1.getDistance()));
 //                        placeInfos.sort((arg0, arg1) -> arg0.oName.compareTo(arg1.oName));
                         String s = "Total "+placeInfos.size()+" places retrieved";
                         utils.log("LIST", s);

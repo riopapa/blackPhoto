@@ -10,16 +10,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import static com.urrecliner.markupphoto.Vars.mainActivity;
-import static com.urrecliner.markupphoto.Vars.nowAddress;
-import static com.urrecliner.markupphoto.Vars.nowPlace;
-import static com.urrecliner.markupphoto.Vars.selectActivity;
-import static com.urrecliner.markupphoto.GPSTracker.hLatitude;
-import static com.urrecliner.markupphoto.GPSTracker.hLongitude;
+import com.urrecliner.markupphoto.placeNearby.PlaceInfo;
+
 import static com.urrecliner.markupphoto.Vars.iconNames;
 import static com.urrecliner.markupphoto.Vars.iconRaws;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.mContext;
+import static com.urrecliner.markupphoto.Vars.nowAddress;
+import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
+import static com.urrecliner.markupphoto.Vars.selectActivity;
 import static com.urrecliner.markupphoto.Vars.tvPlaceAddress;
 import static com.urrecliner.markupphoto.Vars.utils;
 
@@ -39,11 +39,11 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
             this.ivIcon = itemView.findViewById(R.id.recycler_icon);
             this.viewLine.setOnClickListener(view1 -> {
                 int idx = getAdapterPosition();
-                nowPlace = placeInfos.get(idx).oName;
-                nowAddress = placeInfos.get(idx).oAddress;
-                hLatitude = Double.parseDouble(placeInfos.get(idx).oLat);
-                hLongitude = Double.parseDouble(placeInfos.get(idx).oLng);
-                mainActivity.runOnUiThread(() -> {
+                nowPlace = placeInfos.get(idx).getoName();
+                nowAddress = placeInfos.get(idx).getoAddress();
+//                hLatitude = Double.parseDouble(placeInfos.get(idx).getoLat());
+//                hLongitude = Double.parseDouble(placeInfos.get(idx).getoLng());
+                mActivity.runOnUiThread(() -> {
                     String s = " \n"+nowPlace+"\n"+nowAddress;
                     tvPlaceAddress.setText(s);
                 });
@@ -63,16 +63,16 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
     @Override
     public void onBindViewHolder(@NonNull PlaceHolder viewHolder, int position) {
 
-        int icon = getIconRaw(placeInfos.get(position).oIcon);
+        int icon = getIconRaw(placeInfos.get(position).getoIcon());
         if (icon == -1) {
-            String s = placeInfos.get(position).oIcon;
+            String s = placeInfos.get(position).getoIcon();
             utils.log("icon error "+s,"https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/"+s+"-71.png");
             Toast.makeText(mContext,"UnKnown Icon ["+s+"]",Toast.LENGTH_LONG).show();
             icon = iconRaws[0];
-            placeInfos.get(position).setoName(placeInfos.get(position).oName+" "+s);
+            placeInfos.get(position).setoName(placeInfos.get(position).getoName()+" "+s);
         }
-        viewHolder.tvName.setText(placeInfos.get(position).oName);
-        viewHolder.tvAddress.setText(placeInfos.get(position).oAddress);
+        viewHolder.tvName.setText(placeInfos.get(position).getoName());
+        viewHolder.tvAddress.setText(placeInfos.get(position).getoAddress());
         viewHolder.ivIcon.setImageResource(icon);
     }
 
@@ -89,4 +89,7 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         return (placeInfos == null) ? 0 : placeInfos.size();
     }
 
+    void add (PlaceInfo placeInfo) {
+        placeInfos.add(placeInfo);
+    }
 }

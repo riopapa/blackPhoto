@@ -15,15 +15,15 @@ import static android.content.Context.LOCATION_SERVICE;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.utils;
 
-class GPSTracker implements LocationListener {
+public class GPSTracker implements LocationListener {
 
     private static final float MIN_DISTANCE_WALK = 10; // meters
     private static final long MIN_TIME_WALK_UPDATES = 1000; // miliSecs
     protected LocationManager locationManager;
 
-    static double hLatitude = 0;
-    static double hLongitude = 0;
-    static double hAltitude = 0;
+    public static double hLatitude = 0;
+    public static double hLongitude = 0;
+    public static double hAltitude = 0;
     static double oLatitude, oLongitude;
 
     void get() {

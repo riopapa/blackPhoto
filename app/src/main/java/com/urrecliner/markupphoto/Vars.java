@@ -10,12 +10,15 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.urrecliner.markupphoto.placeNearby.PlaceInfo;
+import com.urrecliner.markupphoto.placeNearby.PlaceRetrieve;
+
 import java.util.ArrayList;
 import java.util.List;
 
-class Vars {
+public class Vars {
     static Context mContext;
-    static Activity mainActivity;
+    static Activity mActivity;
     static Activity dirActivity;
     static Activity placeActivity;
 
@@ -58,14 +61,14 @@ class Vars {
     static int colorRGB;
     static int markTextInColor;
     static int markTextOutColor;
+    static int sharedRadius;
     static TextView tvPlaceAddress;
+    static PlaceRetrieve placeRetrieve;
 
     /* --- place select related variables --- */
+    public static boolean nowDownLoading = false;
+    public static ArrayList<PlaceInfo> placeInfos = null;
 
-    static String NO_MORE_PAGE = "<no>";
-    static String pageToken = NO_MORE_PAGE;
-    static boolean nowDownLoading = false;
-    static ArrayList<PlaceInfo> placeInfos = null;
     static Activity selectActivity;
     static String [] iconNames = { "question",
             "airport", "amusement", "aquarium", "art_gallery", "atm", "baby",

@@ -1,6 +1,5 @@
 package com.urrecliner.markupphoto;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
-import androidx.annotation.NonNull;
+
 import androidx.core.content.ContextCompat;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,19 +39,19 @@ import static com.urrecliner.markupphoto.Vars.databaseIO;
 import static com.urrecliner.markupphoto.Vars.dirNotReady;
 import static com.urrecliner.markupphoto.Vars.longFolder;
 import static com.urrecliner.markupphoto.Vars.mContext;
-import static com.urrecliner.markupphoto.Vars.mainActivity;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.mainMenu;
 import static com.urrecliner.markupphoto.Vars.makeDirFolder;
 import static com.urrecliner.markupphoto.Vars.markTextInColor;
 import static com.urrecliner.markupphoto.Vars.markTextOutColor;
 import static com.urrecliner.markupphoto.Vars.markUpOnePhoto;
 import static com.urrecliner.markupphoto.Vars.multiMode;
-import static com.urrecliner.markupphoto.Vars.nowAddress;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
 import static com.urrecliner.markupphoto.Vars.sharePrefer;
+import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.signatureMap;
 import static com.urrecliner.markupphoto.Vars.sizeX;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
-        mainActivity = this;
+        mActivity = this;
         utils = new Utils();
         buildBitMap = new BuildBitMap();
         askPermission();
@@ -91,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         longFolder = sharePrefer.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
         markTextInColor = sharePrefer.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
         markTextOutColor = sharePrefer.getInt("markTextOutColor", ContextCompat.getColor(mContext, R.color.markOutColor));
+        sharedRadius = sharePrefer.getInt("distance", 200);
         signatureMap = buildBitMap.buildSignatureMap();
         ArrayList<File> photoFiles = utils.getFilteredFileList(longFolder);
         if (photoFiles.size() == 0) {
@@ -199,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
                 if (toDelete.size()> 0) {
                     StringBuilder msg = new StringBuilder();
                     for (String s : toDelete) msg.append("\n").append(s);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                     builder.setTitle("Delete multiple photos ?");
                     builder.setMessage(msg.toString());
                     builder.setPositiveButton("Yes", (dialog, which) -> DeleteMulti.run());

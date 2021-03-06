@@ -12,6 +12,8 @@ import android.os.SystemClock;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.urrecliner.markupphoto.placeNearby.PlaceRetrieve;
+
 import androidx.exifinterface.media.ExifInterface;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,8 +46,9 @@ import static com.urrecliner.markupphoto.Vars.copyPasteText;
 import static com.urrecliner.markupphoto.Vars.databaseIO;
 import static com.urrecliner.markupphoto.Vars.longFolder;
 import static com.urrecliner.markupphoto.Vars.mContext;
-import static com.urrecliner.markupphoto.Vars.mainActivity;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.markUpOnePhoto;
+import static com.urrecliner.markupphoto.Vars.nowDownLoading;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.nowPos;
 import static com.urrecliner.markupphoto.Vars.nowLatLng;
@@ -54,13 +57,16 @@ import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
 import static com.urrecliner.markupphoto.Vars.placeActivity;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
+import static com.urrecliner.markupphoto.Vars.placeRetrieve;
 import static com.urrecliner.markupphoto.Vars.placeType;
+import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.tvPlaceAddress;
 import static com.urrecliner.markupphoto.Vars.typeAdapter;
 import static com.urrecliner.markupphoto.Vars.typeIcons;
 import static com.urrecliner.markupphoto.Vars.typeInfos;
 import static com.urrecliner.markupphoto.Vars.typeNames;
 import static com.urrecliner.markupphoto.Vars.utils;
+import static com.urrecliner.markupphoto.placeNearby.PlaceParser.pageToken;
 
 public class MarkupWithPlace extends AppCompatActivity {
 
@@ -211,7 +217,8 @@ public class MarkupWithPlace extends AppCompatActivity {
 
 //    final int REQUEST_PLACE_PICKER = 11;
     private void getPlaceByLatLng() {
-        new PlaceRetrieve().get(latitude, longitude);
+        nowDownLoading = true;
+        new PlaceRetrieve(mContext, latitude, longitude, placeType, pageToken, placeInfos.size(), sharedRadius);
         new Timer().schedule(new TimerTask() {
             public void run() {
                 selectPlace();
@@ -384,7 +391,7 @@ public class MarkupWithPlace extends AppCompatActivity {
                 String outName = orgFileName.toString();
                 orientation = 1; // (bitmap.getWidth() > bitmap.getHeight()) ? 1:6;
                 utils.makeBitmapFile(orgFileName, outName, bitmap, orientation);
-                mainActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(orgFileName)));
+                mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(orgFileName)));
                 photo.setOrientation(orientation);
                 photo.setChecked(false);
                 photo.setBitmap(null);
@@ -457,7 +464,7 @@ public class MarkupWithPlace extends AppCompatActivity {
     void deleteOnConfirm(int position) {
         final int pos = position;
         final Photo photo = photos.get(position);
-        AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
         builder.setTitle("Delete photo ?");
         builder.setMessage(photo.getShortName());
         builder.setPositiveButton("Yes",
@@ -465,7 +472,7 @@ public class MarkupWithPlace extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         File file = photo.getFullFileName();
                         if (file.delete()) {
-                            mainActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                            mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
                             removeItemView(pos);
                         }
                     }

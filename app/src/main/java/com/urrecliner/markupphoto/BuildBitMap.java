@@ -148,14 +148,14 @@ class BuildBitMap {
         canvas.drawBitmap(sigMap, xPos, yPos, null);
 
         String [] split = nowPlace.split("\n");
-        String place = split[0];
-        String comment = "", address = "";
+        String foodName = split[0];
+        String placeName = "", address = "";
         if (split.length > 2) {
-            comment = split[1].trim(); address = split[2].trim();
+            placeName = split[1].trim(); address = split[2].trim();
         }
         else
             address = split[1];
-        if (place.length() == 0) place = " ";
+        if (foodName.length() == 0) foodName = " ";
         xPos = width / 2;
         fontSize = (height + width) / 64;  // gps
         yPos = height - fontSize + fontSize / 5;
@@ -164,13 +164,13 @@ class BuildBitMap {
         yPos -= fontSize + fontSize / 3;
         yPos = drawTextOnCanvas(canvas, address, fontSize, xPos, yPos);
         fontSize = fontSize * 16 / 10;  // Place
-        yPos -= fontSize + fontSize / 3;
-        if (!comment.equals("")) {
+        yPos -= fontSize + fontSize / 4;
+        if (!placeName.equals("")) {
             fontSize = fontSize * 8 / 10;  // Comment
-            yPos = drawTextOnCanvas(canvas, comment, fontSize, xPos, yPos);
+            yPos = drawTextOnCanvas(canvas, placeName, fontSize, xPos, yPos);
             yPos -= fontSize + fontSize / 3;
         }
-        drawTextOnCanvas(canvas, place, fontSize, xPos, yPos);
+        drawTextOnCanvas(canvas, foodName, fontSize, xPos, yPos);
         return newMap;
     }
 

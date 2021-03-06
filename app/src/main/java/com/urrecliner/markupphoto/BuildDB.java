@@ -1,10 +1,8 @@
 package com.urrecliner.markupphoto;
 
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.AsyncTask;
 import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;

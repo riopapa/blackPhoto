@@ -4,33 +4,18 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static com.urrecliner.markupphoto.Vars.dirFolders;
-import static com.urrecliner.markupphoto.Vars.directoryAdapter;
-import static com.urrecliner.markupphoto.Vars.mainActivity;
+import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.sizeX;
 import static com.urrecliner.markupphoto.Vars.utils;
 
@@ -89,7 +74,7 @@ public class MakeDirFolder {
         String[] projection = { MediaStore.Images.ImageColumns.DATA};
         String selection = MediaStore.Images.Media.DATA + " LIKE ?";
         String []selectionArgs = new String[] {"%.jpg%"};
-        Cursor cursor = mainActivity.getContentResolver().query(allImagesUri, projection, selection, selectionArgs, null, null); //"_data DESC");
+        Cursor cursor = mActivity.getContentResolver().query(allImagesUri, projection, selection, selectionArgs, null, null); //"_data DESC");
         try {
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -130,7 +115,7 @@ public class MakeDirFolder {
         int bitmapSize = sizeX / 4;
         Bitmap dirBitmap = Bitmap.createBitmap(bitmapSize, bitmapSize, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(dirBitmap);
-        canvas.drawColor(mainActivity.getColor(R.color.colorPrimary));
+        canvas.drawColor(mActivity.getColor(R.color.colorPrimary));
         Paint paint = new Paint();
         for (int i = 0; i < 4; i++) {
             if (photo4[i] != null) {
