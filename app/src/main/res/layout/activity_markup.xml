@@ -30,22 +30,13 @@
         android:focusedByDefault="true"
         android:inputType="text|textMultiLine"
         android:textSize="16sp"
-        android:hint="@string/press_Location"
+        android:hint="@string/name"
         android:textCursorDrawable="@drawable/cursor_color"
         app:layout_constraintTop_toBottomOf="@id/type_recycler"
         app:layout_constraintBottom_toTopOf="@id/image"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@id/getLocation"
         android:background="@color/placeAddress"
-        />
-    <TextView
-        android:id="@+id/photoName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:text="aaa.jpg"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/placeAddress"
         />
     <ImageView
         android:id="@+id/getInformation"
@@ -67,7 +58,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        android:src="@drawable/icon_get_location"
+        android:src="@mipmap/place_holder"
         android:contentDescription="@string/photo"
         app:layout_constraintTop_toBottomOf="@id/getInformation"
         app:layout_constraintBottom_toBottomOf="@id/placeAddress"
@@ -86,10 +77,20 @@
         android:contentDescription="@string/photo"
         android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/photoName"
+        app:layout_constraintTop_toBottomOf="@id/placeAddress"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteX="8dp" />
+
+    <TextView
+        android:id="@+id/photoName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="aaa.jpg"
+        android:textSize="12sp"
+        app:layout_constraintTop_toBottomOf="@id/placeAddress"
+        />
 
     <ImageView
         android:id="@+id/imageL"
@@ -97,7 +98,7 @@
         android:layout_height="100dp"
         android:contentDescription="@string/photo"
         android:scaleType="centerInside"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:padding="8dp"
         android:background="@drawable/back_border"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -110,7 +111,7 @@
         android:layout_height="100dp"
         android:contentDescription="@string/photo"
         android:scaleType="centerInside"
-        android:layout_margin="16dp"
+        android:layout_margin="8dp"
         android:padding="8dp"
         android:background="@drawable/back_border"
         app:layout_constraintBottom_toBottomOf="parent"

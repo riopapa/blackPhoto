@@ -103,13 +103,13 @@ public class Vars {
     static TypeAdapter typeAdapter;
     static String placeType = "all";
     static int typeNumber = 0;
-    static int[] typeIcons = {R.mipmap.place, R.raw.restaurant, R.raw.shopping, R.raw.shopping, R.raw.park,
-            R.raw.worship_christian, R.raw.worship_islam, R.raw.parking, R.raw.school, R.raw.cafe,
-            R.raw.museum, R.raw.amusement, R.raw.shopping, R.raw.university,R.raw.atm, R.raw.zoo,
-            R.mipmap.place};
-    static String[] typeNames = {"all", "restaurant", "store", "shopping_mall", "park",
-            "church","mosque", "parking", "school", "cafe",
-            "museum", "tourist_attraction", "university", "atm", "zoo",
+    static int[] typeIcons = {R.mipmap.place_holder, R.raw.restaurant, R.raw.cafe, R.raw.shopping, R.raw.shopping,
+            R.raw.park, R.raw.worship_christian, R.raw.worship_islam, R.raw.parking, R.raw.school,
+            R.raw.museum, R.raw.amusement, R.raw.amusement, R.raw.university,R.raw.atm, R.raw.zoo,
+            R.mipmap.place_holder};
+    static String[] typeNames = {"all", "restaurant", "cafe", "store", "shopping_mall",
+            "park", "church","mosque", "parking", "school",
+            "museum", "tourist_attraction", "amusement", "university", "atm", "zoo",
             "all"};
 
 }

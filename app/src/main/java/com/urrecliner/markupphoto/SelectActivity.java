@@ -33,7 +33,7 @@ public class SelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_place);
+        setContentView(R.layout.activity_place);
         selectActivity = this;
         placeRecycleView = findViewById(R.id.place_recycler);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);

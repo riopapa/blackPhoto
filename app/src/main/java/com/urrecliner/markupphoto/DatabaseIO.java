@@ -19,12 +19,11 @@ public class DatabaseIO extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "MarkupPhoto.db";
     private static final String TABLE_NAME = "markupPhoto";
     private static final int SCHEMA_VERSION = 1;
-    private static String logID = "dbIO";
+    private static final String logID = "dbIO";
     private static SQLiteDatabase dbIO = null;
 
     DatabaseIO() {
         super(mContext, utils.getPackageDirectory().toString()+ "/" + DATABASE_NAME, null, SCHEMA_VERSION);
-        int newCount = 0;
     }
 
     @Override
@@ -49,7 +48,7 @@ public class DatabaseIO extends SQLiteOpenHelper {
         String fullFileName = photo.getFullFileName().toString();
         String sqlCommand = "SELECT * FROM " + TABLE_NAME + " WHERE " +
                 "fullFileName=\""+fullFileName+"\";";
-        Cursor result = null;
+        Cursor result;
         try {
             result = dbIO.rawQuery(sqlCommand, null);
             if (result.getCount() >= 0) {
@@ -151,8 +150,7 @@ public class DatabaseIO extends SQLiteOpenHelper {
     private Bitmap StringToBitMap(String encodedString){
         try {
             byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
-            Bitmap bitmap= BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-            return bitmap;
+            return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch(Exception e) {
             utils.log(logID, " StringToBitMap Error "+e.toString());
             return null;

@@ -1,5 +1,6 @@
 package com.urrecliner.markupphoto;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +45,7 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeHolder> {
                 typeAdapter.notifyDataSetChanged();
                 ImageView iv = placeActivity.findViewById(R.id.getLocation);
                 iv.setImageResource(typeIcons[typeNumber]);
+//                iv.setImageBitmap(utils.maskedIcon(typeIcons[typeNumber]));
             });
         }
     }
@@ -60,10 +62,12 @@ public class TypeAdapter extends RecyclerView.Adapter<TypeAdapter.TypeHolder> {
     public void onBindViewHolder(@NonNull TypeHolder viewHolder, int position) {
 
         viewHolder.tvName.setText(typeNames[position]);
+        viewHolder.ivIcon.setImageResource(typeIcons[position]);
         if (typeNumber == position)
-            viewHolder.ivIcon.setImageBitmap(utils.maskedIcon(typeIcons[position]));
+            viewHolder.tvName.setBackgroundColor(Color.LTGRAY);
         else
-            viewHolder.ivIcon.setImageResource(typeIcons[position]);
+            viewHolder.tvName.setBackgroundColor(0x00000000);
+
         viewHolder.ivIcon.setTag(""+position);
     }
 

@@ -12,17 +12,13 @@
     <string name="copy_text">Copy PlaceAddress Text</string>
     <string name="rename_file">Rename file with DateTime Info</string>
     <string name="rotate_image">Rotate Image</string>
-    <string name="press_Location">Press Location icon\nto get Place, Address Name</string>
     <string name="text_color">Text Color</string>
     <string name="outline_color">Outline Color</string>
     <string name="color_plate">colorPlate</string>
     <string name="arrow_text">→\n→</string>
-    <string name="color_hex">F1F2F3F4</string>
+    <string name="color_hexa_value">F1F2F3F4</string>
     <string name="color_range">colorRange</string>
     <string name="cancel">Cancel</string>
     <string name="select">Select</string>
-    <string name="type_all">type All</string>
-    <string name="type_restaurant">type Restaurant</string>
-    <string name="type_food">type Food</string>
 
 </resources>

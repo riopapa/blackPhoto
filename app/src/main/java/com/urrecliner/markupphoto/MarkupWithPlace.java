@@ -65,6 +65,7 @@ import static com.urrecliner.markupphoto.Vars.typeAdapter;
 import static com.urrecliner.markupphoto.Vars.typeIcons;
 import static com.urrecliner.markupphoto.Vars.typeInfos;
 import static com.urrecliner.markupphoto.Vars.typeNames;
+import static com.urrecliner.markupphoto.Vars.typeNumber;
 import static com.urrecliner.markupphoto.Vars.utils;
 import static com.urrecliner.markupphoto.placeNearby.PlaceParser.pageToken;
 
@@ -95,6 +96,7 @@ public class MarkupWithPlace extends AppCompatActivity {
         for (int i = 0; i < typeNames.length; i++) {
             typeInfos.add(new TypeInfo(typeNames[i], typeIcons[i]));
         }
+
         RecyclerView typeRecyclerView = findViewById(R.id.type_recycler);
 //        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         LinearLayoutManager mLinearLayoutManager
@@ -145,6 +147,9 @@ public class MarkupWithPlace extends AppCompatActivity {
                 getPlaceByLatLng();
             }
         });
+//        iVPlace.setImageBitmap(utils.maskedIcon(typeIcons[typeNumber]));
+        iVPlace.setImageResource(typeIcons[typeNumber]);
+
         ImageView iVInfo = findViewById(R.id.getInformation);
         iVInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,6 +204,7 @@ public class MarkupWithPlace extends AppCompatActivity {
         else
             ivR.setVisibility(View.INVISIBLE);
         utils.deleteOldSAVFiles();
+
     }
 
     private void getLocationInfo() {

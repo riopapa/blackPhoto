@@ -311,16 +311,14 @@ class Utils {
 
     Bitmap maskedIcon(int rawId) {
 
-        Bitmap bitmap1 = BitmapFactory.decodeResource(mContext.getResources(), rawId);
-        Bitmap bitmap2 = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.flag_mask);
-        Bitmap resultingImage=Bitmap.createBitmap(bitmap1.getWidth(), bitmap1.getHeight(), bitmap1.getConfig());
+        Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), rawId);
+        Bitmap resultingImage=Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
         Paint paint = new Paint();
         Canvas canvas = new Canvas(resultingImage);
-        canvas.drawBitmap(bitmap2,0,0,paint);
-//        paint.setColor(Color.BLUE);
-//        canvas.drawRect(0,0,512,512, paint);
+        canvas.drawBitmap(bitmap,3,3,paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
-        canvas.drawBitmap(bitmap1,0,0,paint);
+        canvas.drawBitmap(bitmap,0,0,paint);
+        canvas.drawBitmap(bitmap,-3,-3,paint);
         return resultingImage;
     }
 
