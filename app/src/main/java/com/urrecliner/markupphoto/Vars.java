@@ -64,6 +64,7 @@ public class Vars {
     static int sharedRadius;
     static TextView tvPlaceAddress;
     static PlaceRetrieve placeRetrieve;
+    static String byPlaceName = "";
 
     /* --- place select related variables --- */
     public static boolean nowDownLoading = false;
@@ -103,13 +104,15 @@ public class Vars {
     static TypeAdapter typeAdapter;
     static String placeType = "all";
     static int typeNumber = 0;
-    static int[] typeIcons = {R.mipmap.place_holder, R.raw.restaurant, R.raw.cafe, R.raw.shopping, R.raw.shopping,
-            R.raw.park, R.raw.worship_christian, R.raw.worship_islam, R.raw.parking, R.raw.school,
-            R.raw.museum, R.raw.amusement, R.raw.amusement, R.raw.university,R.raw.atm, R.raw.zoo,
+    static int[] typeIcons = {R.mipmap.place_holder, R.raw.restaurant, R.raw.cafe, R.raw.bar,
+            R.raw.shopping, R.raw.shopping, R.raw.park, R.raw.worship_christian, R.raw.worship_islam,
+            R.raw.parking, R.raw.school, R.raw.museum, R.raw.amusement, R.raw.amusement,
+            R.raw.university,R.raw.atm, R.raw.zoo,
             R.mipmap.place_holder};
-    static String[] typeNames = {"all", "restaurant", "cafe", "store", "shopping_mall",
-            "park", "church","mosque", "parking", "school",
-            "museum", "tourist_attraction", "amusement", "university", "atm", "zoo",
+    static String[] typeNames = {"all", "restaurant", "cafe", "bar",
+            "store", "shopping_mall", "park", "church","mosque",
+            "parking", "school", "museum", "tourist_attraction", "amusement",
+            "university", "atm", "zoo",
             "all"};
 
 }

@@ -28,7 +28,6 @@ import static com.urrecliner.markupphoto.Vars.colorDraw;
 import static com.urrecliner.markupphoto.Vars.colorPlate;
 import static com.urrecliner.markupphoto.Vars.colorRGB;
 import static com.urrecliner.markupphoto.Vars.colorRange;
-import static com.urrecliner.markupphoto.Vars.colorSpot;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.markTextInColor;
 import static com.urrecliner.markupphoto.Vars.markTextOutColor;
@@ -55,7 +54,6 @@ public class ColorActivity extends AppCompatActivity {
 
         colorPlate = findViewById(R.id.colorPlate);
         colorRange = findViewById(R.id.colorRange);
-        colorSpot = findViewById(R.id.colorSpot);
 
         tvText = findViewById(R.id.colorText);
         tvOutline = findViewById(R.id.colorOutline);

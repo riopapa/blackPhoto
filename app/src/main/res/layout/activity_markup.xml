@@ -43,7 +43,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="4dp"
-        android:src="@drawable/icon_show_info"
+        android:src="@mipmap/information"
         android:contentDescription="@string/photo"
         app:layout_constraintTop_toBottomOf="@id/type_recycler"
         app:layout_constraintBottom_toTopOf="@id/getLocation"

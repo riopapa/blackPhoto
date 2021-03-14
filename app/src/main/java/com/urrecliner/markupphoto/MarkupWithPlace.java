@@ -41,6 +41,7 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.urrecliner.markupphoto.Vars.SUFFIX_JPG;
 import static com.urrecliner.markupphoto.Vars.buildDB;
+import static com.urrecliner.markupphoto.Vars.byPlaceName;
 import static com.urrecliner.markupphoto.Vars.copyPasteGPS;
 import static com.urrecliner.markupphoto.Vars.copyPasteText;
 import static com.urrecliner.markupphoto.Vars.databaseIO;
@@ -224,7 +225,14 @@ public class MarkupWithPlace extends AppCompatActivity {
 //    final int REQUEST_PLACE_PICKER = 11;
     private void getPlaceByLatLng() {
         nowDownLoading = true;
-        new PlaceRetrieve(mContext, latitude, longitude, placeType, pageToken, placeInfos.size(), sharedRadius);
+        EditText et = findViewById(R.id.placeAddress);
+        String placeName = et.getText().toString();
+        if (placeName != null && placeName.startsWith("?")) {
+            String[] placeNames = placeName.split("\n");
+            byPlaceName = placeNames[0].substring(1);
+        } else
+            byPlaceName = "";
+        new PlaceRetrieve(mContext, latitude, longitude, placeType, pageToken, sharedRadius, byPlaceName);
         new Timer().schedule(new TimerTask() {
             public void run() {
                 selectPlace();

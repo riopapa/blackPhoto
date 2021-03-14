@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         longFolder = sharePrefer.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
         markTextInColor = sharePrefer.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
         markTextOutColor = sharePrefer.getInt("markTextOutColor", ContextCompat.getColor(mContext, R.color.markOutColor));
-        sharedRadius = sharePrefer.getInt("distance", 200);
+        sharedRadius = sharePrefer.getInt("radius", 100);
         signatureMap = buildBitMap.buildSignatureMap();
         ArrayList<File> photoFiles = utils.getFilteredFileList(longFolder);
         if (photoFiles.size() == 0) {

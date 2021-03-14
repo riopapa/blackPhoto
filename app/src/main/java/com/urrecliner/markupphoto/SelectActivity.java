@@ -2,6 +2,7 @@ package com.urrecliner.markupphoto;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import static com.urrecliner.markupphoto.GPSTracker.hLatitude;
 import static com.urrecliner.markupphoto.GPSTracker.hLongitude;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.nowDownLoading;
+import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
 import static com.urrecliner.markupphoto.Vars.placeType;
 import static com.urrecliner.markupphoto.Vars.selectActivity;
@@ -33,7 +35,7 @@ public class SelectActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_place);
+        setContentView(R.layout.activity_placelist);
         selectActivity = this;
         placeRecycleView = findViewById(R.id.place_recycler);
         LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
@@ -44,15 +46,22 @@ public class SelectActivity extends AppCompatActivity {
                 if (!nowDownLoading) {
                     waitTimer.cancel();
                     if (!pageToken.equals(NO_MORE_PAGE)) {
-                        new PlaceRetrieve(mContext, hLatitude, hLongitude, placeType, pageToken, placeInfos.size(), sharedRadius);
+//                        EditText et = findViewById(R.id.placeAddress);
+//                        String placeName = et.getText().toString();
+//                        if (placeName != null && placeName.startsWith("?")) {
+//                            String[] placeNames = placeName.split("\n");
+//                            placeName = placeNames[0].substring(1);
+//                        } else
+//                            placeName = "";
+                        new PlaceRetrieve(mContext, hLatitude, hLongitude, placeType, pageToken, sharedRadius, "");
                         new Timer().schedule(new TimerTask() {
                             public void run() {
                                 waitTimer.start();
                             }
-                        }, 2000);
+                        }, 1500);
                     } else {
-                        placeInfos.sort((arg0, arg1) -> arg0.getDistance().compareTo(arg1.getDistance()));
-//                        placeInfos.sort((arg0, arg1) -> arg0.oName.compareTo(arg1.oName));
+//                        placeInfos.sort((arg0, arg1) -> arg0.getDistance().compareTo(arg1.getDistance()));
+                        placeInfos.sort((arg0, arg1) -> arg0.getoName().compareTo(arg1.getoName()));
                         String s = "Total "+placeInfos.size()+" places retrieved";
                         utils.log("LIST", s);
                         Toast.makeText(mContext,s, Toast.LENGTH_LONG).show();

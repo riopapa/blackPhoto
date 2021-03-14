@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/renameClock"
-        android:icon="@drawable/icon_rename_clock"
+        android:icon="@mipmap/rename_time"
         android:orderInCategory="100"
         android:title="@string/rename_file"
         app:showAsAction="always" />
@@ -14,7 +14,7 @@
         android:id="@+id/saveRotate"
         android:orderInCategory="100"
         android:title= "@string/rotate_image"
-        android:icon="@drawable/icon_save"
+        android:icon="@mipmap/save_photo"
         app:showAsAction="always" />
 
     <item
