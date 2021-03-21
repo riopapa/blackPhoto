@@ -8,6 +8,9 @@ import java.io.File;
 
 import static com.urrecliner.markupphoto.Vars.SUFFIX_JPG;
 import static com.urrecliner.markupphoto.Vars.buildBitMap;
+import static com.urrecliner.markupphoto.Vars.mActivity;
+import static com.urrecliner.markupphoto.Vars.mContext;
+import static com.urrecliner.markupphoto.Vars.nowLatLng;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.utils;
 
@@ -33,16 +36,25 @@ class MarkUpOnePhoto {
             matrix.postRotate(degree);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
         }
-        bitmap = buildBitMap.markDateLocSignature(bitmap, timeStamp);
+        buildBitMap.init(nowLatLng, mActivity, mContext, orientation);
+        String sFood = " ", sPlace = " ", sAddress = " ";
+        if (nowPlace != null) {
+            String [] s = nowPlace.split("\n");
+            if (s.length > 2) {
+                sFood = s[0]; sPlace = s[1]; sAddress = s[2];
+            } else if (s.length == 2) {
+                sPlace = s[0]; sAddress = s[1];
+            } else
+                sAddress = s[0];
+        }
+        bitmap = buildBitMap.markDateLocSignature(bitmap, timeStamp, sFood, sPlace, sAddress);
         String fileName = imgFile.toString();
         String outName = fileName.substring(0, fileName.length() - 4) + "_";
 
-        if (nowPlace != null) {
-            String[] pNames = nowPlace.split("\n");
-            if (pNames.length > 2)
-                outName += pNames[1] + "("+ pNames[0] + ")";    // [0] 음식명, [1] 장소명
-            else
-                outName += pNames[0];
+        if (sFood.equals(" "))
+            outName += sPlace;
+        else {
+            outName += sPlace+"("+sFood+")";
         }
         outName += SUFFIX_JPG;
         utils.makeBitmapFile(imgFile, outName, bitmap, 1);

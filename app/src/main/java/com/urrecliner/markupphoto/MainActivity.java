@@ -69,13 +69,12 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         mActivity = this;
         utils = new Utils();
-        buildBitMap = new BuildBitMap();
+        utils.log("markup", "Start--");
         askPermission();
         squeezeDB = new SqueezeDB();
         buildDB = new BuildDB();
         markUpOnePhoto = new MarkUpOnePhoto();
-
-        utils.log("markup", "Start--");
+        buildBitMap = new BuildBitMap();
         if (databaseIO == null) databaseIO = new DatabaseIO();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();

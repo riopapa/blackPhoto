@@ -1,5 +1,7 @@
 package com.urrecliner.markupphoto;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -31,14 +33,25 @@ import static com.urrecliner.markupphoto.Vars.utils;
 
 class BuildBitMap {
 
-    Bitmap bitmap = null;
+    String sFood, sPlace, sAddress, sLatLng;
+    Bitmap signatureMap;
+    Activity activity;
+    Context context;
+    int cameraOrientation;
+
+    public void init(String latlng, Activity activity, Context context, int cameraOrientation) {
+        this.activity = activity;this.context = context;
+        this.cameraOrientation = cameraOrientation;
+        this.signatureMap = buildSignatureMap();
+        this.sLatLng = latlng;
+    }
 
     Photo makeSumNail(Photo photo) {
         ExifInterface exif;
         String fullFileName = photo.getFullFileName().toString();
         boolean landscape;
-//        utils.log("sumnail","SumNail "+photo.getShortName());
-        bitmap = BitmapFactory.decodeFile(fullFileName).copy(Bitmap.Config.RGB_565, false);
+
+        Bitmap bitmap = BitmapFactory.decodeFile(fullFileName).copy(Bitmap.Config.RGB_565, false);
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         try {
@@ -93,13 +106,12 @@ class BuildBitMap {
         photo.setOrientation(orientation);
         photo.setBitmap(sBitmap);
         databaseIO.insert(photo);
-//        newPhoto.setBitmap(null);   // nullify after insert db
         return photo;
     }
 
     Bitmap makeChecked(Bitmap photoMap) {
 
-        int delta = 4;
+        int delta = 2;
         int delta2 = delta + delta;
         int width = photoMap.getWidth();
         int height = photoMap.getHeight();
@@ -109,9 +121,9 @@ class BuildBitMap {
         final Paint paint = new Paint();
         final Rect rect = new Rect(0, 0, width, height);
         final RectF rectF = new RectF(rect);
-        final float roundPx = 20;
+        final float roundPx = 10;
         paint.setAntiAlias(true);
-        paint.setColor(0x882B65EC);
+        paint.setColor(mContext.getColor(R.color.xorColor));
         canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
         paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
         Bitmap bitmap = Bitmap.createBitmap(photoMap, delta2, delta2, width-delta2-delta2, height-delta2-delta2);
@@ -119,72 +131,65 @@ class BuildBitMap {
         return outMap;
     }
 
-    Bitmap markDateLocSignature(Bitmap photoMap, long timeStamp) {
-        final SimpleDateFormat sdfHourMin = new SimpleDateFormat("`yy/MM/dd(EEE) HH:mm", Locale.KOREA);
-        int fontSize;
+    Bitmap markDateLocSignature(Bitmap photoMap, long timeStamp, String food, String place, String address) {
+
         int width = photoMap.getWidth();
         int height = photoMap.getHeight();
         Bitmap newMap = Bitmap.createBitmap(width, height, photoMap.getConfig());
         Canvas canvas = new Canvas(newMap);
         canvas.drawBitmap(photoMap, 0f, 0f, null);
-        fontSize = (width>height) ? (width+height)/48 : (width+height)/56;  // date time
-        String dateTime = sdfHourMin.format(timeStamp);
-        int sigSize = (width + height) / 16;
-        Bitmap sigMap = Bitmap.createScaledBitmap(signatureMap, sigSize, sigSize, false);
-        if (nowPlace == null) { // datetime only at bottom
-            int xPos = width / 5;
-            int yPos = height - height / 20;
-            drawTextOnCanvas(canvas, dateTime, fontSize, xPos, yPos);
-            xPos = width - sigSize - width / 20;
-            yPos = height - height / 16 - sigSize;
-            canvas.drawBitmap(sigMap, xPos, yPos, null);
+        markDateTime(timeStamp, width, height, canvas);
+        markSignature(width, height, canvas);
+        if (place.equals(" "))
             return newMap;
-        }
-        int xPos = (width>height) ? width / 5: width / 4;
-        int yPos = (width>height) ? height / 8: height / 9;
-        drawTextOnCanvas(canvas, dateTime, fontSize, xPos, yPos);
-        xPos = width - sigSize - sigSize / 2;
-        yPos = sigSize/ 2;
-        canvas.drawBitmap(sigMap, xPos, yPos, null);
-
-        String [] split = nowPlace.split("\n");
-        String foodName = split[0];
-        String placeName = "", address = "";
-        if (split.length > 2) {
-            placeName = split[1].trim(); address = split[2].trim();
-        }
-        else
-            address = split[1];
-        if (foodName.length() == 0) foodName = " ";
-        xPos = width / 2;
-        fontSize = (height + width) / 64;  // gps
-        yPos = height - fontSize + fontSize / 5;
-        yPos = drawTextOnCanvas(canvas, nowLatLng, fontSize, xPos, yPos);
-        fontSize = fontSize * 14 / 10;  // address
-        yPos -= fontSize + fontSize / 3;
-        yPos = drawTextOnCanvas(canvas, address, fontSize, xPos, yPos);
-        fontSize = fontSize * 16 / 10;  // Place
-        yPos -= fontSize + fontSize / 4;
-        if (!placeName.equals("")) {
-            fontSize = fontSize * 8 / 10;  // Comment
-            yPos = drawTextOnCanvas(canvas, placeName, fontSize, xPos, yPos);
-            yPos -= fontSize + fontSize / 3;
-        }
-        drawTextOnCanvas(canvas, foodName, fontSize, xPos, yPos);
+        this.sFood = food; this.sPlace = place; this.sAddress = address;
+        markFoodPlaceAddress(width, height, canvas);
         return newMap;
+    }
+
+    private void markDateTime(long timeStamp, int width, int height, Canvas canvas) {
+        final SimpleDateFormat sdfHourMin = new SimpleDateFormat("`yy/MM/dd(EEE) HH:mm", Locale.KOREA);
+        int fontSize = (width>height) ? (width+height)/48 : (width+height)/54;  // date time
+        String dateTime = sdfHourMin.format(timeStamp);
+        int xPos = (width>height) ? width/6+fontSize: width/4+fontSize;
+        int yPos = (width>height) ? height/9: height/10;
+        drawTextOnCanvas(canvas, dateTime, fontSize, xPos, yPos);
+    }
+
+    private void markSignature(int width, int height, Canvas canvas) {
+        int sigSize = (width + height) / 14;
+        Bitmap sigMap = Bitmap.createScaledBitmap(signatureMap, sigSize, sigSize, false);
+        int xPos = width - sigSize - width / 20;
+        int yPos = (width>height) ? height/14: height/16;
+        Paint paint = new Paint(); paint.setAlpha(150);
+        canvas.drawBitmap(sigMap, xPos, yPos, paint);
+    }
+
+    private void markFoodPlaceAddress(int width, int height, Canvas canvas) {
+
+        int xPos = width / 2;
+        int fontSize = (height + width) / 64;  // gps
+        int yPos = height - fontSize/2;
+        yPos = drawTextOnCanvas(canvas, sLatLng, fontSize, xPos, yPos);
+        fontSize = fontSize * 14 / 10;  // address
+        yPos -= fontSize + fontSize / 6;
+        yPos = drawTextOnCanvas(canvas, sAddress, fontSize, xPos, yPos);
+        fontSize = fontSize * 14 / 10;  // Place
+        yPos -= fontSize + fontSize / 4;
+        yPos = drawTextOnCanvas(canvas, sPlace, fontSize, xPos, yPos);
+        yPos -= fontSize + fontSize / 4; // food
+        drawTextOnCanvas(canvas, sFood, fontSize, xPos, yPos);
     }
 
     int drawTextOnCanvas(Canvas canvas, String text, int fontSize, int xPos, int yPos) {
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setTextSize(fontSize);
-//        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.XOR));
         paint.setTypeface(Typeface.DEFAULT_BOLD);
         paint.setTextAlign(Paint.Align.CENTER);
         int cWidth = canvas.getWidth() * 3 / 4;
         float tWidth = paint.measureText(text);
         int pos;
         if (tWidth > cWidth) {
-//            utils.log("size","cWidth:"+cWidth+" tWidth:"+tWidth);
             int length = text.length() / 2;
             for (pos = length; pos < text.length(); pos++)
                 if (text.substring(pos,pos+1).equals(" "))
@@ -211,7 +216,7 @@ class BuildBitMap {
         paint.setTextSize(textSize);
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
-        paint.setStrokeWidth((int)(textSize/4));
+        paint.setStrokeWidth((int)(textSize/5+3));
         paint.setTypeface(mContext.getResources().getFont(R.font.nanumbarungothic));
         canvas.drawText(text, xPos, yPos, paint);
 
@@ -230,9 +235,7 @@ class BuildBitMap {
             sigMap = BitmapFactory.decodeResource(mContext.getResources(), R.raw.signature);
         Bitmap newBitmap = Bitmap.createBitmap(sigMap.getWidth(), sigMap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
-        Paint alphaPaint = new Paint();
-//        alphaPaint.setAlpha(120);
-        canvas.drawBitmap(sigMap, 0, 0, alphaPaint);
+        canvas.drawBitmap(sigMap, 0, 0, null);
         return newBitmap;
     }
 }

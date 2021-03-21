@@ -37,7 +37,6 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
         ImageView iVImage;
         TextView tVInfo;
-        CheckBox cbCheck;
 
         ViewHolder(final View itemView) {
             super(itemView);
@@ -100,11 +99,7 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
             Bitmap photoMap = photo.getBitmap().copy(Bitmap.Config.ARGB_8888, false);
             boolean checked = !photo.isChecked();
             iVImage.setImageBitmap(checked ? buildBitMap.makeChecked(photoMap):photoMap);
-            if (shortName.length() > 7)
-                tVInfo.setTextColor((shortName.substring(shortName.length()-7).equals(SUFFIX_JPG))?
-                        markedTextColor:unMarkedTextColor);
-            else
-                tVInfo.setTextColor(unMarkedTextColor);
+            tVInfo.setTextColor((shortName.endsWith(SUFFIX_JPG))? markedTextColor:unMarkedTextColor);
             tVInfo.setText(shortName);
             photo.setChecked(checked);
             photos.set(position, photo);
@@ -141,15 +136,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
         params.width = width; params.height = height;
         holder.iVImage.setLayoutParams(params);
         holder.iVImage.setImageBitmap(checked ? buildBitMap.makeChecked(photoMap):photoMap);
-        if (shortName.length() > 7)
-            holder.tVInfo.setTextColor((shortName.substring(shortName.length()-7).equals(SUFFIX_JPG))?
-                markedTextColor:unMarkedTextColor);
-        else
-            holder.tVInfo.setTextColor(unMarkedTextColor);
+        holder.tVInfo.setTextColor((shortName.endsWith(SUFFIX_JPG))? markedTextColor:unMarkedTextColor);
         holder.tVInfo.setText(shortName);
-//        holder.cbCheck.setVisibility(multiMode ? View.VISIBLE: View.INVISIBLE);
-//        holder.cbCheck.setEnabled(multiMode);
-//        holder.cbCheck.setChecked(checked);
     }
 }
 

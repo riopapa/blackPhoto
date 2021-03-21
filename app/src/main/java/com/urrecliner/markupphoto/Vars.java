@@ -56,7 +56,6 @@ public class Vars {
 
     static ImageView colorPlate;
     static ImageView colorRange;
-    static ImageView colorSpot;
     static SeekBar colorAlpha;
     static int colorRGB;
     static int markTextInColor;
