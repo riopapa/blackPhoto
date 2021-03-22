@@ -4,7 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
@@ -178,7 +182,16 @@ public class MarkupWithPlace extends AppCompatActivity {
 
         final ImageView ivL = findViewById(R.id.imageL);
         if (nowPos > 0) {
-            ivL.setImageBitmap(photos.get(nowPos-1).getBitmap());
+            ivL.post(new Runnable() {
+                @Override
+                public void run() {
+                    int width = ivL.getMeasuredWidth();
+                    int height = ivL.getMeasuredHeight();
+                    Bitmap bitmap = maskImage(photos.get(nowPos-1).getBitmap(), false);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+                    ivL.setImageBitmap(bitmap);
+                }
+            });
             ivL.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -192,7 +205,18 @@ public class MarkupWithPlace extends AppCompatActivity {
 
         final ImageView ivR = findViewById(R.id.imageR);
         if (nowPos < photos.size()-1) {
-            ivR.setImageBitmap(photos.get(nowPos+1).getBitmap());
+
+//            ivR.setImageBitmap(photos.get(nowPos+1).getBitmap());
+            ivR.post(new Runnable() {
+                @Override
+                public void run() {
+                    int width = ivR.getMeasuredWidth();
+                    int height = ivR.getMeasuredHeight();
+                    Bitmap bitmap = maskImage(photos.get(nowPos+1).getBitmap(), true);
+                    bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+                    ivR.setImageBitmap(bitmap);
+                }
+            });
             ivR.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -206,6 +230,20 @@ public class MarkupWithPlace extends AppCompatActivity {
             ivR.setVisibility(View.INVISIBLE);
         utils.deleteOldSAVFiles();
 
+    }
+
+    private Bitmap maskImage(Bitmap mainImage, boolean isRight) {
+        Bitmap mask = BitmapFactory.decodeResource(getResources(),(isRight) ? R.mipmap.move_right: R.mipmap.move_left);
+        Bitmap result = Bitmap.createScaledBitmap(mainImage, mask.getWidth(), mask.getHeight(), false);
+        Canvas c = new Canvas(result);
+        c.drawBitmap(mainImage, 0, 0, null);
+        Paint paint = new Paint();
+        paint.setFilterBitmap(false);
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN) ); // DST_OUT
+        c.drawBitmap(mask, 0, 0, paint);
+        paint.setXfermode(null);
+        c.drawBitmap(result, 0, 0, null);
+        return result;
     }
 
     private void getLocationInfo() {

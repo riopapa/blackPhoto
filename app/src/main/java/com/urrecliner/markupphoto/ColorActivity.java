@@ -31,7 +31,7 @@ import static com.urrecliner.markupphoto.Vars.colorRange;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.markTextInColor;
 import static com.urrecliner.markupphoto.Vars.markTextOutColor;
-import static com.urrecliner.markupphoto.Vars.sharePrefer;
+import static com.urrecliner.markupphoto.Vars.sPref;
 import static com.urrecliner.markupphoto.Vars.utils;
 
 public class ColorActivity extends AppCompatActivity {
@@ -257,7 +257,7 @@ public class ColorActivity extends AppCompatActivity {
         super.onBackPressed();
         markTextInColor = currInColor;
         markTextOutColor = currOutColor;
-        SharedPreferences.Editor editor = sharePrefer.edit();
+        SharedPreferences.Editor editor = sPref.edit();
         editor.putInt("markTextInColor", markTextInColor);
         editor.putInt("markTextOutColor", markTextOutColor);
         editor.apply();

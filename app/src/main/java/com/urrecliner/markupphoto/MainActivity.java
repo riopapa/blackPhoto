@@ -50,7 +50,7 @@ import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
-import static com.urrecliner.markupphoto.Vars.sharePrefer;
+import static com.urrecliner.markupphoto.Vars.sPref;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.signatureMap;
@@ -83,13 +83,13 @@ public class MainActivity extends AppCompatActivity {
         makeDirFolder = new MakeDirFolder();
 
         photos = new ArrayList<>();
-        sharePrefer = getApplicationContext().getSharedPreferences("myPhoto", MODE_PRIVATE);
-        spanCount = sharePrefer.getInt("spanCount", 3);
-        shortFolder = sharePrefer.getString("shortFolder", "DCIM/Camera");
-        longFolder = sharePrefer.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
-        markTextInColor = sharePrefer.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
-        markTextOutColor = sharePrefer.getInt("markTextOutColor", ContextCompat.getColor(mContext, R.color.markOutColor));
-        sharedRadius = sharePrefer.getInt("radius", 100);
+        sPref = getApplicationContext().getSharedPreferences("myPhoto", MODE_PRIVATE);
+        spanCount = sPref.getInt("spanCount", 3);
+        shortFolder = sPref.getString("shortFolder", "DCIM/Camera");
+        longFolder = sPref.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
+        markTextInColor = sPref.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
+        markTextOutColor = sPref.getInt("markTextOutColor", ContextCompat.getColor(mContext, R.color.markOutColor));
+        sharedRadius = sPref.getInt("radius", 500);
         signatureMap = buildBitMap.buildSignatureMap();
         ArrayList<File> photoFiles = utils.getFilteredFileList(longFolder);
         if (photoFiles.size() == 0) {
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
 //            shortFolder = "DCIM/Camera";
 //            longFolder = new File(Environment.getExternalStorageDirectory(), shortFolder).toString();
         }
-        Collections.sort(photoFiles, Collections.reverseOrder());
+        photoFiles.sort(Collections.reverseOrder());
 
         prepareCards();
         for (File photoFile : photoFiles) {
@@ -211,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_TwoThree:
                 spanCount = (spanCount == 2) ? 3:2;
-                SharedPreferences.Editor editor = sharePrefer.edit();
+                SharedPreferences.Editor editor = sPref.edit();
                 editor.putInt("spanCount", spanCount);
                 editor.apply();
                 editor.commit();

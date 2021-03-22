@@ -48,7 +48,7 @@ public class Vars {
     static List<Photo> photos = null;
     static ArrayList<DirectoryFolder> dirFolders = null;
 
-    static SharedPreferences sharePrefer;
+    static SharedPreferences sPref;
     static Menu mainMenu;
 
     static DatabaseIO databaseIO = null;

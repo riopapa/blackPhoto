@@ -100,7 +100,6 @@
         android:scaleType="centerInside"
         android:layout_margin="8dp"
         android:padding="8dp"
-        android:background="@drawable/back_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         tools:layout_editor_absoluteX="8dp" />
@@ -113,7 +112,6 @@
         android:scaleType="centerInside"
         android:layout_margin="8dp"
         android:padding="8dp"
-        android:background="@drawable/back_border"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_editor_absoluteX="8dp" />
