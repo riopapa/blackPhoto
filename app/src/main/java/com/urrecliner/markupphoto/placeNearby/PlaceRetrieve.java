@@ -8,7 +8,7 @@ import com.urrecliner.markupphoto.R;
 public class PlaceRetrieve {
 
     static boolean byPlaceName = false;
-    public PlaceRetrieve(Context mContext, double latitude, double longitude, String placeType, String pageToken,  int radius, String placeName) {
+    public PlaceRetrieve(Context mContext, double latitude, double longitude, String placeType, String pageToken,  String radius, String placeName) {
 
         StringBuilder url;
         if (!placeName.equals("")) {

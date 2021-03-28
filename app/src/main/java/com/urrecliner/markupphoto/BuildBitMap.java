@@ -161,7 +161,7 @@ class BuildBitMap {
         Bitmap sigMap = Bitmap.createScaledBitmap(signatureMap, sigSize, sigSize, false);
         int xPos = width - sigSize - width / 20;
         int yPos = (width>height) ? height/14: height/16;
-        Paint paint = new Paint(); paint.setAlpha(150);
+        Paint paint = new Paint(); paint.setAlpha(100);
         canvas.drawBitmap(sigMap, xPos, yPos, paint);
     }
 

@@ -2,6 +2,7 @@ package com.urrecliner.markupphoto;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -14,6 +15,8 @@ import android.net.Uri;
 import android.os.Environment;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.appcompat.app.ActionBar;
+
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +37,10 @@ import static com.urrecliner.markupphoto.Vars.copyPasteGPS;
 import static com.urrecliner.markupphoto.Vars.longFolder;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.mActivity;
+import static com.urrecliner.markupphoto.Vars.sharedAutoLoad;
+import static com.urrecliner.markupphoto.Vars.sharedPref;
+import static com.urrecliner.markupphoto.Vars.sharedRadius;
+import static com.urrecliner.markupphoto.Vars.sharedSortType;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.utils;
 
@@ -284,6 +291,8 @@ class Utils {
 
         long oldDate = System.currentTimeMillis() - 5*24*60*60*1000L;        // 5 days before
         File[] files = new File(longFolder).listFiles((dir, name) -> name.endsWith("sav"));
+        if (files == null)
+            return;
         for (File file : files) {
             long lastModDate = new Date(file.lastModified()).getTime();
             if (lastModDate < oldDate && file.delete())
@@ -307,6 +316,22 @@ class Utils {
             actionBar.setTitle(title);
             actionBar.setSubtitle(shortFolder);
         }
+    }
+
+    void getPreference() {
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
+        sharedRadius = sharedPref.getString("radius", "");
+        if (sharedRadius.equals("")) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString("radius", "200");
+            editor.putBoolean("autoLoad", true);
+            editor.putString("sort", "none");
+            editor.apply();
+            editor.commit();
+        }
+        sharedRadius = sharedPref.getString("radius", "200");
+        sharedAutoLoad = sharedPref.getBoolean("autoLoad", false);
+        sharedSortType = sharedPref.getString("sort", "none");
     }
 
     Bitmap maskedIcon(int rawId) {

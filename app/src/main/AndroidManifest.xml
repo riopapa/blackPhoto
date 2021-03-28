@@ -34,6 +34,7 @@
         <activity android:name=".DirectoryActivity" />
         <activity android:name=".ColorActivity" />
         <activity android:name=".SelectActivity" />
+        <activity android:name=".SettingsActivity" />
     </application>
 
 </manifest>

@@ -16,7 +16,7 @@ import static com.urrecliner.markupphoto.Vars.dirFolders;
 import static com.urrecliner.markupphoto.Vars.longFolder;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.multiMode;
-import static com.urrecliner.markupphoto.Vars.sPref;
+import static com.urrecliner.markupphoto.Vars.sharedPref;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.squeezeDB;
 import static com.urrecliner.markupphoto.Vars.utils;
@@ -41,7 +41,7 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
                 @Override
                 public void onClick(View view) {
                     int pos = getAdapterPosition();
-                    SharedPreferences.Editor editor = sPref.edit();
+                    SharedPreferences.Editor editor = sharedPref.edit();
                     shortFolder = dirFolders.get(pos).getShortFolder();
                     editor.putString("shortFolder", shortFolder);
                     longFolder = dirFolders.get(pos).getLongFolder();

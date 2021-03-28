@@ -50,7 +50,7 @@ import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
-import static com.urrecliner.markupphoto.Vars.sPref;
+import static com.urrecliner.markupphoto.Vars.sharedPref;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.signatureMap;
@@ -83,13 +83,12 @@ public class MainActivity extends AppCompatActivity {
         makeDirFolder = new MakeDirFolder();
 
         photos = new ArrayList<>();
-        sPref = getApplicationContext().getSharedPreferences("myPhoto", MODE_PRIVATE);
-        spanCount = sPref.getInt("spanCount", 3);
-        shortFolder = sPref.getString("shortFolder", "DCIM/Camera");
-        longFolder = sPref.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
-        markTextInColor = sPref.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
-        markTextOutColor = sPref.getInt("markTextOutColor", ContextCompat.getColor(mContext, R.color.markOutColor));
-        sharedRadius = sPref.getInt("radius", 500);
+        utils.getPreference();
+        spanCount = sharedPref.getInt("spanCount", 3);
+        shortFolder = sharedPref.getString("shortFolder", "DCIM/Camera");
+        longFolder = sharedPref.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
+        markTextInColor = sharedPref.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
+        markTextOutColor = sharedPref.getInt("markTextOutColor", ContextCompat.getColor(mContext, R.color.markOutColor));
         signatureMap = buildBitMap.buildSignatureMap();
         ArrayList<File> photoFiles = utils.getFilteredFileList(longFolder);
         if (photoFiles.size() == 0) {
@@ -161,9 +160,12 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.action_setting:
-                finish();
-                intent = new Intent(this, ColorActivity.class);
+                intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
+//
+//                finish();
+//                intent = new Intent(this, ColorActivity.class);
+//                startActivity(intent);
                 return true;
 
             case R.id.action_MarkUpMulti:
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_TwoThree:
                 spanCount = (spanCount == 2) ? 3:2;
-                SharedPreferences.Editor editor = sPref.edit();
+                SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putInt("spanCount", spanCount);
                 editor.apply();
                 editor.commit();

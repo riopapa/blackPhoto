@@ -62,8 +62,8 @@ import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
 import static com.urrecliner.markupphoto.Vars.placeActivity;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
-import static com.urrecliner.markupphoto.Vars.placeRetrieve;
 import static com.urrecliner.markupphoto.Vars.placeType;
+import static com.urrecliner.markupphoto.Vars.sharedAutoLoad;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.tvPlaceAddress;
 import static com.urrecliner.markupphoto.Vars.typeAdapter;
@@ -145,10 +145,10 @@ public class MarkupWithPlace extends AppCompatActivity {
         TextView tv = findViewById(R.id.photoName);
         tv.setText(fileFullName.getName());
         ImageView iVPlace = findViewById(R.id.getLocation);
-        iVPlace.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                placeInfos = new ArrayList<>();
+        iVPlace.setOnClickListener(view -> {
+            if (latitude == 0 && longitude == 0) {
+                Toast.makeText(mContext,"No GPS Information to retrieve places",Toast.LENGTH_LONG).show();
+            } else {
                 getPlaceByLatLng();
             }
         });
@@ -156,48 +156,34 @@ public class MarkupWithPlace extends AppCompatActivity {
         iVPlace.setImageResource(typeIcons[typeNumber]);
 
         ImageView iVInfo = findViewById(R.id.getInformation);
-        iVInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(mContext, buildLongInfo(), Toast.LENGTH_LONG).show();
-            }
-        });
+        iVInfo.setOnClickListener(view -> Toast.makeText(mContext, buildLongInfo(), Toast.LENGTH_LONG).show());
         FloatingActionButton fab = findViewById(R.id.rotate);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MenuItem item = menuPlace.findItem(R.id.saveRotate);
-                item.setEnabled(true);
-                item.getIcon().setAlpha(255);
-                ImageView iv = findViewById(R.id.image);
-                Matrix matrix = new Matrix();
-                matrix.postRotate(-90);
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-                iv.setImageBitmap(bitmap);
-                PhotoViewAttacher pA;       // to enable zoom
-                pA = new PhotoViewAttacher(iv);
-                pA.update();
-            }
+        fab.setOnClickListener(view -> {
+            MenuItem item = menuPlace.findItem(R.id.saveRotate);
+            item.setEnabled(true);
+            item.getIcon().setAlpha(255);
+            ImageView iv1 = findViewById(R.id.image);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(-90);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
+            iv1.setImageBitmap(bitmap);
+            PhotoViewAttacher pA1;       // to enable zoom
+            pA1 = new PhotoViewAttacher(iv1);
+            pA1.update();
         });
 
         final ImageView ivL = findViewById(R.id.imageL);
         if (nowPos > 0) {
-            ivL.post(new Runnable() {
-                @Override
-                public void run() {
-                    int width = ivL.getMeasuredWidth();
-                    int height = ivL.getMeasuredHeight();
-                    Bitmap bitmap = maskImage(photos.get(nowPos-1).getBitmap(), false);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-                    ivL.setImageBitmap(bitmap);
-                }
+            ivL.post(() -> {
+                int width = ivL.getMeasuredWidth();
+                int height = ivL.getMeasuredHeight();
+                Bitmap bitmap = maskImage(photos.get(nowPos-1).getBitmap(), false);
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+                ivL.setImageBitmap(bitmap);
             });
-            ivL.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    nowPos--;
-                    buildPhotoScreen();
-                }
+            ivL.setOnClickListener(view -> {
+                nowPos--;
+                buildPhotoScreen();
             });
             ivL.setVisibility(View.VISIBLE);
         } else
@@ -229,7 +215,9 @@ public class MarkupWithPlace extends AppCompatActivity {
         else
             ivR.setVisibility(View.INVISIBLE);
         utils.deleteOldSAVFiles();
-
+        if (sharedAutoLoad && !photo.getShortName().endsWith("_ha.jpg")) {
+            getPlaceByLatLng();
+        }
     }
 
     private Bitmap maskImage(Bitmap mainImage, boolean isRight) {
@@ -260,9 +248,11 @@ public class MarkupWithPlace extends AppCompatActivity {
         et.setSelection(text.indexOf("\n"));
     }
 
-//    final int REQUEST_PLACE_PICKER = 11;
     private void getPlaceByLatLng() {
+        placeInfos = new ArrayList<>();
         nowDownLoading = true;
+        ImageView iVPlace = findViewById(R.id.getLocation);
+        iVPlace.setAlpha(0.2f);
         EditText et = findViewById(R.id.placeAddress);
         String placeName = et.getText().toString();
         if (placeName != null && placeName.startsWith("?")) {
@@ -273,14 +263,11 @@ public class MarkupWithPlace extends AppCompatActivity {
         new PlaceRetrieve(mContext, latitude, longitude, placeType, pageToken, sharedRadius, byPlaceName);
         new Timer().schedule(new TimerTask() {
             public void run() {
-                selectPlace();
+                iVPlace.setAlpha(1f);
+                Intent intent = new Intent(mContext, SelectActivity.class);
+                startActivity(intent);
             }
-        }, 2000);
-    }
-
-    private void selectPlace() {
-        Intent intent = new Intent(mContext, SelectActivity.class);
-        startActivity(intent);
+        }, 1500);
     }
 
 //    @Override

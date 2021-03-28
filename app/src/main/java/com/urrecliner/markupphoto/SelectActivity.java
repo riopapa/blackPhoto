@@ -22,7 +22,9 @@ import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
 import static com.urrecliner.markupphoto.Vars.placeType;
 import static com.urrecliner.markupphoto.Vars.selectActivity;
+import static com.urrecliner.markupphoto.Vars.sharedPref;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
+import static com.urrecliner.markupphoto.Vars.sharedSortType;
 import static com.urrecliner.markupphoto.Vars.utils;
 import static com.urrecliner.markupphoto.placeNearby.PlaceParser.pageToken;
 import static com.urrecliner.markupphoto.placeNearby.PlaceParser.NO_MORE_PAGE;
@@ -60,11 +62,9 @@ public class SelectActivity extends AppCompatActivity {
                             }
                         }, 1500);
                     } else {
-//                        placeInfos.sort((arg0, arg1) -> arg0.getDistance().compareTo(arg1.getDistance()));
-                        placeInfos.sort((arg0, arg1) -> arg0.getoName().compareTo(arg1.getoName()));
+                        sortPlaceInfos();
                         String s = "Total "+placeInfos.size()+" places retrieved";
-                        utils.log("LIST", s);
-                        Toast.makeText(mContext,s, Toast.LENGTH_LONG).show();
+                        Toast.makeText(mContext,s, Toast.LENGTH_SHORT).show();
                         PlaceAdapter placeAdapter = new PlaceAdapter();
                         placeRecycleView.setAdapter(placeAdapter);
                     }
@@ -73,4 +73,18 @@ public class SelectActivity extends AppCompatActivity {
             public void onFinish() { }
         }.start();
     }
+
+    private void sortPlaceInfos() {
+
+        switch(sharedSortType) {
+            case "name":
+                placeInfos.sort((arg0, arg1) -> arg0.getoName().compareTo(arg1.getoName()));
+                break;
+            case "distance":
+                placeInfos.sort((arg0, arg1) -> arg0.getDistance().compareTo(arg1.getDistance()));
+                break;
+            default:
+        }
+    }
+
 }

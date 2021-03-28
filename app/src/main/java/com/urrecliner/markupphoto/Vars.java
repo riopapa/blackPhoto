@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
 import android.widget.ImageView;
@@ -48,7 +49,6 @@ public class Vars {
     static List<Photo> photos = null;
     static ArrayList<DirectoryFolder> dirFolders = null;
 
-    static SharedPreferences sPref;
     static Menu mainMenu;
 
     static DatabaseIO databaseIO = null;
@@ -60,10 +60,15 @@ public class Vars {
     static int colorRGB;
     static int markTextInColor;
     static int markTextOutColor;
-    static int sharedRadius;
     static TextView tvPlaceAddress;
     static PlaceRetrieve placeRetrieve;
     static String byPlaceName = "";
+
+    /* --- shared Preference **/
+    static SharedPreferences sharedPref;
+    static String sharedRadius = "200";
+    static String sharedSortType = "";
+    static boolean sharedAutoLoad = false;
 
     /* --- place select related variables --- */
     public static boolean nowDownLoading = false;
@@ -82,7 +87,8 @@ public class Vars {
             "school", "shopping", "ski", "stadium", "supermarket", "taxi", "tennis",
             "train", "travel_agent", "truck", "university", "wine", "worship_christian",
             "worship_general", "worship_hindu", "worship_islam", "worship_jewish", "zoo",
-            "park", "bank","worship_dharma", "pharmacy", "parking"
+            "park", "bank","worship_dharma", "pharmacy", "parking", "hospital",
+            "cemetery_grave"
     };
     static int [] iconRaws = { R.raw.question,
             R.raw.airport, R.raw.amusement, R.raw.aquarium, R.raw.art_gallery, R.raw.atm, R.raw.baby,
@@ -96,7 +102,8 @@ public class Vars {
             R.raw.school, R.raw.shopping, R.raw.ski, R.raw.stadium, R.raw.supermarket, R.raw.taxi, R.raw.tennis,
             R.raw.train, R.raw.travel_agent, R.raw.truck, R.raw.university, R.raw.wine, R.raw.worship_christian,
             R.raw.worship_general, R.raw.worship_hindu, R.raw.worship_islam, R.raw.worship_jewish, R.raw.zoo,
-            R.raw.park, R.raw.bank, R.raw.worship_dharma, R.raw.pharmacy, R.raw.parking
+            R.raw.park, R.raw.bank, R.raw.worship_dharma, R.raw.pharmacy, R.raw.parking, R.raw.hospital,
+            R.raw.cemetery_grave
     };
 
     static ArrayList<TypeInfo> typeInfos = null;
