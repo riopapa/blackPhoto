@@ -2,7 +2,6 @@ package com.urrecliner.markupphoto;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,14 +17,11 @@ import static com.urrecliner.markupphoto.GPSTracker.hLatitude;
 import static com.urrecliner.markupphoto.GPSTracker.hLongitude;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.nowDownLoading;
-import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.placeInfos;
 import static com.urrecliner.markupphoto.Vars.placeType;
 import static com.urrecliner.markupphoto.Vars.selectActivity;
-import static com.urrecliner.markupphoto.Vars.sharedPref;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
-import static com.urrecliner.markupphoto.Vars.sharedSortType;
-import static com.urrecliner.markupphoto.Vars.utils;
+import static com.urrecliner.markupphoto.Vars.sharedSort;
 import static com.urrecliner.markupphoto.placeNearby.PlaceParser.pageToken;
 import static com.urrecliner.markupphoto.placeNearby.PlaceParser.NO_MORE_PAGE;
 
@@ -76,11 +72,11 @@ public class SelectActivity extends AppCompatActivity {
 
     private void sortPlaceInfos() {
 
-        switch(sharedSortType) {
-            case "name":
+        switch(sharedSort) {
+            case "이름":
                 placeInfos.sort((arg0, arg1) -> arg0.getoName().compareTo(arg1.getoName()));
                 break;
-            case "distance":
+            case "거리":
                 placeInfos.sort((arg0, arg1) -> arg0.getDistance().compareTo(arg1.getDistance()));
                 break;
             default:

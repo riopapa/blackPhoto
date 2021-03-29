@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,13 +27,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.urrecliner.markupphoto.Vars.buildBitMap;
 import static com.urrecliner.markupphoto.Vars.buildDB;
@@ -45,17 +52,17 @@ import static com.urrecliner.markupphoto.Vars.makeDirFolder;
 import static com.urrecliner.markupphoto.Vars.markTextInColor;
 import static com.urrecliner.markupphoto.Vars.markTextOutColor;
 import static com.urrecliner.markupphoto.Vars.markUpOnePhoto;
+import static com.urrecliner.markupphoto.Vars.menuItem;
 import static com.urrecliner.markupphoto.Vars.multiMode;
 import static com.urrecliner.markupphoto.Vars.nowPlace;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photoView;
 import static com.urrecliner.markupphoto.Vars.photos;
 import static com.urrecliner.markupphoto.Vars.sharedPref;
-import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
 import static com.urrecliner.markupphoto.Vars.signatureMap;
 import static com.urrecliner.markupphoto.Vars.sizeX;
-import static com.urrecliner.markupphoto.Vars.spanCount;
+import static com.urrecliner.markupphoto.Vars.sharedSpan;
 import static com.urrecliner.markupphoto.Vars.spanWidth;
 import static com.urrecliner.markupphoto.Vars.squeezeDB;
 import static com.urrecliner.markupphoto.Vars.utils;
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
         mActivity = this;
+        photoView = findViewById(R.id.photoView);
         utils = new Utils();
         utils.log("markup", "Start--");
         askPermission();
@@ -84,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
 
         photos = new ArrayList<>();
         utils.getPreference();
-        spanCount = sharedPref.getInt("spanCount", 3);
         shortFolder = sharedPref.getString("shortFolder", "DCIM/Camera");
         longFolder = sharedPref.getString("longFolder", new File(Environment.getExternalStorageDirectory(), shortFolder).toString());
         markTextInColor = sharedPref.getInt("markTextInColor", ContextCompat.getColor(mContext, R.color.markInColor));
@@ -127,60 +134,11 @@ public class MainActivity extends AppCompatActivity {
         }
         utils.deleteOldLogFiles();
         utils.deleteOldSAVFiles();
-    }
-
-    private void prepareCards() {
-        photoView = findViewById(R.id.photoView);
-        StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(spanCount, StaggeredGridLayoutManager.VERTICAL);
-        photoView.setLayoutManager(SGL);
-        photoView.addItemDecoration(new DividerItemDecoration(this, SGL.getOrientation()));
-        photoView.setLayoutManager(SGL);
-        photoView.setBackgroundColor(0x88000000 + Color.GRAY);
-        spanWidth = (sizeX / spanCount) * 96 / 100;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        mainMenu = menu;
-        getMenuInflater().inflate(R.menu.main_menu, menu);
-        MenuItem item = menu.findItem(R.id.action_TwoThree);
-        item.setIcon((spanCount == 3) ? R.drawable.icon_show_two:R.drawable.icon_show_three);
-
-        if (dirNotReady) {
-            item = mainMenu.findItem(R.id.action_Directory);
-            item.setEnabled(false);
-            item.getIcon().setAlpha(35);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent intent;
-        switch (item.getItemId()) {
-
-            case R.id.action_setting:
-                intent = new Intent(MainActivity.this, SettingsActivity.class);
-                startActivity(intent);
-//
-//                finish();
-//                intent = new Intent(this, ColorActivity.class);
-//                startActivity(intent);
-                return true;
-
-            case R.id.action_MarkUpMulti:
-                nowPlace = null;
-                final MarkUpMulti markUpMulti = new MarkUpMulti();
-                markUpMulti.markUp();
-                return true;
-
-            case R.id.action_Directory:
-                finish();
-                intent = new Intent(this, DirectoryActivity.class);
-                startActivity(intent);
-                return true;
-
-            case R.id.action_unSelect:
+        FloatingActionButton fab = findViewById(R.id.undo);
+        fab.setVisibility(View.INVISIBLE);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 multiMode = false;
                 int totCount = photos.size();
                 for (int i = 0; i < totCount; i++) {
@@ -192,14 +150,65 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
                 photoAdapter.notifyDataSetChanged();
+                fab.setVisibility(View.INVISIBLE);
+                MenuItem item = mainMenu.findItem(R.id.action_Delete);
+                item.setVisible(false);
+
+            }
+        });
+    }
+
+    static void prepareCards() {
+        int span = Integer.parseInt(sharedSpan);
+        StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(span, StaggeredGridLayoutManager.VERTICAL);
+        photoView.setLayoutManager(SGL);
+        photoView.addItemDecoration(new DividerItemDecoration(mContext, SGL.getOrientation()));
+        photoView.setLayoutManager(SGL);
+        photoView.setBackgroundColor(0x88000000 + Color.GRAY);
+        spanWidth = (sizeX / span) * 96 / 100;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        mainMenu = menu;
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        if (dirNotReady) {
+            MenuItem item = mainMenu.findItem(R.id.action_Directory);
+            item.setEnabled(false);
+            item.getIcon().setAlpha(35);
+        }
+        MenuItem item = mainMenu.findItem(R.id.action_Delete);
+        item.setVisible(false);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Intent intent;
+        switch (item.getItemId()) {
+
+            case R.id.action_setting:
+                intent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivity(intent);
+                return true;
+
+//            case R.id.action_MarkUpMulti:
+//                nowPlace = null;
+//                new MarkUpMulti().markUp();
+//                return true;
+
+            case R.id.action_Directory:
+                finish();
+                intent = new Intent(this, DirectoryActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.action_Delete:
-                final ArrayList<String> toDelete;
-                toDelete = build_DeletePhoto();
-                if (toDelete.size()> 0) {
+                final ArrayList<String> toDeleteList;
+                toDeleteList = build_DeletePhoto();
+                if (toDeleteList.size()> 0) {
                     StringBuilder msg = new StringBuilder();
-                    for (String s : toDelete) msg.append("\n").append(s);
+                    for (String s : toDeleteList) msg.append("\n").append(s);
                     AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                     builder.setTitle("Delete multiple photos ?");
                     builder.setMessage(msg.toString());
@@ -209,18 +218,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(mContext,"Photo selection is required to delete",Toast.LENGTH_LONG).show();
                 }
-                break;
-
-            case R.id.action_TwoThree:
-                spanCount = (spanCount == 2) ? 3:2;
-                SharedPreferences.Editor editor = sharedPref.edit();
-                editor.putInt("spanCount", spanCount);
-                editor.apply();
-                editor.commit();
-                prepareCards();
-//                getMenuInflater().inflate(R.menuPlace.main_menu, menuThis);
-                MenuItem item23 = mainMenu.findItem(R.id.action_TwoThree);
-                item23.setIcon((spanCount == 3) ? R.drawable.icon_show_two:R.drawable.icon_show_three);
                 break;
         }
         return super.onOptionsItemSelected(item);

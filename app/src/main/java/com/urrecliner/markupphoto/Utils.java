@@ -40,8 +40,9 @@ import static com.urrecliner.markupphoto.Vars.mActivity;
 import static com.urrecliner.markupphoto.Vars.sharedAutoLoad;
 import static com.urrecliner.markupphoto.Vars.sharedPref;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
-import static com.urrecliner.markupphoto.Vars.sharedSortType;
+import static com.urrecliner.markupphoto.Vars.sharedSort;
 import static com.urrecliner.markupphoto.Vars.shortFolder;
+import static com.urrecliner.markupphoto.Vars.sharedSpan;
 import static com.urrecliner.markupphoto.Vars.utils;
 
 class Utils {
@@ -326,12 +327,14 @@ class Utils {
             editor.putString("radius", "200");
             editor.putBoolean("autoLoad", true);
             editor.putString("sort", "none");
+            editor.putString("span","3");
             editor.apply();
             editor.commit();
         }
         sharedRadius = sharedPref.getString("radius", "200");
         sharedAutoLoad = sharedPref.getBoolean("autoLoad", false);
-        sharedSortType = sharedPref.getString("sort", "none");
+        sharedSort = sharedPref.getString("sort", "none");
+        sharedSpan = sharedPref.getString("span","3");
     }
 
     Bitmap maskedIcon(int rawId) {

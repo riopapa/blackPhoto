@@ -37,7 +37,6 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:18.0.0'
     implementation 'com.google.android.gms:play-services-places:17.0.0'
     implementation 'com.commit451:PhotoView:1.2.4'
-
     implementation "androidx.preference:preference:1.1.1"
 
     // Places library

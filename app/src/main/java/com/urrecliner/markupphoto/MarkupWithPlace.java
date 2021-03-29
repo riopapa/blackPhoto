@@ -43,7 +43,6 @@ import java.util.TimerTask;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static com.urrecliner.markupphoto.Vars.SUFFIX_JPG;
 import static com.urrecliner.markupphoto.Vars.buildDB;
 import static com.urrecliner.markupphoto.Vars.byPlaceName;
 import static com.urrecliner.markupphoto.Vars.copyPasteGPS;
@@ -103,7 +102,6 @@ public class MarkupWithPlace extends AppCompatActivity {
         }
 
         RecyclerView typeRecyclerView = findViewById(R.id.type_recycler);
-//        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
         LinearLayoutManager mLinearLayoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         typeRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -155,10 +153,39 @@ public class MarkupWithPlace extends AppCompatActivity {
 //        iVPlace.setImageBitmap(utils.maskedIcon(typeIcons[typeNumber]));
         iVPlace.setImageResource(typeIcons[typeNumber]);
 
+        ImageView iVMark = findViewById(R.id.add_mark);
+        iVMark.setOnClickListener(view -> {
+            if (latitude == 0 && longitude == 0) {
+                Toast.makeText(mContext,"No GPS Information to retrieve places",Toast.LENGTH_LONG).show();
+            } else {
+                EditText etPlace = findViewById(R.id.placeAddress);
+                nowPlace = etPlace.getText().toString();
+                if (nowPlace.length() > 5) {
+                    Photo nPhoto = new Photo(markUpOnePhoto.insertGeoInfo(photo));
+                    String nFileName = nPhoto.getFullFileName().toString();
+                    if (photos.get(nowPos-1).getFullFileName().toString().equals(nFileName)) {
+                        removeItemView(nowPos-1);
+                        databaseIO.delete(nPhoto.getFullFileName());
+                        nowPos--;
+                    };
+
+                    nPhoto.setBitmap(null);
+                    nPhoto.setOrientation(photo.getOrientation());
+                    nPhoto = buildDB.getPhotoWithMap(nPhoto);
+                    photos.add(nowPos, nPhoto);
+                    photoAdapter.notifyItemInserted(nowPos);
+                    photoAdapter.notifyItemChanged(nowPos, nPhoto);
+                    photoAdapter.notifyItemChanged(nowPos+1);
+                    finish();
+                }
+            }
+        });
+        iVMark.setAlpha(fileFullName.getName().endsWith("_ha.jpg") ? 0.3f: 1f);
+
         ImageView iVInfo = findViewById(R.id.getInformation);
         iVInfo.setOnClickListener(view -> Toast.makeText(mContext, buildLongInfo(), Toast.LENGTH_LONG).show());
-        FloatingActionButton fab = findViewById(R.id.rotate);
-        fab.setOnClickListener(view -> {
+        FloatingActionButton fabRotate = findViewById(R.id.rotate);
+        fabRotate.setOnClickListener(view -> {
             MenuItem item = menuPlace.findItem(R.id.saveRotate);
             item.setEnabled(true);
             item.getIcon().setAlpha(255);
@@ -191,8 +218,6 @@ public class MarkupWithPlace extends AppCompatActivity {
 
         final ImageView ivR = findViewById(R.id.imageR);
         if (nowPos < photos.size()-1) {
-
-//            ivR.setImageBitmap(photos.get(nowPos+1).getBitmap());
             ivR.post(new Runnable() {
                 @Override
                 public void run() {
@@ -392,23 +417,9 @@ public class MarkupWithPlace extends AppCompatActivity {
         menuPlace = menu;
         MenuItem item;
         getMenuInflater().inflate(R.menu.photo_menu, menu);
-        String fileName = photos.get(nowPos).getShortName();
-        if (fileName.substring(fileName.length()-7).equals(SUFFIX_JPG)) {
-            item = menu.findItem(R.id.markWithPlace);
-            item.setEnabled(false);
-            item.getIcon().setAlpha(40);
-        }
-        else {
-            item = menu.findItem(R.id.markWithPlace);
-            item.setEnabled(true);
-            item.getIcon().setAlpha(255);
-        }
         item = menu.findItem(R.id.saveRotate);
         item.setEnabled(false);
         item.getIcon().setAlpha(40);
-        item = menu.findItem(R.id.pasteText);
-//        Log.w("text",copyPasteText+" "+copyPasteGPS);
-//        item.setVisible((copyPasteText == null));
         return true;
     }
 
@@ -449,28 +460,6 @@ public class MarkupWithPlace extends AppCompatActivity {
 
             case R.id.pasteText:
                 etPlace.setText(copyPasteText);
-                return true;
-
-            case R.id.markWithPlace:
-                nowPlace = etPlace.getText().toString();
-                if (nowPlace.length() > 5) {
-                    Photo nPhoto = new Photo(markUpOnePhoto.insertGeoInfo(photo));
-                    String nFileName = nPhoto.getFullFileName().toString();
-                    if (photos.get(nowPos-1).getFullFileName().toString().equals(nFileName)) {
-                        removeItemView(nowPos-1);
-                        databaseIO.delete(nPhoto.getFullFileName());
-                        nowPos--;
-                    };
-
-                    nPhoto.setBitmap(null);
-                    nPhoto.setOrientation(photo.getOrientation());
-                    nPhoto = buildDB.getPhotoWithMap(nPhoto);
-                    photos.add(nowPos, nPhoto);
-                    photoAdapter.notifyItemInserted(nowPos);
-                    photoAdapter.notifyItemChanged(nowPos, nPhoto);
-                    photoAdapter.notifyItemChanged(nowPos+1);
-                    finish();
-                }
                 return true;
 
             case R.id.markDelete:

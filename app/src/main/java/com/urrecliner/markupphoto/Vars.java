@@ -7,10 +7,12 @@ import android.graphics.Bitmap;
 
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.urrecliner.markupphoto.placeNearby.PlaceInfo;
 import com.urrecliner.markupphoto.placeNearby.PlaceRetrieve;
 
@@ -40,7 +42,7 @@ public class Vars {
     static String longFolder = null;
     static int nowPos;
     static String nowPlace, nowAddress, nowLatLng;
-    static int spanCount, spanWidth, sizeX;
+    static int spanWidth, sizeX;
     static String copyPasteText = null;
     static String copyPasteGPS;
     static boolean dirNotReady = true;
@@ -61,14 +63,16 @@ public class Vars {
     static int markTextInColor;
     static int markTextOutColor;
     static TextView tvPlaceAddress;
-    static PlaceRetrieve placeRetrieve;
     static String byPlaceName = "";
+    static MenuItem menuItem;
+    static FloatingActionButton fabUndo;
 
     /* --- shared Preference **/
     static SharedPreferences sharedPref;
-    static String sharedRadius = "200";
-    static String sharedSortType = "";
+    static String sharedRadius;
+    static String sharedSort;
     static boolean sharedAutoLoad = false;
+    static String sharedSpan;
 
     /* --- place select related variables --- */
     public static boolean nowDownLoading = false;

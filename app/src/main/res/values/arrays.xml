@@ -18,10 +18,15 @@
         <item>1000</item>
     </string-array>
 
+    <string-array name="span_values">
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <string-array name="sort_values">
         <item>none</item>
-        <item>name</item>
-        <item>distance</item>
+        <item>이름</item>
+        <item>거리</item>
     </string-array>
 
 </resources>

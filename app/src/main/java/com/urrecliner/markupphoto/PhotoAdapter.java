@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -12,11 +13,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import static com.urrecliner.markupphoto.Vars.SUFFIX_JPG;
 import static com.urrecliner.markupphoto.Vars.buildBitMap;
 import static com.urrecliner.markupphoto.Vars.buildDB;
+import static com.urrecliner.markupphoto.Vars.fabUndo;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.mActivity;
+import static com.urrecliner.markupphoto.Vars.mainMenu;
 import static com.urrecliner.markupphoto.Vars.multiMode;
 import static com.urrecliner.markupphoto.Vars.nowPos;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
@@ -94,6 +99,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
 
         private void toggleCheckBox(int position) {
 
+            fabUndo = mActivity.findViewById(R.id.undo);
+            fabUndo.setVisibility(View.VISIBLE);
             Photo photo = photos.get(position);
             String shortName = photo.getShortName();
             Bitmap photoMap = photo.getBitmap().copy(Bitmap.Config.ARGB_8888, false);
@@ -111,6 +118,8 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                 for (int pos = start; pos < finish; pos++)
                     photoAdapter.notifyItemChanged(pos);
             }
+            MenuItem item = mainMenu.findItem(R.id.action_Delete);
+            item.setVisible(true);
         }
     }
 

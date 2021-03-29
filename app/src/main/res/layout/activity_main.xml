@@ -21,8 +21,18 @@
         >
     </androidx.recyclerview.widget.RecyclerView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/undo"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="40dp"
+        android:contentDescription="TODO"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/undo"
+        app:backgroundTint="#44FF0000"
+        app:maxImageSize="48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+         />
+
 </RelativeLayout>
-<!--    android:scrollbars="vertical"-->
-<!--    android:scrollbarThumbVertical="@color/recycleView"-->
-<!--    android:scrollbarSize="4dp"-->
-<!--    android:scrollbarStyle="outsideInset"-->

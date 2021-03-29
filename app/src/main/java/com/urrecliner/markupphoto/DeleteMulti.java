@@ -3,11 +3,15 @@ package com.urrecliner.markupphoto;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import java.io.File;
 
+import static com.urrecliner.markupphoto.Vars.fabUndo;
 import static com.urrecliner.markupphoto.Vars.mActivity;
+import static com.urrecliner.markupphoto.Vars.mainMenu;
 import static com.urrecliner.markupphoto.Vars.photoAdapter;
 import static com.urrecliner.markupphoto.Vars.photos;
 
@@ -68,6 +72,14 @@ class DeleteMulti {
             msg.append(deleteCount);
             msg.append(" photos deleted");
             Toast.makeText(mActivity, msg, Toast.LENGTH_SHORT).show();
+            mActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    fabUndo.setVisibility(View.INVISIBLE);
+                    MenuItem item = mainMenu.findItem(R.id.action_Delete);
+                    item.setVisible(false);
+                }
+            });
         }
     }
 }

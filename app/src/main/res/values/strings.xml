@@ -28,9 +28,10 @@
     <string name="signature_title">Your signature</string>
     <string name="zoom_title">Google Map Zoom Level </string>
     <string name="radius_title">Search Radius in Meters</string>
-    <string name="sort_title">Sort Sequence</string>
+    <string name="sort_title">Sort PlaceList</string>
+    <string name="span_title">Number of photos in columns</string>
 
-    <string name="auto_title">Load PlaceList automatically</string>
+    <string name="auto_title">PlaceList AutoLoad</string>
     <string name="attachment_title">Download incoming attachments</string>
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
