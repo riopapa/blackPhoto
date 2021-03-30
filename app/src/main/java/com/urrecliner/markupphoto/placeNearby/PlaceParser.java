@@ -15,7 +15,7 @@ public class PlaceParser {
         HashMap<String, String> placeList = new HashMap<>();
         String placeName = "--NA--";
         String vicinity= "--NA--";
-        String icon = "";
+        String icon;
 
         try {
             if (!placeJson.isNull("name")) {
@@ -50,7 +50,7 @@ public class PlaceParser {
         return placeList;
 
     }
-    private List<HashMap<String, String>> getAllPlaces(JSONArray jsonArray, boolean byPlaceName)
+    private List<HashMap<String, String>> getAllPlaces(JSONArray jsonArray)
     {
         int count = jsonArray.length();
         List<HashMap<String, String>> placelist = new ArrayList<>();
@@ -100,6 +100,6 @@ public class PlaceParser {
             }
         }
         assert jsonArray != null;
-        return getAllPlaces(jsonArray, byPlaceName);
+        return getAllPlaces(jsonArray);
     }
 }

@@ -17,7 +17,8 @@ import static com.urrecliner.markupphoto.Vars.colorRange;
 
 class ColorDraw {
 
-    private ImageView iVBoxCurr, iVBoxWork;
+    private final ImageView iVBoxCurr;
+    private final ImageView iVBoxWork;
 
     ColorDraw(Activity activity) {
         iVBoxCurr = activity.findViewById(R.id.colorCurr);

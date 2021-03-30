@@ -37,25 +37,22 @@ public class DirectoryAdapter extends RecyclerView.Adapter<DirectoryAdapter.View
             super(itemView);
             tVInfo = itemView.findViewById(R.id.dirName);
             iVImage = itemView.findViewById(R.id.dirImage);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int pos = getAdapterPosition();
-                    SharedPreferences.Editor editor = sharedPref.edit();
-                    shortFolder = dirFolders.get(pos).getShortFolder();
-                    editor.putString("shortFolder", shortFolder);
-                    longFolder = dirFolders.get(pos).getLongFolder();
-                    editor.putString("longFolder", longFolder);
-                    editor.apply();
-                    editor.commit();
-                    dirActivity.finish();
-                    buildDB.cancel();
-                    squeezeDB.cancel();
-                    multiMode = false;
-                    dirNotReady = false;
-                    Intent intent = new Intent(mContext, MainActivity.class);
-                    dirActivity.startActivity(intent);
-                }
+            itemView.setOnClickListener(view -> {
+                int pos = getAdapterPosition();
+                SharedPreferences.Editor editor = sharedPref.edit();
+                shortFolder = dirFolders.get(pos).getShortFolder();
+                editor.putString("shortFolder", shortFolder);
+                longFolder = dirFolders.get(pos).getLongFolder();
+                editor.putString("longFolder", longFolder);
+                editor.apply();
+                editor.commit();
+                dirActivity.finish();
+                buildDB.cancel();
+                squeezeDB.cancel();
+                multiMode = false;
+                dirNotReady = false;
+                Intent intent = new Intent(mContext, MainActivity.class);
+                dirActivity.startActivity(intent);
             });
         }
     }

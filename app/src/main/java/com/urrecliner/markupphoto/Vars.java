@@ -43,7 +43,7 @@ public class Vars {
     static int nowPos;
     static String nowPlace, nowAddress, nowLatLng;
     static int spanWidth, sizeX;
-    static String copyPasteText = null;
+    static String copyPasteText = "";
     static String copyPasteGPS;
     static boolean dirNotReady = true;
 
@@ -117,12 +117,12 @@ public class Vars {
     static int[] typeIcons = {R.mipmap.place_holder, R.raw.restaurant, R.raw.cafe, R.raw.bar,
             R.raw.shopping, R.raw.shopping, R.raw.park, R.raw.worship_christian, R.raw.worship_islam,
             R.raw.parking, R.raw.school, R.raw.museum, R.raw.amusement, R.raw.amusement,
-            R.raw.university,R.raw.atm, R.raw.zoo,
+            R.raw.university,R.raw.atm, R.raw.zoo, R.raw.lodging,
             R.mipmap.place_holder};
     static String[] typeNames = {"all", "restaurant", "cafe", "bar",
             "store", "shopping_mall", "park", "church","mosque",
             "parking", "school", "museum", "tourist_attraction", "amusement",
-            "university", "atm", "zoo",
+            "university", "atm", "zoo", "lodging",
             "all"};
 
 }

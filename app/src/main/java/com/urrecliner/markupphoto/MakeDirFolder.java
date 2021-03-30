@@ -32,6 +32,8 @@ public class MakeDirFolder {
         @Override
         protected String doInBackground(String... inputParams) {
             int index = 0;
+            if (dirFolders == null)
+                return "";
             for (DirectoryFolder df: dirFolders) {
                 photoFiles = utils.getFilteredFileList(df.getLongFolder());
                 if (photoFiles.size() != 0) {

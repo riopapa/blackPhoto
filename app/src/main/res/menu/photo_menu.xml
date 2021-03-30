@@ -11,31 +11,17 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/saveRotate"
-        android:orderInCategory="100"
-        android:title= "@string/rotate_image"
-        android:icon="@mipmap/save_photo"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/markDelete"
         android:orderInCategory="100"
         android:title="@string/delete"
-        android:icon="@drawable/icon_delete"
+        android:icon="@mipmap/trash"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/copyText"
-        android:icon="@drawable/icon_text_copy"
+        android:icon="@mipmap/copy"
         android:orderInCategory="100"
         android:title="@string/copy_text"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/pasteText"
-        android:icon="@drawable/icon_text_paste"
-        android:orderInCategory="100"
-        android:title="@string/paste_text"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>

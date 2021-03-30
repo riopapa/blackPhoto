@@ -1,17 +1,13 @@
 <resources>
     <string name="app_name">MarkUp Photo</string>
     <string name="select_Directory">Select Directory</string>
-    <string name="apply_Mark">Apply Mark</string>
-    <string name="unSelect">Undo All select</string>
     <string name="setting">Settig</string>
     <string name="delete">Delete File</string>
     <string name="photo">photo</string>
     <string name="name">Name</string>
     <string name="todo">TODO</string>
-    <string name="paste_text">Paste Text into PlaceAddress</string>
     <string name="copy_text">Copy PlaceAddress Text</string>
     <string name="rename_file">Rename file with DateTime Info</string>
-    <string name="rotate_image">Rotate Image</string>
     <string name="text_color">Text Color</string>
     <string name="outline_color">Outline Color</string>
     <string name="color_plate">colorPlate</string>
@@ -22,20 +18,12 @@
     <string name="select">Select</string>
 
     <string name="messages_header">Preference Setting</string>
-    <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="zoom_title">Google Map Zoom Level </string>
     <string name="radius_title">Search Radius in Meters</string>
     <string name="sort_title">Sort PlaceList</string>
     <string name="span_title">Number of photos in columns</string>
 
     <string name="auto_title">PlaceList AutoLoad</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="space">" "</string>
 
 </resources>

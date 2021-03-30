@@ -41,8 +41,6 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
                 int idx = getAdapterPosition();
                 nowPlace = placeInfos.get(idx).getoName();
                 nowAddress = placeInfos.get(idx).getoAddress();
-//                hLatitude = Double.parseDouble(placeInfos.get(idx).getoLat());
-//                hLongitude = Double.parseDouble(placeInfos.get(idx).getoLng());
                 mActivity.runOnUiThread(() -> {
                     String s = " \n"+nowPlace+"\n"+nowAddress;
                     tvPlaceAddress.setText(s);
@@ -89,7 +87,4 @@ public class PlaceAdapter extends RecyclerView.Adapter<PlaceAdapter.PlaceHolder>
         return (placeInfos == null) ? 0 : placeInfos.size();
     }
 
-    void add (PlaceInfo placeInfo) {
-        placeInfos.add(placeInfo);
-    }
 }

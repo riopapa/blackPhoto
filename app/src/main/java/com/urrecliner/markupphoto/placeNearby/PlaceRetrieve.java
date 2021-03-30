@@ -1,8 +1,6 @@
 package com.urrecliner.markupphoto.placeNearby;
 
 import android.content.Context;
-import android.widget.Toast;
-
 import com.urrecliner.markupphoto.R;
 
 public class PlaceRetrieve {

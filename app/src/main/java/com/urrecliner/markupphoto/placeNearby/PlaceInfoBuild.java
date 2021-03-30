@@ -6,7 +6,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.urrecliner.markupphoto.Vars.nowDownLoading;
 import static com.urrecliner.markupphoto.Vars.placeInfos;

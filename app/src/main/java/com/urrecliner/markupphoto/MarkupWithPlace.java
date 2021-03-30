@@ -10,6 +10,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.location.Geocoder;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -76,16 +77,15 @@ import static com.urrecliner.markupphoto.placeNearby.PlaceParser.pageToken;
 public class MarkupWithPlace extends AppCompatActivity {
 
     ExifInterface exif = null;
-    String strAddress = null, strPlace = null, strPosition = null;
+    String strAddress = null, strPlace = null;
     String dateTimeColon, dateTimeFileName = null;
-    Date photoDate;
     String maker, model;
     double latitude, longitude, altitude;
     File fileFullName;
     int orientation;
     Photo photo;
     Bitmap bitmap;
-    Menu menuPlace;
+    ImageView photoImage;
 
     static final SimpleDateFormat sdfDate = new SimpleDateFormat("yyyy:MM:dd HH:mm:ss", Locale.US);
     static final SimpleDateFormat sdfFile = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US);
@@ -160,13 +160,13 @@ public class MarkupWithPlace extends AppCompatActivity {
                 EditText etPlace = findViewById(R.id.placeAddress);
                 nowPlace = etPlace.getText().toString();
                 if (nowPlace.length() > 5) {
-                    Photo nPhoto = new Photo(markUpOnePhoto.insertGeoInfo(photo));
+                    Photo nPhoto = new Photo(MarkUpOnePhoto.insertGeoInfo(photo));
                     String nFileName = nPhoto.getFullFileName().toString();
                     if (photos.get(nowPos-1).getFullFileName().toString().equals(nFileName)) {
                         removeItemView(nowPos-1);
                         databaseIO.delete(nPhoto.getFullFileName());
                         nowPos--;
-                    };
+                    }
 
                     nPhoto.setBitmap(null);
                     nPhoto.setOrientation(photo.getOrientation());
@@ -179,65 +179,70 @@ public class MarkupWithPlace extends AppCompatActivity {
                 }
             }
         });
-        iVMark.setAlpha(fileFullName.getName().endsWith("_ha.jpg") ? 0.3f: 1f);
+        iVMark.setAlpha(fileFullName.getName().endsWith("_ha.jpg") ? 0.2f: 1f);
+
+        photoImage = findViewById(R.id.image);
+
+        ImageView iVPaste = findViewById(R.id.pasteInfo);
+        iVPaste.setOnClickListener(view -> {
+            EditText etPlace = findViewById(R.id.placeAddress);
+            etPlace.setText(copyPasteText);
+        });
+        iVPaste.setAlpha((copyPasteText.equals("")) ? 0.2f: 1f);
 
         ImageView iVInfo = findViewById(R.id.getInformation);
         iVInfo.setOnClickListener(view -> Toast.makeText(mContext, buildLongInfo(), Toast.LENGTH_LONG).show());
-        FloatingActionButton fabRotate = findViewById(R.id.rotate);
-        fabRotate.setOnClickListener(view -> {
-            MenuItem item = menuPlace.findItem(R.id.saveRotate);
-            item.setEnabled(true);
-            item.getIcon().setAlpha(255);
-            ImageView iv1 = findViewById(R.id.image);
+
+        ImageView iVRotateSave = findViewById(R.id.rotate_save);
+        iVRotateSave.setOnClickListener(v -> save_rotatedPhoto());
+        iVRotateSave.setVisibility(View.INVISIBLE);
+
+        ImageView ivRotate = findViewById(R.id.rotate);
+        ivRotate.setOnClickListener(view -> {
             Matrix matrix = new Matrix();
             matrix.postRotate(-90);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
-            iv1.setImageBitmap(bitmap);
+            photoImage.setImageBitmap(bitmap);
             PhotoViewAttacher pA1;       // to enable zoom
-            pA1 = new PhotoViewAttacher(iv1);
+            pA1 = new PhotoViewAttacher(photoImage);
             pA1.update();
+            iVRotateSave.setVisibility(View.VISIBLE);
         });
 
-        final ImageView ivL = findViewById(R.id.imageL);
+        final ImageView ivLeft = findViewById(R.id.imageL);
         if (nowPos > 0) {
-            ivL.post(() -> {
-                int width = ivL.getMeasuredWidth();
-                int height = ivL.getMeasuredHeight();
+            ivLeft.post(() -> {
+                int width = ivLeft.getMeasuredWidth();
+                int height = ivLeft.getMeasuredHeight();
                 Bitmap bitmap = maskImage(photos.get(nowPos-1).getBitmap(), false);
                 bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-                ivL.setImageBitmap(bitmap);
+                ivLeft.setImageBitmap(bitmap);
             });
-            ivL.setOnClickListener(view -> {
+            ivLeft.setOnClickListener(view -> {
                 nowPos--;
                 buildPhotoScreen();
             });
-            ivL.setVisibility(View.VISIBLE);
+            ivLeft.setVisibility(View.VISIBLE);
         } else
-            ivL.setVisibility(View.INVISIBLE);
+            ivLeft.setVisibility(View.INVISIBLE);
 
-        final ImageView ivR = findViewById(R.id.imageR);
+        final ImageView ivRight = findViewById(R.id.imageR);
         if (nowPos < photos.size()-1) {
-            ivR.post(new Runnable() {
-                @Override
-                public void run() {
-                    int width = ivR.getMeasuredWidth();
-                    int height = ivR.getMeasuredHeight();
-                    Bitmap bitmap = maskImage(photos.get(nowPos+1).getBitmap(), true);
-                    bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-                    ivR.setImageBitmap(bitmap);
-                }
+            ivRight.post(() -> {
+                int width = ivRight.getMeasuredWidth();
+                int height = ivRight.getMeasuredHeight();
+                Bitmap bitmap = maskImage(photos.get(nowPos+1).getBitmap(), true);
+                bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+                ivRight.setImageBitmap(bitmap);
             });
-            ivR.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    nowPos++;
-                    buildPhotoScreen();
-                }
+            ivRight.setOnClickListener(view -> {
+                nowPos++;
+                buildPhotoScreen();
             });
-            ivR.setVisibility(View.VISIBLE);
+            ivRight.setVisibility(View.VISIBLE);
         }
         else
-            ivR.setVisibility(View.INVISIBLE);
+            ivRight.setVisibility(View.INVISIBLE);
         utils.deleteOldSAVFiles();
         if (sharedAutoLoad && !photo.getShortName().endsWith("_ha.jpg")) {
             getPlaceByLatLng();
@@ -258,6 +263,25 @@ public class MarkupWithPlace extends AppCompatActivity {
         return result;
     }
 
+    private void save_rotatedPhoto() {
+        File orgFileName, tgtFileName;
+        orgFileName = photo.getFullFileName();
+        tgtFileName = new File (orgFileName.toString().replace(photo.getShortName(),""), dateTimeFileName +".jpg.sav");
+        tgtFileName.delete();
+        orgFileName.renameTo(tgtFileName);
+        databaseIO.delete(orgFileName);
+        String outName = orgFileName.toString();
+        orientation = 1; // (bitmap.getWidth() > bitmap.getHeight()) ? 1:6;
+        utils.makeBitmapFile(orgFileName, outName, bitmap, orientation);
+        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(orgFileName)));
+        photo.setOrientation(orientation);
+        photo.setChecked(false);
+        photo.setBitmap(null);
+        photos.set(nowPos, photo);
+        photoAdapter.notifyItemChanged(nowPos, photo);
+        finish();
+    }
+
     private void getLocationInfo() {
         Geocoder geocoder = new Geocoder(this, Locale.KOREA);
         strPlace = "";
@@ -276,7 +300,7 @@ public class MarkupWithPlace extends AppCompatActivity {
         iVPlace.setAlpha(0.2f);
         EditText et = findViewById(R.id.placeAddress);
         String placeName = et.getText().toString();
-        if (placeName != null && placeName.startsWith("?")) {
+        if (placeName.startsWith("?")) {
             String[] placeNames = placeName.split("\n");
             byPlaceName = placeNames[0].substring(1);
         } else
@@ -313,6 +337,7 @@ public class MarkupWithPlace extends AppCompatActivity {
 //    }
 
     private void getPhotoExif(File fileFullName) {
+        Date photoDate;
         try {
             exif = new ExifInterface(fileFullName.getAbsolutePath());
         } catch (Exception e) {
@@ -329,16 +354,13 @@ public class MarkupWithPlace extends AppCompatActivity {
         altitude = utils.convertALT2GPS(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE),
                             exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF));
         dateTimeColon = exif.getAttribute(ExifInterface.TAG_DATETIME);
+        photoDate = new Date(fileFullName.lastModified());
         if (dateTimeColon != null) {
             try {
                 photoDate = sdfDate.parse(dateTimeColon);
             } catch (Exception e) {
                 Log.e("Exception", "on date "+ dateTimeColon);
-                photoDate = new Date(fileFullName.lastModified());
             }
-        }
-        else {
-            photoDate = new Date(fileFullName.lastModified());
         }
         dateTimeFileName = sdfFile.format(photoDate.getTime());
     }
@@ -377,12 +399,12 @@ public class MarkupWithPlace extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menuPlace = menu;
-        MenuItem item;
         getMenuInflater().inflate(R.menu.photo_menu, menu);
-        item = menu.findItem(R.id.saveRotate);
-        item.setEnabled(false);
-        item.getIcon().setAlpha(40);
+//        menuPlace = menu;
+//        MenuItem item;
+//        item = menu.findItem(R.id.saveRotate);
+//        item.setEnabled(false);
+//        item.getIcon().setAlpha(40);
         return true;
     }
 
@@ -395,34 +417,15 @@ public class MarkupWithPlace extends AppCompatActivity {
 
         switch (item.getItemId()) {
 
-            case R.id.saveRotate:
-                orgFileName = photo.getFullFileName();
-                tgtFileName = new File (orgFileName.toString().replace(photo.getShortName(),""), dateTimeFileName +".jpg.sav");
-                tgtFileName.delete();
-                orgFileName.renameTo(tgtFileName);
-                databaseIO.delete(orgFileName);
-                String outName = orgFileName.toString();
-                orientation = 1; // (bitmap.getWidth() > bitmap.getHeight()) ? 1:6;
-                utils.makeBitmapFile(orgFileName, outName, bitmap, orientation);
-                mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(orgFileName)));
-                photo.setOrientation(orientation);
-                photo.setChecked(false);
-                photo.setBitmap(null);
-                photos.set(nowPos, photo);
-                photoAdapter.notifyItemChanged(nowPos, photo);
-                finish();
-                return true;
-
             case R.id.copyText:
                 copyPasteText = etPlace.getText().toString();
                 copyPasteGPS = latitude+";"+longitude+";"+altitude;
                 Toast.makeText(mContext, "Text Copied\n"+copyPasteText,Toast.LENGTH_SHORT).show();
-                MenuItem itemP = menuPlace.findItem(R.id.pasteText);
-                itemP.setTitle("Paste <"+copyPasteText+">");
-                return true;
-
-            case R.id.pasteText:
-                etPlace.setText(copyPasteText);
+                ImageView iv = findViewById(R.id.pasteInfo);
+                iv.setAlpha(1f);
+                iv.setEnabled(true);
+//                MenuItem itemP = menuPlace.findItem(R.id.pasteText);
+//                itemP.setTitle("Paste <"+copyPasteText+">");
                 return true;
 
             case R.id.markDelete:
@@ -459,19 +462,16 @@ public class MarkupWithPlace extends AppCompatActivity {
         builder.setTitle("Delete photo ?");
         builder.setMessage(photo.getShortName());
         builder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        File file = photo.getFullFileName();
-                        if (file.delete()) {
-                            mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
-                            removeItemView(pos);
-                        }
+                (dialog, which) -> {
+                    File file = photo.getFullFileName();
+                    if (file.delete()) {
+//                        mActivity.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+                        MediaScannerConnection.scanFile(mContext, new String[]{file.toString()}, null, null);
+                        removeItemView(pos);
                     }
-                });
-        builder.setNegativeButton("No",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
+                })
+                .setNegativeButton("No",
+                (dialog, which) -> {
                 });
         MainActivity.showPopup(builder);
     }

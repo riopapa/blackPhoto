@@ -25,9 +25,6 @@ import java.util.Locale;
 
 import static com.urrecliner.markupphoto.Vars.databaseIO;
 import static com.urrecliner.markupphoto.Vars.mContext;
-import static com.urrecliner.markupphoto.Vars.nowPlace;
-import static com.urrecliner.markupphoto.Vars.nowLatLng;
-import static com.urrecliner.markupphoto.Vars.signatureMap;
 import static com.urrecliner.markupphoto.Vars.sizeX;
 import static com.urrecliner.markupphoto.Vars.utils;
 

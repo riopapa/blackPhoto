@@ -136,25 +136,22 @@ public class MainActivity extends AppCompatActivity {
         utils.deleteOldSAVFiles();
         FloatingActionButton fab = findViewById(R.id.undo);
         fab.setVisibility(View.INVISIBLE);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                multiMode = false;
-                int totCount = photos.size();
-                for (int i = 0; i < totCount; i++) {
-                    Photo photo = photos.get(i);
-                    if (photo.isChecked()) {
-                        photo.setChecked(false);
-                        photos.set(i, photo);
-                        photoAdapter.notifyItemChanged(i, photo);
-                    }
+        fab.setOnClickListener(v -> {
+            multiMode = false;
+            int totCount = photos.size();
+            for (int i = 0; i < totCount; i++) {
+                Photo photo = photos.get(i);
+                if (photo.isChecked()) {
+                    photo.setChecked(false);
+                    photos.set(i, photo);
+                    photoAdapter.notifyItemChanged(i, photo);
                 }
-                photoAdapter.notifyDataSetChanged();
-                fab.setVisibility(View.INVISIBLE);
-                MenuItem item = mainMenu.findItem(R.id.action_Delete);
-                item.setVisible(false);
-
             }
+            photoAdapter.notifyDataSetChanged();
+            fab.setVisibility(View.INVISIBLE);
+            MenuItem item = mainMenu.findItem(R.id.action_Delete);
+            item.setVisible(false);
+
         });
     }
 
@@ -291,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private ArrayList findUnAskedPermissions() {
-        ArrayList <String> result = new ArrayList<String>();
+        ArrayList <String> result = new ArrayList<>();
         for (String perm : permissions) if (hasPermission(perm)) result.add(perm);
         return result;
     }
@@ -321,13 +318,8 @@ public class MainActivity extends AppCompatActivity {
     }
     private void showDialog(String msg) {
         showMessageOKCancel(msg,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        MainActivity.this.requestPermissions(permissionsRejected.toArray(
-                                new String[0]), ALL_PERMISSIONS_RESULT);
-                    }
-                });
+                (dialog, which) -> MainActivity.this.requestPermissions(permissionsRejected.toArray(
+                        new String[0]), ALL_PERMISSIONS_RESULT));
     }
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new android.app.AlertDialog.Builder(this)

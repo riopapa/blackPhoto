@@ -16,10 +16,6 @@ public class PlaceInfo {
     public String getoName() { return oName; }
     public String getoAddress() { return oAddress; }
     public String getoIcon() { return oIcon; }
-    public String getoLat() { return oLat; }
-    public String getoLng() { return oLng; }
-    public Double getLat() { return lat; }
-    public Double getLng() { return lng; }
 
 
     public String getDistance() {

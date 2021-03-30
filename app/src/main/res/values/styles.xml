@@ -33,9 +33,4 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
-    <style name="PreferenceScreen" parent="Theme.AppCompat">
-        <item name="android:textSize">14sp</item>
-        <item name="android:padding">4dp</item>
-    </style>
-
 </resources>

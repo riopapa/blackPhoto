@@ -290,7 +290,7 @@ class Utils {
     }
 
     double convertALT2GPS(String altString, String UpDown) {
-        if (altString.length() > 1) {
+        if (altString != null) {
             double val = Double.parseDouble(altString.substring(0, altString.indexOf("/"))) /
                     Double.parseDouble(altString.substring(altString.indexOf("/")+1));
             return (UpDown == null || UpDown.equals("0")) ? val: -val;
