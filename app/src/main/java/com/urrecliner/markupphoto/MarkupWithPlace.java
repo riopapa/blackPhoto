@@ -79,7 +79,7 @@ public class MarkupWithPlace extends AppCompatActivity {
     String strAddress = null, strPlace = null, strPosition = null;
     String dateTimeColon, dateTimeFileName = null;
     Date photoDate;
-    String maker, model, Orientation, longitudeR, longitudeStr, latitudeR, latitudeStr, altitudeStr, altitudeR;
+    String maker, model;
     double latitude, longitude, altitude;
     File fileFullName;
     int orientation;
@@ -125,7 +125,6 @@ public class MarkupWithPlace extends AppCompatActivity {
         ImageView iv = findViewById(R.id.image);
         bitmap = BitmapFactory.decodeFile(fileFullName.getAbsolutePath());
         getPhotoExif(fileFullName);
-        orientation = Integer.parseInt(Orientation);
         photo.setOrientation(orientation);
         if (orientation != 1) {
             if (orientation == 6) {
@@ -261,9 +260,6 @@ public class MarkupWithPlace extends AppCompatActivity {
 
     private void getLocationInfo() {
         Geocoder geocoder = new Geocoder(this, Locale.KOREA);
-        latitude = convertDMS(latitudeStr, latitudeR);
-        longitude = convertDMS(longitudeStr, longitudeR);
-        altitude = convertALT(altitudeStr, altitudeR);
         strPlace = "";
         nowLatLng = String.format(Locale.ENGLISH, "%.5f ; %.5f ; %.1f", latitude, longitude, altitude);
         strAddress = GPS2Address.get(geocoder, latitude, longitude);
@@ -325,16 +321,13 @@ public class MarkupWithPlace extends AppCompatActivity {
         }
         maker = exif.getAttribute(ExifInterface.TAG_MAKE);
         model = exif.getAttribute(ExifInterface.TAG_MODEL);
-        Orientation = exif.getAttribute(ExifInterface.TAG_ORIENTATION);
-        longitudeR = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF);
-        longitudeStr = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE);
-        latitudeR = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF);
-        latitudeStr = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE);
-        altitudeR = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF);
-        altitudeStr = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE);
-        if (altitudeStr == null) {
-            altitudeStr = ""; altitudeR = "";
-        }
+        orientation = Integer.parseInt(exif.getAttribute(ExifInterface.TAG_ORIENTATION));
+        longitude = utils.convertDMS2GPS(exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE),
+                exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE_REF));
+        latitude = utils.convertDMS2GPS(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE),
+                            exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE_REF));
+        altitude = utils.convertALT2GPS(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE),
+                            exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE_REF));
         dateTimeColon = exif.getAttribute(ExifInterface.TAG_DATETIME);
         if (dateTimeColon != null) {
             try {
@@ -354,7 +347,7 @@ public class MarkupWithPlace extends AppCompatActivity {
 
         return "Directory : "+longFolder+"\nFile Name : "+fileFullName.getName()+
                 "\nDevice: "+maker+" - "+model+"\nOrientation: "+orientation+
-                "\nLocation: "+latitudeStr+latitudeR+", "+longitudeStr+longitudeR+", "+(altitudeR.equals("0")? "":"-")+altitudeStr+
+                "\nLocation: "+latitude+", "+longitude+", "+altitude+
                 "\nDate Time: "+dateTimeFileName+
                 "\nSize: "+bitmap.getWidth()+" x "+bitmap.getHeight();
     }
@@ -376,36 +369,6 @@ public class MarkupWithPlace extends AppCompatActivity {
 //        }
 //        super.onActivityResult(requestCode, resultCode, data);
 //    }
-
-    double convertDMS (String dmsString, String NEWS) {
-        if (dmsString != null) {
-            String[] dms = dmsString.split(",");
-            if (dms.length == 3) {
-                double degree = Double.parseDouble(dms[0].substring(0, dms[0].length() - 2));
-                double min = Double.parseDouble(dms[1].substring(0, dms[1].length() - 2));
-                double sec = Double.parseDouble(dms[2].substring(0, dms[2].indexOf("/")));
-                double secDiv = Double.parseDouble(dms[2].substring(dms[2].indexOf("/") + 1));
-                sec /= secDiv;
-                double result = degree + min / 60f + sec / 3600f;
-                if (NEWS.equals("S") || NEWS.equals("W"))
-                    result *= -1;
-                return result;
-            } else
-                return 0;
-        }
-        else
-            return 0;
-    }
-
-    double convertALT(String altString, String UpDown) {
-        if (altString.length() > 1) {
-            double val = Double.parseDouble(altString.substring(0, altString.indexOf("/"))) /
-                    Double.parseDouble(altString.substring(altString.indexOf("/")+1));
-            return (UpDown == null || UpDown.equals("0")) ? val: -val;
-        }
-        else
-            return 0;
-    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -452,7 +415,7 @@ public class MarkupWithPlace extends AppCompatActivity {
 
             case R.id.copyText:
                 copyPasteText = etPlace.getText().toString();
-                copyPasteGPS = longitudeR+";"+longitudeStr+";"+latitudeR+";"+latitudeStr+";"+altitudeR+";"+altitudeStr;
+                copyPasteGPS = latitude+";"+longitude+";"+altitude;
                 Toast.makeText(mContext, "Text Copied\n"+copyPasteText,Toast.LENGTH_SHORT).show();
                 MenuItem itemP = menuPlace.findItem(R.id.pasteText);
                 itemP.setTitle("Paste <"+copyPasteText+">");
@@ -528,4 +491,5 @@ public class MarkupWithPlace extends AppCompatActivity {
         int pos = (nowPos > 3) ? nowPos-3:0;
         photoView.scrollToPosition(pos);
     }
+
 }

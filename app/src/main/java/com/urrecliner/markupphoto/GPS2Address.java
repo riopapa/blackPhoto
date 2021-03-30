@@ -13,7 +13,7 @@ public class GPS2Address {
     static String get(Geocoder geocoder, double latitude, double longitude) {
 
         try {
-            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 5);
             if (addresses.size() > 0) {
                 Address address = addresses.get(0);
                 String Feature = address.getFeatureName();
