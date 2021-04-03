@@ -1,6 +1,8 @@
 package com.urrecliner.markupphoto;
 
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.SpannableString;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
@@ -14,7 +16,6 @@ import static com.urrecliner.markupphoto.Vars.utils;
 
 public class SettingsActivity extends AppCompatActivity  {
 
-    static Preference pRadius, pSort, pAutoLoad, pSpan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +30,8 @@ public class SettingsActivity extends AppCompatActivity  {
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
         final String RADIUS = "radius", SORT = "sort", AUTO_LOAD = "autoLoad", SPAN = "span";
+        Preference pRadius, pSort, pAutoLoad, pSpan;
+
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.set_preferences, rootKey);
@@ -41,29 +44,31 @@ public class SettingsActivity extends AppCompatActivity  {
                 pRadius.setSummary(String.format(fRadius, sharedRadius));
                 return true;
             });
+
             pSort = findPreference(SORT);
-            pSort.setSummary((sharedSort.equals("none")) ? "정열하지 않고 보여 줍니다":sharedSort + " 순으로 보여 줍니다");
+            pSort.setSummary((sharedSort.equals("none")) ? "정렬하지 않고 보여 줍니다":sharedSort + " 순으로 보여 줍니다");
             pSort.setOnPreferenceChangeListener((preference, newValue) -> {
                 sharedSort = newValue.toString();
-                pSort.setSummary((sharedSort.equals("none")) ? "정열하지 않고 보여 줍니다":sharedSort + " 순으로 보여 줍니다");
+                pSort.setSummary((sharedSort.equals("none")) ? "정렬하지 않고 보여 줍니다":sharedSort + " 순으로 보여 줍니다");
                 return true;
             });
 
             pAutoLoad = findPreference(AUTO_LOAD);
-            pAutoLoad.setSummary(sharedAutoLoad ? "자동 로드 안 함" : "사진 선택하면 자동 로드");
+            pAutoLoad.setSummary(sharedAutoLoad ? "사진을 선택하면 장소를 자동으로 검색" : "사진을 선택해도 장소 목록은 버튼을 눌러야 보임");
             pAutoLoad.setOnPreferenceChangeListener((preference, newValue) -> {
                 sharedAutoLoad = Boolean.parseBoolean(newValue.toString());
-                pAutoLoad.setSummary(sharedAutoLoad ? "자동 로드 안 함" : "사진 선택하면 자동 로드");
+                pAutoLoad.setSummary(sharedAutoLoad ? "사진을 선택하면 장소를 자동으로 검색" : "사진을 선택해도 장소 목록은 버튼을 눌러야 보임");
                 return true;
             });
 
             pSpan = findPreference(SPAN);
-            pSpan.setSummary("한 줄에 "+(sharedSpan.equals("2") ? "두": "세")+" 사진을 보여줍니다");
+            pSpan.setSummary("한 줄에 "+(sharedSpan.equals("2") ? "두": "세")+" 장의 사진을 보여줍니다");
             pSpan.setOnPreferenceChangeListener((preference, newValue) -> {
                 sharedSpan = newValue.toString();
-                pSpan.setSummary("한 줄에 "+(sharedSpan.equals("2") ? "두": "세")+" 사진을 보여줍니다");
+                pSpan.setSummary("한 줄에 "+(sharedSpan.equals("2") ? "두": "세")+" 장의 사진을 보여줍니다");
                 return true;
             });
+
         }
     }
 

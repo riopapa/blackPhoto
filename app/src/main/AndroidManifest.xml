@@ -37,7 +37,7 @@
         <activity android:name=".ColorActivity" />
         <activity android:name=".SelectActivity" />
         <activity android:name=".SettingsActivity"
-            android:theme="@style/Theme.Custom" />
+            android:theme="@style/MyPreference" />
     </application>
 
 </manifest>
