@@ -23,6 +23,7 @@
     <string name="radius_title">Search Radius in Meters</string>
     <string name="sort_title">Sort PlaceList</string>
     <string name="span_title">Number of photos in columns</string>
+    <string name="signature_alpha">Alpha value (100~255)</string>
 
     <string name="auto_title">PlaceList AutoLoad</string>
 

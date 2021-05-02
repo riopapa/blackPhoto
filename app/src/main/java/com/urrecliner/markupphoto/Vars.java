@@ -69,10 +69,11 @@ public class Vars {
 
     /* --- shared Preference **/
     static SharedPreferences sharedPref;
-    static String sharedRadius;
-    static String sharedSort;
+    static String sharedRadius = "";
+    static String sharedSort = "";
     static boolean sharedAutoLoad = false;
-    static String sharedSpan;
+    static String sharedSpan = "";
+    static String sharedAlpha = "";
 
     /* --- place select related variables --- */
     public static boolean nowDownLoading = false;

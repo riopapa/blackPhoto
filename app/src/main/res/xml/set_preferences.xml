@@ -5,10 +5,6 @@
     <PreferenceCategory app:title="@string/messages_header"
         >
 
-<!--        <EditTextPreference-->
-<!--            app:key="signature"-->
-<!--            app:title="@string/signature_title"-->
-<!--            app:useSimpleSummaryProvider="true" />-->
 
         <ListPreference
             app:defaultValue="123"
@@ -45,6 +41,13 @@
             app:icon="@mipmap/span"
             app:summary="this and that"
             app:title="@string/span_title" />
+
+        <EditTextPreference
+            app:key="alpha"
+            app:defaultValue="150"
+            app:title="@string/signature_alpha"
+            app:summary="Signature alpha value (255 is full)"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

@@ -37,6 +37,7 @@ import static com.urrecliner.markupphoto.Vars.copyPasteGPS;
 import static com.urrecliner.markupphoto.Vars.longFolder;
 import static com.urrecliner.markupphoto.Vars.mContext;
 import static com.urrecliner.markupphoto.Vars.mActivity;
+import static com.urrecliner.markupphoto.Vars.sharedAlpha;
 import static com.urrecliner.markupphoto.Vars.sharedAutoLoad;
 import static com.urrecliner.markupphoto.Vars.sharedPref;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
@@ -381,6 +382,7 @@ class Utils {
             editor.putBoolean("autoLoad", true);
             editor.putString("sort", "none");
             editor.putString("span","3");
+            editor.putString("alpha","180");
             editor.apply();
             editor.commit();
         }
@@ -388,6 +390,7 @@ class Utils {
         sharedAutoLoad = sharedPref.getBoolean("autoLoad", false);
         sharedSort = sharedPref.getString("sort", "none");
         sharedSpan = sharedPref.getString("span","3");
+        sharedAlpha = sharedPref.getString("alpha","180");
     }
 
     Bitmap maskedIcon(int rawId) {

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import static com.urrecliner.markupphoto.Vars.sharedAlpha;
 import static com.urrecliner.markupphoto.Vars.sharedAutoLoad;
 import static com.urrecliner.markupphoto.Vars.sharedRadius;
 import static com.urrecliner.markupphoto.Vars.sharedSort;
@@ -29,8 +30,8 @@ public class SettingsActivity extends AppCompatActivity  {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
-        final String RADIUS = "radius", SORT = "sort", AUTO_LOAD = "autoLoad", SPAN = "span";
-        Preference pRadius, pSort, pAutoLoad, pSpan;
+        final String RADIUS = "radius", SORT = "sort", AUTO_LOAD = "autoLoad", SPAN = "span", ALPHA = "alpha";
+        Preference pRadius, pSort, pAutoLoad, pSpan, pAlpha;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -66,6 +67,12 @@ public class SettingsActivity extends AppCompatActivity  {
             pSpan.setOnPreferenceChangeListener((preference, newValue) -> {
                 sharedSpan = newValue.toString();
                 pSpan.setSummary("한 줄에 "+(sharedSpan.equals("2") ? "두": "세")+" 장의 사진을 보여줍니다");
+                return true;
+            });
+
+            pAlpha = findPreference(ALPHA);
+            pAlpha.setOnPreferenceChangeListener((preference, newValue) -> {
+                sharedAlpha = newValue.toString();
                 return true;
             });
 

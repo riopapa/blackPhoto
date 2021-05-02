@@ -25,6 +25,7 @@ import java.util.Locale;
 
 import static com.urrecliner.markupphoto.Vars.databaseIO;
 import static com.urrecliner.markupphoto.Vars.mContext;
+import static com.urrecliner.markupphoto.Vars.sharedAlpha;
 import static com.urrecliner.markupphoto.Vars.sizeX;
 import static com.urrecliner.markupphoto.Vars.utils;
 
@@ -158,7 +159,7 @@ class BuildBitMap {
         Bitmap sigMap = Bitmap.createScaledBitmap(signatureMap, sigSize, sigSize, false);
         int xPos = width - sigSize - width / 20;
         int yPos = (width>height) ? height/14: height/16;
-        Paint paint = new Paint(); paint.setAlpha(100);
+        Paint paint = new Paint(); paint.setAlpha(Integer.parseInt(sharedAlpha));
         canvas.drawBitmap(sigMap, xPos, yPos, paint);
     }
 
@@ -229,7 +230,7 @@ class BuildBitMap {
             sigMap = BitmapFactory.decodeFile(sigFile.toString(), null);
         }
         else
-            sigMap = BitmapFactory.decodeResource(mContext.getResources(), R.raw.signature);
+            sigMap = BitmapFactory.decodeResource(mContext.getResources(), R.mipmap.signature);
         Bitmap newBitmap = Bitmap.createBitmap(sigMap.getWidth(), sigMap.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(newBitmap);
         canvas.drawBitmap(sigMap, 0, 0, null);
