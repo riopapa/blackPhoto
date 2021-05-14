@@ -1,8 +1,6 @@
 package com.urrecliner.markupphoto;
 
 import android.os.Bundle;
-import android.text.Layout;
-import android.text.SpannableString;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.Preference;

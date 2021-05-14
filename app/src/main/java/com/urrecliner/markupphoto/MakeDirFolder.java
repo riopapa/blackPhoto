@@ -34,22 +34,29 @@ public class MakeDirFolder {
             int index = 0;
             if (dirFolders == null)
                 return "";
+//            utils.log("dir","size ="+dirFolders.size());
             for (DirectoryFolder df: dirFolders) {
+//                utils.log("dir","df ="+df.getLongFolder());
                 photoFiles = utils.getFilteredFileList(df.getLongFolder());
                 if (photoFiles.size() != 0) {
 //               Collections.sort(photoFiles, Collections.<File>reverseOrder());
                     int photoSize = photoFiles.size();
                     df.setNumberOfPics(photoSize);
                     File[] photo4 = new File[4];
-                    if (photoSize > 8) {
-                        photo4[0] = new File(photoFiles.get(0).getAbsolutePath());
-                        photo4[1] = new File(photoFiles.get(photoSize-1).getAbsolutePath());
-                        photo4[2] = new File(photoFiles.get((photoSize-1)/3).getAbsolutePath());
-                        photo4[3] = new File(photoFiles.get((photoSize-1)*2/3).getAbsolutePath());
-                    } else {
-                        int maxCnt = Math.min(photoSize, 4);
-                        for (int i = 0; i < maxCnt; i++)
-                            photo4[i] = new File(photoFiles.get(i).getAbsolutePath());
+                    try {
+                        if (photoSize > 8) {
+                            photo4[0] = new File(photoFiles.get(0).getAbsolutePath());
+                            photo4[1] = new File(photoFiles.get(photoSize-1).getAbsolutePath());
+                            photo4[2] = new File(photoFiles.get((photoSize-1)/3).getAbsolutePath());
+                            photo4[3] = new File(photoFiles.get((photoSize-1)*2/3).getAbsolutePath());
+                        } else {
+                            int maxCnt = Math.min(photoSize, 4);
+                            for (int i = 0; i < maxCnt; i++)
+                                photo4[i] = new File(photoFiles.get(i).getAbsolutePath());
+                        }
+                    } catch (Exception e) {
+                        utils.log("df","bad images in "+df.getLongFolder());
+                        e.printStackTrace();
                     }
                     df.setImageBitmap(buildOneDirImage(photo4));
                     dirFolders.set(index, df);
