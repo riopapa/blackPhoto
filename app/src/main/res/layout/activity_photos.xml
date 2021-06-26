@@ -2,21 +2,23 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/scrollbar_shape_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/border_back"
     android:id="@+id/main_layout"
-    tools:context=".MainActivity">
+    tools:context=".PhotoSelect">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventView"
+        android:id="@+id/sumNailView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1dp"
+        android:layout_margin="2dp"
         app:layoutManager="GridLayoutManager"
-        android:choiceMode="multipleChoice"
-        style="@style/scrollbar_shape_style"
+        app:spanCount="2"
+        android:choiceMode="singleChoice"
+        android:scrollbars="vertical"
+        android:scrollbarThumbVertical="@color/recycleView"
+        android:scrollbarSize="8dp"
+        android:scrollbarStyle="outsideInset"
         >
     </androidx.recyclerview.widget.RecyclerView>
 

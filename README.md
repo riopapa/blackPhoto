@@ -20,7 +20,7 @@ This application is useful if you want to memorize where you visited in photo
 
 Application source can be downloaded from [my github][1].
 
-[1]: https://github.com/riopapa/MarkUpPhoto
+[1]: https://github.com/riopapa/blackphoto
 
 ## Main Screen
 

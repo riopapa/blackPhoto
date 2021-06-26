@@ -9,7 +9,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.urrecliner.markupphoto"
+        applicationId "com.urrecliner.blackphoto"
         minSdkVersion 29
         targetSdkVersion 29
         versionCode 1
