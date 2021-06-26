@@ -23,14 +23,13 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFullFolder;
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
-import static com.urrecliner.blackphoto.Vars.eventFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.eventFolderView;
-import static com.urrecliner.blackphoto.Vars.sizeX;
 import static com.urrecliner.blackphoto.Vars.spanWidth;
 import static com.urrecliner.blackphoto.Vars.utils;
 
@@ -68,11 +67,10 @@ public class MainActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        sizeX = size.x;
-        spanWidth = (sizeX / 2) * 96 / 100; //  2=span count
+        spanWidth = (size.x / 2) * 96 / 100; //  2=span count
 
         eventFolderView = findViewById(R.id.eventView);
-        EventFolderAdapter eventFolderAdapter = new EventFolderAdapter();
+        eventFolderAdapter = new EventFolderAdapter();
         eventFolderView.setAdapter(eventFolderAdapter);
         utils.readyPackageFolder(eventFullFolder);
     }

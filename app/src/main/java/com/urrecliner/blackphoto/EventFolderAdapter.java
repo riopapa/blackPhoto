@@ -2,13 +2,22 @@ package com.urrecliner.blackphoto;
 
 import android.content.Intent;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
+import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
@@ -33,6 +42,20 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
                 Intent intent = new Intent(mContext, PhotoSelect.class);
                 mActivity.startActivity(intent);
             });
+
+            itemView.setOnLongClickListener(view -> {
+                currEventFolder = eventFolders.get(getAdapterPosition());
+                String deleteCmd = "rm -r \"" + currEventFolder.getAbsolutePath() + "\"";
+                Runtime runtime = Runtime.getRuntime();
+                try {
+                    runtime.exec(deleteCmd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                eventFolders.remove(getAdapterPosition());
+                eventFolderAdapter.notifyDataSetChanged();
+                return true;
+            });
         }
     }
 
@@ -48,4 +71,5 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         folder = folder.substring(38, 56);
         holder.tvEventTIme.setText(folder);
     }
+
 }

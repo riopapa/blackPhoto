@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
+import static com.urrecliner.blackphoto.Vars.logFullFolder;
 
 class Utils {
 
@@ -50,7 +51,7 @@ class Utils {
         FileWriter fw = null;
         try {
             String PREFIX = "log_";
-            File file = new File(jpgFullFolder, PREFIX + sdfDate.format(new Date())+".txt");
+            File file = new File(logFullFolder, PREFIX + sdfDate.format(new Date())+".txt");
             if (!file.exists()) {
                 if (!file.createNewFile()) {
                     logE("createFile", " Error");

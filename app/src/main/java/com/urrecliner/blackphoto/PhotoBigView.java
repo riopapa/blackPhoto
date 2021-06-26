@@ -46,7 +46,6 @@ public class PhotoBigView extends AppCompatActivity {
         tv = findViewById(R.id.photoName);
         iv = findViewById(R.id.photoImage);
         tv.setText(photo.fullFileName.getName());
-        tv.setTextColor((photo.sent) ? 0xffff0000: 0xff000000);
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap bitmap = BitmapFactory.decodeFile(photo.fullFileName.getAbsolutePath());
@@ -57,7 +56,6 @@ public class PhotoBigView extends AppCompatActivity {
         pA.update();
         ImageView sv = findViewById(R.id.sendImage);
         sv.setOnClickListener(view -> {
-            photo.sent = true;
             photos.set(nowPos, photo);
             jpgCopy(photo.fullFileName);
             photosAdapter.notifyItemChanged(nowPos);

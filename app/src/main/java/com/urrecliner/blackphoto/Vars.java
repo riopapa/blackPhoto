@@ -9,6 +9,7 @@ import android.os.Environment;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Vars {
     static Context mContext;
@@ -16,18 +17,20 @@ public class Vars {
 
     static PhotosAdapter photosAdapter;
     static RecyclerView eventFolderView;
-    static String jpgFolder = "BlackBox/EventJpg";
-    static String eventFolder = "BlackBox/event/eventJpg";
-    static File jpgFullFolder =  new File(Environment.getExternalStorageDirectory(), jpgFolder);
-    static File eventFullFolder =  new File(Environment.getExternalStorageDirectory(), eventFolder);
+    static File jpgFullFolder =  new File(Environment.getExternalStorageDirectory(),
+            "BlackBox/EventJpg");
+    static File eventFullFolder =  new File(Environment.getExternalStorageDirectory(),
+            "BlackBox/event/eventJpg");
+    static File logFullFolder =  new File(Environment.getExternalStorageDirectory(),
+            "BlackBox/log");
     static Utils utils;
 
     static File currEventFolder = null;
     static int nowPos;
-    static int spanWidth, sizeX;
+    static int spanWidth;
 
-    static boolean multiMode = false;
     static ArrayList<Photo> photos = null;
-    static ArrayList<File> eventFolders = null;
+    static List<File> eventFolders = null;
+    static EventFolderAdapter eventFolderAdapter;
 }
 
