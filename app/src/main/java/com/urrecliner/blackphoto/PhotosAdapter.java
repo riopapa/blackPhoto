@@ -6,12 +6,9 @@ import android.graphics.Bitmap;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,6 +32,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView iVImage, ivCheck;
+        TextView tvName;
 
         ViewHolder(final View itemView) {
             super(itemView);
@@ -42,14 +40,26 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
             iVImage.setOnClickListener(view -> {
                 toggleCheckBox(getAdapterPosition());
             });
-
             iVImage.setOnLongClickListener(view -> {
                     showBigPhoto();
                 return true;
             });
-            ivCheck = itemView.findViewById(R.id.select);
+
+            ivCheck = itemView.findViewById(R.id.checked);
             ivCheck.setOnClickListener(view -> {
                 toggleCheckBox(getAdapterPosition());
+            });
+            ivCheck.setOnLongClickListener(view -> {
+                showBigPhoto();
+                return true;
+            });
+            tvName = itemView.findViewById(R.id.photoName);
+            tvName.setOnClickListener(view -> {
+                toggleCheckBox(getAdapterPosition());
+            });
+            tvName.setOnLongClickListener(view -> {
+                showBigPhoto();
+                return true;
             });
         }
 
@@ -74,21 +84,23 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Photo photo = photos.get(position);
-        if (photo.bitMap == null) {
-            photo.bitMap = makeSumNail(photo.fullFileName);
-            photos.set(position, photo);
-        }
+//        if (photo.bitMap == null) {
+//            photo.bitMap = makeSumNail(photo.fullFileName);
+//            photos.set(position, photo);
+//        }
         holder.ivCheck.setImageResource((photo.checked) ? R.mipmap.checked : R.mipmap.unchecked);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.iVImage.getLayoutParams();
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
         holder.iVImage.setLayoutParams(params);
         holder.iVImage.setImageBitmap(photo.bitMap);
+        holder.tvName.setText(photo.shortName);
     }
 
     static Bitmap makeSumNail(File fullFileName) {
         Bitmap bitmap = BitmapFactory.decodeFile(fullFileName.toString()).copy(Bitmap.Config.RGB_565, false);
-        int width = bitmap.getWidth() * 5 / 16;
-        int height = bitmap.getHeight() * 5 / 16;
+        int width = bitmap.getWidth() * 3 / 30;
+        int height = bitmap.getHeight() * 3 / 30;
         return Bitmap.createScaledBitmap(bitmap, width, height, false);
     }
+
 }

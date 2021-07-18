@@ -1,12 +1,16 @@
 package com.urrecliner.blackphoto;
 
+import android.app.Dialog;
 import android.content.Intent;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,18 +49,48 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
 
             itemView.setOnLongClickListener(view -> {
                 currEventFolder = eventFolders.get(getAdapterPosition());
-                String deleteCmd = "rm -r \"" + currEventFolder.getAbsolutePath() + "\"";
-                Runtime runtime = Runtime.getRuntime();
-                try {
-                    runtime.exec(deleteCmd);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                eventFolders.remove(getAdapterPosition());
-                eventFolderAdapter.notifyDataSetChanged();
+                TextView tv = itemView.findViewById(R.id.eventTime);
+                AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
+                builder.setTitle("Delete this event?");
+                builder.setMessage(tv.getText().toString());
+                builder.setPositiveButton("Yes", (dialog, which) -> {
+                    deleteRecursive(currEventFolder);
+                    eventFolders.remove(getAdapterPosition());
+                    eventFolderAdapter.notifyDataSetChanged();
+                });
+                builder.setNegativeButton("No", (dialog, which) -> { });
+                showPopup(builder);
+                ;
+//                String deleteCmd = "rm -r \"" + currEventFolder.getAbsolutePath() + "\"";
+//                Runtime runtime = Runtime.getRuntime();
+//                try {
+//                    runtime.exec(deleteCmd);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
                 return true;
             });
         }
+    }
+    static void showPopup(AlertDialog.Builder builder) {
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        Button btn = dialog.getButton(Dialog.BUTTON_POSITIVE);
+        btn.setTextSize(16);
+        btn.setAllCaps(false);
+        btn = dialog.getButton(Dialog.BUTTON_NEGATIVE);
+        btn.setTextSize(24);
+        btn.setAllCaps(false);
+        btn.setFocusable(true);
+        btn.setFocusableInTouchMode(true);
+        btn.requestFocus();
+    }
+
+    static void deleteRecursive(File fileOrDirectory) {
+        if (fileOrDirectory.isDirectory())
+            for (File child : fileOrDirectory.listFiles())
+                deleteRecursive(child);
+        fileOrDirectory.delete();
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -71,5 +105,4 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         folder = folder.substring(38, 56);
         holder.tvEventTIme.setText(folder);
     }
-
 }

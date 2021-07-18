@@ -1,28 +1,22 @@
 package com.urrecliner.blackphoto;
 
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFullFolder;
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
@@ -42,13 +36,7 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         mActivity = this;
         askPermission();
-        File[] fullFileList = jpgFullFolder.listFiles(new FileFilter() {
-            @Override
-            public boolean accept(File file)
-            {
-                return (file.getPath().contains("V2"));
-            }
-        });
+        File[] fullFileList = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
         if (fullFileList == null) {
             Toast.makeText(this,"No event Jpg Folders",Toast.LENGTH_LONG).show();
             finish();
@@ -56,19 +44,14 @@ public class MainActivity extends AppCompatActivity {
         }
         Arrays.sort(fullFileList);
         eventFolders = new ArrayList<>();
-        if (fullFileList != null)
-            eventFolders.addAll(Arrays.asList(fullFileList));
-        else {
-            Toast.makeText(this,"No event folders", Toast.LENGTH_LONG).show();
-            return;
-        }
+        eventFolders.addAll(Arrays.asList(fullFileList));
         utils = new Utils();
         utils.log("blackPhoto", "Start--");
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        spanWidth = (size.x / 2) * 96 / 100; //  2=span count
-
+        spanWidth = (size.x / SPAN_COUNT) * 96 / 100; //  2=span count
+        Log.w("spanWith","is "+spanWidth);
         eventFolderView = findViewById(R.id.eventView);
         eventFolderAdapter = new EventFolderAdapter();
         eventFolderView.setAdapter(eventFolderAdapter);
@@ -108,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == ALL_PERMISSIONS_RESULT) {
             for (Object perms : permissionsToRequest) {
                 if (hasPermission((String) perms)) {

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#6361bf</color>
-    <color name="recycleView">#fccffc</color>
     <color name="xorColor">#ccCAD8AA</color>
 
 </resources>

@@ -1,10 +1,9 @@
 package com.urrecliner.blackphoto;
 
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.photosAdapter;
@@ -26,39 +26,38 @@ import static com.urrecliner.blackphoto.Vars.photos;
 
 public class PhotoSelect extends AppCompatActivity {
 
-    RecyclerView photosView;
+    static RecyclerView photosView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photos);
         photosView = findViewById(R.id.sumNailView);
-        StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
         photosView.setLayoutManager(SGL);
         photosView.addItemDecoration(new DividerItemDecoration(this, SGL.getOrientation()));
         photosView.setLayoutManager(SGL);
         photos =  new ArrayList<>();
         File[] fullFileList = currEventFolder.listFiles((dir, name) ->
-                ((name.endsWith("jpg") || name.endsWith("JPG"))));
-        if (fullFileList != null) {
-            Arrays.sort(fullFileList);
-            photos = new ArrayList<>();
-            for (File f: fullFileList) {
-                photos.add(new Photo(f));
-            }
-            new PhotoBitmap().execute("");
-        } else {
-            Toast.makeText(mContext,"No photos in "+currEventFolder.getName(), Toast.LENGTH_LONG).show();
+                (name.endsWith("jpg")));
+        if (fullFileList == null) {
+            Toast.makeText(mContext, "No photos in " + currEventFolder.getName(), Toast.LENGTH_LONG).show();
             return;
+        }
+        Arrays.sort(fullFileList);
+        photos = new ArrayList<>();
+        for (File f: fullFileList) {
+            photos.add(new Photo(f));
         }
         photosAdapter = new PhotosAdapter();
         photosView.setAdapter(photosAdapter);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                photosView.scrollToPosition(50);
+                new PhotoBitmap().execute("");
             }
         }, 200);
+        photosView.setBackgroundColor(Color.YELLOW);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -83,16 +82,6 @@ public class PhotoSelect extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private ArrayList<String> build_DeletePhoto() {
-        ArrayList<String> arrayList = new ArrayList<>();
-
-        for (Photo photo: photos) {
-            if (photo.checked)
-                arrayList.add(photo.shortName);
-        }
-        return arrayList;
-    }
-
     static class PhotoBitmap extends AsyncTask<String, String, String> {
 
         @Override
@@ -104,6 +93,11 @@ public class PhotoSelect extends AppCompatActivity {
                 }
             }
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(String doI) {
+            photosView.setBackgroundColor(Color.WHITE);
         }
     }
 }
