@@ -19,7 +19,7 @@ import java.nio.file.Files;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static com.urrecliner.blackphoto.Vars.eventFullFolder;
+import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.nowPos;
 import static com.urrecliner.blackphoto.Vars.photos;
@@ -92,7 +92,7 @@ public class PhotoBigView extends AppCompatActivity {
 
     static void jpgCopy (File sourcepath) {
 
-        File dest = new File (eventFullFolder, sourcepath.getName());
+        File dest = new File (selectedJpgFolder, sourcepath.getName());
         try {
             Files.copy(sourcepath.toPath(), dest.toPath());
             Toast.makeText(mContext, sourcepath.getName()+" copied",Toast.LENGTH_LONG).show();

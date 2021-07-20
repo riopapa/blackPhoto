@@ -19,8 +19,10 @@ public class Vars {
     static RecyclerView eventFolderView;
     static File jpgFullFolder =  new File(Environment.getExternalStorageDirectory(),
             "BlackBox/EventJpg");
-    static File eventFullFolder =  new File(Environment.getExternalStorageDirectory(),
-            "BlackBox/event/eventJpg");
+    static File selectedJpgFolder =  new File(Environment.getExternalStorageDirectory(),
+            "BlackBox/event/selectedJpg");
+    static File eventMP4Folder =  new File(Environment.getExternalStorageDirectory(),
+            "BlackBox/event");
     static File logFullFolder =  new File(Environment.getExternalStorageDirectory(),
             "BlackBox/log");
     static Utils utils;

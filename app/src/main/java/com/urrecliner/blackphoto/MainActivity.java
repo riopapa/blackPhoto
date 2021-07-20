@@ -1,5 +1,6 @@
 package com.urrecliner.blackphoto;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.io.File;
@@ -18,7 +21,8 @@ import java.util.Arrays;
 
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
-import static com.urrecliner.blackphoto.Vars.eventFullFolder;
+import static com.urrecliner.blackphoto.Vars.eventMP4Folder;
+import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
 import static com.urrecliner.blackphoto.Vars.mContext;
@@ -55,8 +59,54 @@ public class MainActivity extends AppCompatActivity {
         eventFolderView = findViewById(R.id.eventView);
         eventFolderAdapter = new EventFolderAdapter();
         eventFolderView.setAdapter(eventFolderAdapter);
-        utils.readyPackageFolder(eventFullFolder);
+        utils.readyPackageFolder(selectedJpgFolder);
     }
+
+    @Override
+    public void onBackPressed() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Old Events");
+        builder.setMessage("Delete Old Event Files?");
+        builder.setPositiveButton("Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
+                        if (mp4Files != null) {
+                            for (File mp4: mp4Files) {
+                                mp4.delete();
+                            }
+                            Toast.makeText(getApplicationContext(), mp4Files.length+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
+                        }
+                        File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
+                        if (jpgFolders != null) {
+                            for (File fJpg: jpgFolders) {
+                                EventFolderAdapter.deleteRecursive(fJpg);
+                                Toast.makeText(getApplicationContext(), fJpg.getName()+" deleted ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        File[] jpgFiles = selectedJpgFolder.listFiles();
+                        if (jpgFiles != null) {
+                            for (File fJpg: jpgFiles) {
+                                fJpg.delete();
+                            }
+                            Toast.makeText(getApplicationContext(), jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
+                        }
+                        finish();
+                    }
+                });
+        builder.setNegativeButton("No, not Now",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
+    }
+
 
     // ↓ ↓ ↓ P E R M I S S I O N   RELATED /////// ↓ ↓ ↓ ↓  BEST CASE 20/09/27 with no lambda
     private final static int ALL_PERMISSIONS_RESULT = 101;

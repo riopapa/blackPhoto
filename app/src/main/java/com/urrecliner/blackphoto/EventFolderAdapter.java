@@ -86,7 +86,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         btn.requestFocus();
     }
 
-    static void deleteRecursive(File fileOrDirectory) {
+    public static void deleteRecursive(File fileOrDirectory) {
         if (fileOrDirectory.isDirectory())
             for (File child : fileOrDirectory.listFiles())
                 deleteRecursive(child);
