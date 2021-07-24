@@ -54,8 +54,8 @@ public class MainActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        spanWidth = (size.x / SPAN_COUNT) * 96 / 100; //  2=span count
-        Log.w("spanWith","is "+spanWidth);
+        spanWidth = (size.x / SPAN_COUNT) * 90 / 100; //  2=span count
+        Log.w("spanWith","x is "+size.x+", spanWidth="+spanWidth);
         eventFolderView = findViewById(R.id.eventView);
         eventFolderAdapter = new EventFolderAdapter();
         eventFolderView.setAdapter(eventFolderAdapter);

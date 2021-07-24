@@ -34,6 +34,6 @@ public class Vars {
     static ArrayList<Photo> photos = null;
     static List<File> eventFolders = null;
     static EventFolderAdapter eventFolderAdapter;
-    final static int SPAN_COUNT = 2;
+    final static int SPAN_COUNT = 1;
 }
 
