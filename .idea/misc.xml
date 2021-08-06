@@ -5,6 +5,20 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_thumb.xml" value="0.28802083333333334" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_track.xml" value="0.28802083333333334" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_main.xml" value="0.13221884498480244" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_photos.xml" value="0.271875" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/photos_item.xml" value="0.271875" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/main_menu.xml" value="0.271875" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/photo_menu.xml" value="0.271875" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/photos_menu.xml" value="0.271875" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state>

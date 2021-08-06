@@ -9,6 +9,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
@@ -18,6 +20,8 @@ import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
@@ -54,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
-        spanWidth = (size.x / SPAN_COUNT) * 90 / 100; //  2=span count
-        Log.w("spanWith","x is "+size.x+", spanWidth="+spanWidth);
+        spanWidth = (size.x / SPAN_COUNT) * 90 / 100;
+//        Log.w("spanWith","x is "+size.x+", spanWidth="+spanWidth);
         eventFolderView = findViewById(R.id.eventView);
         eventFolderAdapter = new EventFolderAdapter();
         eventFolderView.setAdapter(eventFolderAdapter);
@@ -63,48 +67,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onCreateOptionsMenu(Menu menu) {
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Old Events");
-        builder.setMessage("Delete Old Event Files?");
-        builder.setPositiveButton("Yes",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
-                        if (mp4Files != null) {
-                            for (File mp4: mp4Files) {
-                                mp4.delete();
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        if (item.getItemId() == R.id.erase) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Old Events");
+            builder.setMessage("Delete Old Event Files?");
+            builder.setPositiveButton("Yes",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
+                            if (mp4Files != null) {
+                                for (File mp4: mp4Files) {
+                                    mp4.delete();
+                                }
+                                Toast.makeText(getApplicationContext(), mp4Files.length+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(getApplicationContext(), mp4Files.length+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
-                        }
-                        File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
-                        if (jpgFolders != null) {
-                            for (File fJpg: jpgFolders) {
-                                EventFolderAdapter.deleteRecursive(fJpg);
-                                Toast.makeText(getApplicationContext(), fJpg.getName()+" deleted ", Toast.LENGTH_SHORT).show();
+                            File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
+                            if (jpgFolders != null) {
+                                for (File fJpg: jpgFolders) {
+                                    EventFolderAdapter.deleteRecursive(fJpg);
+                                    Toast.makeText(getApplicationContext(), fJpg.getName()+" deleted ", Toast.LENGTH_SHORT).show();
+                                }
                             }
-                        }
-                        File[] jpgFiles = selectedJpgFolder.listFiles();
-                        if (jpgFiles != null) {
-                            for (File fJpg: jpgFiles) {
-                                fJpg.delete();
+                            File[] jpgFiles = selectedJpgFolder.listFiles();
+                            if (jpgFiles != null) {
+                                for (File fJpg: jpgFiles) {
+                                    fJpg.delete();
+                                }
+                                Toast.makeText(getApplicationContext(), jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
                             }
-                            Toast.makeText(getApplicationContext(), jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
-                        finish();
-                    }
-                });
-        builder.setNegativeButton("No, not Now",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
-                });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
-        dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
+                    });
+            builder.setNegativeButton("No, not Now",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    });
+            AlertDialog dialog = builder.create();
+            dialog.show();
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
+        }
+        return false;
     }
 
 

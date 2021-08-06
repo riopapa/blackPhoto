@@ -56,7 +56,7 @@ public class PhotoSelect extends AppCompatActivity {
             public void run() {
                 new PhotoBitmap().execute("");
             }
-        }, 200);
+        }, 20);
         photosView.setBackgroundColor(Color.YELLOW);
     }
     @Override
@@ -82,11 +82,23 @@ public class PhotoSelect extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static class PhotoBitmap extends AsyncTask<String, String, String> {
+    class PhotoBitmap extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... strings) {
-            for (int i = 0; i < photos.size(); i++) {
+            for (int i = 0; i < photos.size(); i += 3) {
+                Photo photo = photos.get(i);
+                if (photo.bitMap == null ) {
+                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+                }
+            }
+            for (int i = 1; i < photos.size(); i += 3) {
+                Photo photo = photos.get(i);
+                if (photo.bitMap == null ) {
+                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+                }
+            }
+            for (int i = 2; i < photos.size(); i += 3) {
                 Photo photo = photos.get(i);
                 if (photo.bitMap == null ) {
                     photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);

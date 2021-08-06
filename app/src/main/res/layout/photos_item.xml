@@ -16,17 +16,16 @@
 
     <ImageView
         android:id="@+id/checked"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_margin="4dp"
-        android:src="@mipmap/unchecked"
-        />
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_margin="8dp"
+        android:src="@mipmap/unchecked" />
 
     <TextView
         android:id="@+id/photoName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:textColor="#094355"
         android:layout_toEndOf="@+id/checked"
         />

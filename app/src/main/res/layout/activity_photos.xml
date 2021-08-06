@@ -15,10 +15,11 @@
         app:spanCount="2"
         android:choiceMode="singleChoice"
         android:scrollbars="vertical"
-        android:scrollbarSize="6dp"
+        android:fadeScrollbars="false"
+        android:scrollbarSize="16dp"
         android:scrollbarStyle="outsideInset"
-        style="@style/scrollbar_shape_photos"
         >
     </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>
+<!--    style="@style/scrollbar_shape_photos"-->
