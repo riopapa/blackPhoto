@@ -37,26 +37,20 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         ViewHolder(final View itemView) {
             super(itemView);
             iVImage = itemView.findViewById(R.id.photosImage);
-            iVImage.setOnClickListener(view -> {
-                toggleCheckBox(getAdapterPosition());
-            });
+            iVImage.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
             iVImage.setOnLongClickListener(view -> {
                     showBigPhoto();
                 return true;
             });
 
             ivCheck = itemView.findViewById(R.id.checked);
-            ivCheck.setOnClickListener(view -> {
-                toggleCheckBox(getAdapterPosition());
-            });
+            ivCheck.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
             ivCheck.setOnLongClickListener(view -> {
                 showBigPhoto();
                 return true;
             });
             tvName = itemView.findViewById(R.id.photoName);
-            tvName.setOnClickListener(view -> {
-                toggleCheckBox(getAdapterPosition());
-            });
+            tvName.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
             tvName.setOnLongClickListener(view -> {
                 showBigPhoto();
                 return true;
@@ -64,7 +58,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
 
         private void showBigPhoto() {
-            nowPos = getAdapterPosition();
+            nowPos = getAbsoluteAdapterPosition();
             Intent intent = new Intent(mContext, PhotoBigView.class);
             mActivity.startActivity(intent);
         }
@@ -98,9 +92,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     static Bitmap makeSumNail(File fullFileName) {
         Bitmap bitmap = BitmapFactory.decodeFile(fullFileName.toString()).copy(Bitmap.Config.RGB_565, false);
-        int width = bitmap.getWidth() * 3 / 30;
-        int height = bitmap.getHeight() * 3 / 30;
+        int width = bitmap.getWidth() * 6 / 30;
+        int height = bitmap.getHeight() * 6 / 30;
         return Bitmap.createScaledBitmap(bitmap, width, height, false);
     }
-
 }

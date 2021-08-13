@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +21,7 @@ import java.util.Arrays;
 
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
+import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.photosAdapter;
 import static com.urrecliner.blackphoto.Vars.photos;
@@ -27,6 +29,9 @@ import static com.urrecliner.blackphoto.Vars.photos;
 public class PhotoSelect extends AppCompatActivity {
 
     static RecyclerView photosView;
+    String title;
+    int cnt;
+    ActionBar actionBar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,6 +39,7 @@ public class PhotoSelect extends AppCompatActivity {
         setContentView(R.layout.activity_photos);
         photosView = findViewById(R.id.sumNailView);
         StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
+
         photosView.setLayoutManager(SGL);
         photosView.addItemDecoration(new DividerItemDecoration(this, SGL.getOrientation()));
         photosView.setLayoutManager(SGL);
@@ -51,6 +57,7 @@ public class PhotoSelect extends AppCompatActivity {
         }
         photosAdapter = new PhotosAdapter();
         photosView.setAdapter(photosAdapter);
+        actionBar = this.getSupportActionBar();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -58,7 +65,19 @@ public class PhotoSelect extends AppCompatActivity {
             }
         }, 20);
         photosView.setBackgroundColor(Color.YELLOW);
+        title = currEventFolder.getName().substring(0, 18);
+        showActionBar(0);
     }
+
+    private void showActionBar(int cnt) {
+
+        mActivity.runOnUiThread(() -> {
+            actionBar.setTitle(title);
+            String s = cnt+"/"+photos.size()+ " photos";
+            actionBar.setSubtitle(s);
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.photos_menu, menu);
@@ -86,24 +105,27 @@ public class PhotoSelect extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            for (int i = 0; i < photos.size(); i += 3) {
+            for (int i = 0; i < photos.size(); i++) {
                 Photo photo = photos.get(i);
                 if (photo.bitMap == null ) {
+                    showActionBar(++cnt);
                     photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
                 }
             }
-            for (int i = 1; i < photos.size(); i += 3) {
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
-            }
-            for (int i = 2; i < photos.size(); i += 3) {
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
-            }
+//            for (int i = 1; i < photos.size(); i += 3) {
+//                Photo photo = photos.get(i);
+//                if (photo.bitMap == null ) {
+//                    showActionBar(++cnt);
+//                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+//                }
+//            }
+//            for (int i = 2; i < photos.size(); i += 3) {
+//                Photo photo = photos.get(i);
+//                if (photo.bitMap == null ) {
+//                    showActionBar(++cnt);
+//                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+//                }
+//            }
             return null;
         }
 
