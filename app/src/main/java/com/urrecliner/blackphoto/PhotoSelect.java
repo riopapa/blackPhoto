@@ -105,27 +105,34 @@ public class PhotoSelect extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            for (int i = 0; i < photos.size(); i++) {
+            for (int i = 0; i < photos.size(); i+=4) {
+                showActionBar(++cnt);
                 Photo photo = photos.get(i);
                 if (photo.bitMap == null ) {
-                    showActionBar(++cnt);
                     photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
                 }
             }
-//            for (int i = 1; i < photos.size(); i += 3) {
-//                Photo photo = photos.get(i);
-//                if (photo.bitMap == null ) {
-//                    showActionBar(++cnt);
-//                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-//                }
-//            }
-//            for (int i = 2; i < photos.size(); i += 3) {
-//                Photo photo = photos.get(i);
-//                if (photo.bitMap == null ) {
-//                    showActionBar(++cnt);
-//                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-//                }
-//            }
+            for (int i = 2; i < photos.size(); i +=4) {
+                showActionBar(++cnt);
+                Photo photo = photos.get(i);
+                if (photo.bitMap == null ) {
+                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+                }
+            }
+            for (int i = 1; i < photos.size(); i +=4) {
+                showActionBar(++cnt);
+                Photo photo = photos.get(i);
+                if (photo.bitMap == null ) {
+                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+                }
+            }
+            for (int i = 3; i < photos.size(); i +=4) {
+                showActionBar(++cnt);
+                Photo photo = photos.get(i);
+                if (photo.bitMap == null ) {
+                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+                }
+            }
             return null;
         }
 

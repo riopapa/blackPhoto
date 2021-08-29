@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.Random;
 
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.mActivity;
@@ -78,10 +79,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Photo photo = photos.get(position);
-//        if (photo.bitMap == null) {
-//            photo.bitMap = makeSumNail(photo.fullFileName);
-//            photos.set(position, photo);
-//        }
+        if (photo.bitMap == null &&  new Random().nextInt(5) == 0) {
+                photo.bitMap = makeSumNail(photo.fullFileName);
+                photos.set(position, photo);
+        }
         holder.ivCheck.setImageResource((photo.checked) ? R.mipmap.checked : R.mipmap.unchecked);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.iVImage.getLayoutParams();
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
@@ -92,8 +93,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     static Bitmap makeSumNail(File fullFileName) {
         Bitmap bitmap = BitmapFactory.decodeFile(fullFileName.toString()).copy(Bitmap.Config.RGB_565, false);
-        int width = bitmap.getWidth() * 6 / 30;
-        int height = bitmap.getHeight() * 6 / 30;
+        int width = bitmap.getWidth() * 5 / 30;
+        int height = bitmap.getHeight() * 5 / 30;
         return Bitmap.createScaledBitmap(bitmap, width, height, false);
     }
 }
