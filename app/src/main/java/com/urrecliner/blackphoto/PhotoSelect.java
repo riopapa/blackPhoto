@@ -67,6 +67,7 @@ public class PhotoSelect extends AppCompatActivity {
         photosView.setBackgroundColor(Color.YELLOW);
         title = currEventFolder.getName().substring(0, 18);
         showActionBar(0);
+        photosView.scrollToPosition(photos.size()/3);
     }
 
     private void showActionBar(int cnt) {
@@ -105,6 +106,13 @@ public class PhotoSelect extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
+            for (int i = photos.size()/4; i < photos.size()/2; i+=3) {
+//                showActionBar(++cnt);
+                Photo photo = photos.get(i);
+                if (photo.bitMap == null ) {
+                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+                }
+            }
             for (int i = 0; i < photos.size(); i+=4) {
                 showActionBar(++cnt);
                 Photo photo = photos.get(i);

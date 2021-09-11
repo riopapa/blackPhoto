@@ -93,8 +93,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     static Bitmap makeSumNail(File fullFileName) {
         Bitmap bitmap = BitmapFactory.decodeFile(fullFileName.toString()).copy(Bitmap.Config.RGB_565, false);
-        int width = bitmap.getWidth() * 5 / 30;
-        int height = bitmap.getHeight() * 5 / 30;
-        return Bitmap.createScaledBitmap(bitmap, width, height, false);
+        return Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 5 / 40,
+                bitmap.getHeight() * 5 / 40, false);
     }
 }
