@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ public class PhotoSelect extends AppCompatActivity {
 
     static RecyclerView photosView;
     String title;
-    int cnt;
+    int cnt = 0;
     ActionBar actionBar;
 
     @Override
@@ -58,12 +59,7 @@ public class PhotoSelect extends AppCompatActivity {
         photosAdapter = new PhotosAdapter();
         photosView.setAdapter(photosAdapter);
         actionBar = this.getSupportActionBar();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                new PhotoBitmap().execute("");
-            }
-        }, 20);
+        new Handler().postDelayed(() -> new PhotoBitmap().execute(""), 20);
         photosView.setBackgroundColor(Color.YELLOW);
         title = currEventFolder.getName().substring(0, 18);
         showActionBar(0);
@@ -88,16 +84,14 @@ public class PhotoSelect extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()) {
-
-            case R.id.action_sending:
-                for (int i = 0; i < photos.size(); i++) {
-                    Photo photo = photos.get(i);
-                    if (photo.checked) {
-                        new PhotoBigView().jpgCopy(photo.fullFileName);
-                    }
+        if (item.getItemId() == R.id.action_sending) {
+            for (int i = 0; i < photos.size(); i++) {
+                Photo photo = photos.get(i);
+                if (photo.checked) {
+                    new PhotoBigView().jpgCopy(photo.fullFileName);
                 }
-                return true;
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -106,40 +100,18 @@ public class PhotoSelect extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            for (int i = photos.size()/4; i < photos.size()/2; i+=3) {
-//                showActionBar(++cnt);
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
-            }
-            for (int i = 0; i < photos.size(); i+=4) {
-                showActionBar(++cnt);
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
-            }
-            for (int i = 2; i < photos.size(); i +=4) {
-                showActionBar(++cnt);
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
-            }
-            for (int i = 1; i < photos.size(); i +=4) {
-                showActionBar(++cnt);
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
-            }
-            for (int i = 3; i < photos.size(); i +=4) {
-                showActionBar(++cnt);
-                Photo photo = photos.get(i);
-                if (photo.bitMap == null ) {
-                    photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
-                }
+
+            Photo photo;
+            int oneThirdPos = photos.size() / 3;
+            Log.w("onepos="+oneThirdPos,"photo size ="+photos.size());
+            for (int i = 0; i < photos.size() * 2 / 3; i++) {
+                int pos;
+                pos = oneThirdPos - i;
+                if (pos >= 0)
+                    setPhotoBitmap(pos);
+                pos = oneThirdPos + i;
+                if (pos < photos.size())
+                    setPhotoBitmap(pos);
             }
             return null;
         }
@@ -147,6 +119,17 @@ public class PhotoSelect extends AppCompatActivity {
         @Override
         protected void onPostExecute(String doI) {
             photosView.setBackgroundColor(Color.WHITE);
+        }
+    }
+
+    private void setPhotoBitmap(int pos) {
+        Photo photo;
+        photo = photos.get(pos);
+        if (photo.bitMap == null) {
+            Log.w("photo "+cnt,pos+" null");
+            showActionBar(++cnt);
+            photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
+            photos.set(pos, photo);
         }
     }
 }

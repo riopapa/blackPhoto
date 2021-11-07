@@ -1,39 +1,35 @@
 package com.urrecliner.blackphoto;
 
+import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
+import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
+import static com.urrecliner.blackphoto.Vars.eventFolderView;
+import static com.urrecliner.blackphoto.Vars.eventFolders;
+import static com.urrecliner.blackphoto.Vars.eventMP4Folder;
+import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
+import static com.urrecliner.blackphoto.Vars.mActivity;
+import static com.urrecliner.blackphoto.Vars.mContext;
+import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
+import static com.urrecliner.blackphoto.Vars.spanWidth;
+import static com.urrecliner.blackphoto.Vars.utils;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
-
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
-import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
-import static com.urrecliner.blackphoto.Vars.eventMP4Folder;
-import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
-import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
-import static com.urrecliner.blackphoto.Vars.eventFolders;
-import static com.urrecliner.blackphoto.Vars.mContext;
-import static com.urrecliner.blackphoto.Vars.mActivity;
-import static com.urrecliner.blackphoto.Vars.eventFolderView;
-import static com.urrecliner.blackphoto.Vars.spanWidth;
-import static com.urrecliner.blackphoto.Vars.utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,38 +76,32 @@ public class MainActivity extends AppCompatActivity {
             builder.setTitle("Old Events");
             builder.setMessage("Delete Old Event Files?");
             builder.setPositiveButton("Yes",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
-                            if (mp4Files != null) {
-                                for (File mp4: mp4Files) {
-                                    mp4.delete();
-                                }
-                                Toast.makeText(getApplicationContext(), mp4Files.length+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
+                    (dialog, which) -> {
+                        File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
+                        if (mp4Files != null) {
+                            for (File mp4: mp4Files) {
+                                mp4.delete();
                             }
-                            File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
-                            if (jpgFolders != null) {
-                                for (File fJpg: jpgFolders) {
-                                    EventFolderAdapter.deleteRecursive(fJpg);
-                                    Toast.makeText(getApplicationContext(), fJpg.getName()+" deleted ", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                            File[] jpgFiles = selectedJpgFolder.listFiles();
-                            if (jpgFiles != null) {
-                                for (File fJpg: jpgFiles) {
-                                    fJpg.delete();
-                                }
-                                Toast.makeText(getApplicationContext(), jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
-                            }
-                            finish();
+                            Toast.makeText(getApplicationContext(), mp4Files.length+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
                         }
+                        File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
+                        if (jpgFolders != null) {
+                            for (File fJpg: jpgFolders) {
+                                EventFolderAdapter.deleteRecursive(fJpg);
+                                Toast.makeText(getApplicationContext(), fJpg.getName()+" deleted ", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        File[] jpgFiles = selectedJpgFolder.listFiles();
+                        if (jpgFiles != null) {
+                            for (File fJpg: jpgFiles) {
+                                fJpg.delete();
+                            }
+                            Toast.makeText(getApplicationContext(), jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
+                        }
+                        finish();
                     });
             builder.setNegativeButton("No, not Now",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            finish();
-                        }
-                    });
+                    (dialog, which) -> finish());
             AlertDialog dialog = builder.create();
             dialog.show();
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
@@ -153,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == ALL_PERMISSIONS_RESULT) {
             for (Object perms : permissionsToRequest) {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
@@ -41,26 +36,24 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             super(itemView);
             tvEventTIme = itemView.findViewById(R.id.eventTime);
             itemView.setOnClickListener(view -> {
-                currEventFolder = eventFolders.get(getAdapterPosition());
+                currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
                 Toast.makeText(mContext,currEventFolder.getName().substring(0, 18)+" selected", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, PhotoSelect.class);
                 mActivity.startActivity(intent);
             });
 
             itemView.setOnLongClickListener(view -> {
-                currEventFolder = eventFolders.get(getAdapterPosition());
-                TextView tv = itemView.findViewById(R.id.eventTime);
+                currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                 builder.setTitle("Delete this event?");
-                builder.setMessage(tv.getText().toString());
+                builder.setMessage(tvEventTIme.getText().toString());
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     deleteRecursive(currEventFolder);
-                    eventFolders.remove(getAdapterPosition());
+                    eventFolders.remove(getAbsoluteAdapterPosition());
                     eventFolderAdapter.notifyDataSetChanged();
                 });
                 builder.setNegativeButton("No", (dialog, which) -> { });
                 showPopup(builder);
-                ;
 //                String deleteCmd = "rm -r \"" + currEventFolder.getAbsolutePath() + "\"";
 //                Runtime runtime = Runtime.getRuntime();
 //                try {

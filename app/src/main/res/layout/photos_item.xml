@@ -3,16 +3,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="1dp"
-    android:layout_marginRight="1dp"
-    android:layout_marginTop="1dp">
+    android:layout_marginLeft="3dp"
+    android:layout_marginRight="3dp"
+    android:layout_marginTop="3dp">
 
     <ImageView
         android:id="@+id/photosImage"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/photoName"
         android:contentDescription="@string/todo" />
+
+    <TextView
+        android:id="@+id/photoName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="#094355"
+        android:layout_toEndOf="@+id/checked"
+        />
 
     <ImageView
         android:id="@+id/checked"
@@ -20,14 +30,5 @@
         android:layout_height="20dp"
         android:layout_margin="8dp"
         android:src="@mipmap/unchecked" />
-
-    <TextView
-        android:id="@+id/photoName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="#094355"
-        android:layout_toEndOf="@+id/checked"
-        />
 
 </RelativeLayout>

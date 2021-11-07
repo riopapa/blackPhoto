@@ -76,16 +76,13 @@ public class PhotoBigView extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-
-            case R.id.selectPhoto:
-                photo.checked = !photo.checked;
-                photos.set(nowPos, photo);
-                photosAdapter.notifyItemChanged(nowPos);
-                nowPos++;
-                if (nowPos >= photos.size()) nowPos = photos.size() - 1;
-                showBigImage();
-                break;
+        if (item.getItemId() == R.id.selectPhoto) {
+            photo.checked = !photo.checked;
+            photos.set(nowPos, photo);
+            photosAdapter.notifyItemChanged(nowPos);
+            nowPos++;
+            if (nowPos >= photos.size()) nowPos = photos.size() - 1;
+            showBigImage();
         }
         return super.onOptionsItemSelected(item);
     }
