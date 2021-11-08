@@ -101,12 +101,9 @@ public class PhotoSelect extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            Photo photo;
             int oneThirdPos = photos.size() / 3;
-            Log.w("onepos="+oneThirdPos,"photo size ="+photos.size());
             for (int i = 0; i < photos.size() * 2 / 3; i++) {
-                int pos;
-                pos = oneThirdPos - i;
+                int pos = oneThirdPos - i;
                 if (pos >= 0)
                     setPhotoBitmap(pos);
                 pos = oneThirdPos + i;
@@ -126,7 +123,6 @@ public class PhotoSelect extends AppCompatActivity {
         Photo photo;
         photo = photos.get(pos);
         if (photo.bitMap == null) {
-            Log.w("photo "+cnt,pos+" null");
             showActionBar(++cnt);
             photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
             photos.set(pos, photo);

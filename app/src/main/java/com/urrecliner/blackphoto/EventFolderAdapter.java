@@ -37,7 +37,6 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             tvEventTIme = itemView.findViewById(R.id.eventTime);
             itemView.setOnClickListener(view -> {
                 currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
-                Toast.makeText(mContext,currEventFolder.getName().substring(0, 18)+" selected", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(mContext, PhotoSelect.class);
                 mActivity.startActivity(intent);
             });
