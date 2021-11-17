@@ -32,6 +32,7 @@ public class PhotoSelect extends AppCompatActivity {
     static RecyclerView photosView;
     String title;
     int cnt = 0;
+    boolean asyncRunning = false;
     ActionBar actionBar;
 
     @Override
@@ -59,6 +60,7 @@ public class PhotoSelect extends AppCompatActivity {
         photosAdapter = new PhotosAdapter();
         photosView.setAdapter(photosAdapter);
         actionBar = this.getSupportActionBar();
+        asyncRunning = true;
         new Handler().postDelayed(() -> new PhotoBitmap().execute(""), 20);
         photosView.setBackgroundColor(Color.YELLOW);
         title = currEventFolder.getName().substring(0, 18);
@@ -103,6 +105,8 @@ public class PhotoSelect extends AppCompatActivity {
 
             int oneThirdPos = photos.size() / 3;
             for (int i = 0; i < photos.size() * 2 / 3; i++) {
+                if (!asyncRunning)
+                    return null;
                 int pos = oneThirdPos - i;
                 if (pos >= 0)
                     setPhotoBitmap(pos);
@@ -116,6 +120,7 @@ public class PhotoSelect extends AppCompatActivity {
         @Override
         protected void onPostExecute(String doI) {
             photosView.setBackgroundColor(Color.WHITE);
+            asyncRunning = false;
         }
     }
 
@@ -127,5 +132,11 @@ public class PhotoSelect extends AppCompatActivity {
             photo.bitMap = PhotosAdapter.makeSumNail(photo.fullFileName);
             photos.set(pos, photo);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        asyncRunning = false;
     }
 }
