@@ -94,7 +94,9 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         String folder = eventFolders.get(position).toString();
-        folder = folder.substring(38, 56);
-        holder.tvEventTIme.setText(folder);
+        String s = folder.substring(38, 56);
+        File files = eventFolders.get(position);
+        s += " / "+files.listFiles().length;
+        holder.tvEventTIme.setText(s);
     }
 }

@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         eventFolders = new ArrayList<>();
         eventFolders.addAll(Arrays.asList(fullFileList));
         utils = new Utils();
-        utils.log("blackPhoto", "Start--");
+//        utils.log("blackPhoto", "Start--");
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
