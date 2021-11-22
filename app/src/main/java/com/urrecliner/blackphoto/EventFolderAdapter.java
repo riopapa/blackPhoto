@@ -6,12 +6,14 @@ import android.content.Intent;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.File;
 
@@ -31,10 +33,15 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvEventTIme;
+        ImageView image1, image2, image3, image4;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tvEventTIme = itemView.findViewById(R.id.eventTime);
+            image1 = itemView.findViewById(R.id.photoImage1);
+            image2 = itemView.findViewById(R.id.photoImage2);
+            image3 = itemView.findViewById(R.id.photoImage3);
+            image4 = itemView.findViewById(R.id.photoImage4);
             itemView.setOnClickListener(view -> {
                 currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
                 Intent intent = new Intent(mContext, PhotoSelect.class);
@@ -86,7 +93,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
     }
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_folder_line, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folders_item, parent, false);
         return new ViewHolder(view);
     }
 
@@ -96,7 +103,20 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         String folder = eventFolders.get(position).toString();
         String s = folder.substring(38, 56);
         File files = eventFolders.get(position);
-        s += " / "+files.listFiles().length;
+        File [] photoList = files.listFiles();
+        assert photoList != null;
+        int photoSize = photoList.length;
+        s += " / "+photoSize;
         holder.tvEventTIme.setText(s);
+        if (photoList.length > 50) {
+            Bitmap bitmap = BitmapFactory.decodeFile(photoList[photoSize/8].toString()).copy(Bitmap.Config.RGB_565, false);
+            holder.image1.setImageBitmap(bitmap);
+            bitmap = BitmapFactory.decodeFile(photoList[photoSize/4].toString()).copy(Bitmap.Config.RGB_565, false);
+            holder.image2.setImageBitmap(bitmap);
+            bitmap = BitmapFactory.decodeFile(photoList[photoSize/2].toString()).copy(Bitmap.Config.RGB_565, false);
+            holder.image3.setImageBitmap(bitmap);
+            bitmap = BitmapFactory.decodeFile(photoList[photoSize*3/4].toString()).copy(Bitmap.Config.RGB_565, false);
+            holder.image4.setImageBitmap(bitmap);
+        }
     }
 }
