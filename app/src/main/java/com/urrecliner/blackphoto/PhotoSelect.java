@@ -65,7 +65,7 @@ public class PhotoSelect extends AppCompatActivity {
         photosView.setBackgroundColor(Color.YELLOW);
         title = currEventFolder.getName().substring(0, 18);
         showActionBar(0);
-        photosView.scrollToPosition(photos.size()/3);
+        photosView.scrollToPosition(photos.size()*5/10);
     }
 
     private void showActionBar(int cnt) {
@@ -103,8 +103,8 @@ public class PhotoSelect extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            int oneThirdPos = photos.size() / 3;
-            for (int i = 0; i < photos.size() * 2 / 3; i++) {
+            int oneThirdPos = photos.size() / 2;
+            for (int i = 0; i < photos.size() / 2 + 2; i++) {
                 if (!asyncRunning)
                     return null;
                 int pos = oneThirdPos - i;

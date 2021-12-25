@@ -79,7 +79,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Photo photo = photos.get(position);
-        if (photo.bitMap == null &&  new Random().nextInt(5) == 0) {
+        if (photo.bitMap == null &&  new Random().nextInt(3) == 0) {
                 photo.bitMap = makeSumNail(photo.fullFileName);
                 photos.set(position, photo);
         }
