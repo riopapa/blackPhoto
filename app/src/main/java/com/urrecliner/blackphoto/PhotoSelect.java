@@ -26,6 +26,7 @@ import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.photosAdapter;
 import static com.urrecliner.blackphoto.Vars.photos;
+import static com.urrecliner.blackphoto.Vars.utils;
 
 public class PhotoSelect extends AppCompatActivity {
 
@@ -49,7 +50,7 @@ public class PhotoSelect extends AppCompatActivity {
         File[] fullFileList = currEventFolder.listFiles((dir, name) ->
                 (name.endsWith("jpg")));
         if (fullFileList == null) {
-            Toast.makeText(mContext, "No photos in " + currEventFolder.getName(), Toast.LENGTH_LONG).show();
+            utils.showToast( "No photos in " + currEventFolder.getName());
             return;
         }
         Arrays.sort(fullFileList);
@@ -65,7 +66,7 @@ public class PhotoSelect extends AppCompatActivity {
         photosView.setBackgroundColor(Color.YELLOW);
         title = currEventFolder.getName().substring(0, 18);
         showActionBar(0);
-        photosView.scrollToPosition(photos.size()*5/10);
+        photosView.scrollToPosition(photos.size()*4/10);
     }
 
     private void showActionBar(int cnt) {

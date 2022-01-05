@@ -78,25 +78,25 @@ public class MainActivity extends AppCompatActivity {
             builder.setPositiveButton("Yes",
                     (dialog, which) -> {
                         File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
-                        if (mp4Files != null) {
+                        if (mp4Files != null && mp4Files.length > 0) {
                             for (File mp4: mp4Files) {
                                 mp4.delete();
                             }
-                            Toast.makeText(getApplicationContext(), mp4Files.length+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
+                            utils.showToast( mp4Files.length+" event mp4 deleted ");
                         }
                         File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
-                        if (jpgFolders != null) {
+                        if (jpgFolders != null && jpgFolders.length > 0) {
                             for (File fJpg: jpgFolders) {
-                                EventFolderAdapter.deleteRecursive(fJpg);
-                                Toast.makeText(getApplicationContext(), fJpg.getName()+" deleted ", Toast.LENGTH_SHORT).show();
+                                utils.deleteFolder(fJpg);
                             }
+                            utils.showToast( " image folders folder cleared");
                         }
                         File[] jpgFiles = selectedJpgFolder.listFiles();
-                        if (jpgFiles != null) {
+                        if (jpgFiles != null && jpgFiles.length > 0) {
                             for (File fJpg: jpgFiles) {
                                 fJpg.delete();
                             }
-                            Toast.makeText(getApplicationContext(), jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
+                            utils.showToast( jpgFiles.length+" selected Jpgs deleted ");
                         }
                         finish();
                     });

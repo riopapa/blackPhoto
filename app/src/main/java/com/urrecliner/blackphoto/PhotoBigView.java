@@ -24,6 +24,7 @@ import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.nowPos;
 import static com.urrecliner.blackphoto.Vars.photos;
 import static com.urrecliner.blackphoto.Vars.photosAdapter;
+import static com.urrecliner.blackphoto.Vars.utils;
 
 public class PhotoBigView extends AppCompatActivity {
 
@@ -92,7 +93,7 @@ public class PhotoBigView extends AppCompatActivity {
         File dest = new File (selectedJpgFolder, sourcepath.getName());
         try {
             Files.copy(sourcepath.toPath(), dest.toPath());
-            Toast.makeText(mContext, sourcepath.getName()+" copied",Toast.LENGTH_LONG).show();
+            utils.showToast( sourcepath.getName()+" copied");
         } catch (IOException e) {
 //            e.printStackTrace();
         }

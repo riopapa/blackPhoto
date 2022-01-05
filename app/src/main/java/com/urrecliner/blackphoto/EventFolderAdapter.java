@@ -16,12 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
+import static com.urrecliner.blackphoto.Vars.utils;
 
 public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.ViewHolder> {
 
@@ -54,7 +56,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
                 builder.setTitle("Delete this event?");
                 builder.setMessage(tvEventTIme.getText().toString());
                 builder.setPositiveButton("Yes", (dialog, which) -> {
-                    deleteRecursive(currEventFolder);
+                    utils.deleteFolder(currEventFolder);
                     eventFolders.remove(getAbsoluteAdapterPosition());
                     eventFolderAdapter.notifyDataSetChanged();
                 });
@@ -85,12 +87,23 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         btn.requestFocus();
     }
 
-    public static void deleteRecursive(File fileOrDirectory) {
-        if (fileOrDirectory.isDirectory())
-            for (File child : fileOrDirectory.listFiles())
-                deleteRecursive(child);
-        fileOrDirectory.delete();
-    }
+//    public static void deleteRecursive(File fileOrDirectory) {
+//        if (fileOrDirectory.isDirectory())
+//            deleteFolder(fileOrDirectory);
+////            for (File child : fileOrDirectory.listFiles())
+////                deleteRecursive(child);
+//        else
+//            fileOrDirectory.delete();
+//    }
+
+//    public static void deleteFolder(File file) {
+//        String deleteCmd = "rm -r " + file.toString();
+//        Runtime runtime = Runtime.getRuntime();
+//        try {
+//            runtime.exec(deleteCmd);
+//        } catch (IOException e) { }
+//    }
+//
 
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folders_item, parent, false);

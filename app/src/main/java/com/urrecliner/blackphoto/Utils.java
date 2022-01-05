@@ -1,6 +1,9 @@
 package com.urrecliner.blackphoto;
 
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,6 +14,9 @@ import java.util.Locale;
 
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
 import static com.urrecliner.blackphoto.Vars.logFullFolder;
+import static com.urrecliner.blackphoto.Vars.mContext;
+
+import org.apache.commons.io.FileUtils;
 
 class Utils {
 
@@ -83,4 +89,17 @@ class Utils {
         }
     }
 
+    void showToast(String text) {
+        Toast toast = Toast.makeText(mContext,text, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL,0,200);
+        toast.show();
+    }
+
+    void deleteFolder (File file) {
+        try {
+            FileUtils.deleteDirectory(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
