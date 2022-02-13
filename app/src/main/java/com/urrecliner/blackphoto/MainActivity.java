@@ -108,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
                         }
                         File[] jpgFiles = selectedJpgFolder.listFiles();
                         if (jpgFiles != null && jpgFiles.length > 0) {
-                            for (File fJpg: jpgFiles) {
-                                fJpg.delete();
+                            for (File jpgFile: jpgFiles) {
+                                jpgFile.delete();
                             }
                             utils.showToast( jpgFiles.length+" selected Jpgs deleted ");
                         }

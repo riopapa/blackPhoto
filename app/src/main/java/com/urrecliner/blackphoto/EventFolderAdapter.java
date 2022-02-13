@@ -114,22 +114,21 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        String folder = eventFolders.get(position).toString();
-        String s = folder.substring(38, 56);
-        File files = eventFolders.get(position);
-        File [] photoList = files.listFiles();
+        File oneEventFolder = eventFolders.get(position);
+        String folderName = oneEventFolder.toString();
+        String [] photoList = oneEventFolder.list();
         assert photoList != null;
         int photoSize = photoList.length;
-        s += " / "+photoSize;
-        holder.tvEventTIme.setText(s);
+        String showName = folderName.substring(38, 56) + " / "+photoSize;
+        holder.tvEventTIme.setText(showName);
         if (photoList.length > 50) {
-            Bitmap bitmap = BitmapFactory.decodeFile(photoList[photoSize/8].toString()).copy(Bitmap.Config.RGB_565, false);
+            Bitmap bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize/8].toString()).copy(Bitmap.Config.RGB_565, false);
             holder.image1.setImageBitmap(bitmap);
-            bitmap = BitmapFactory.decodeFile(photoList[photoSize/4].toString()).copy(Bitmap.Config.RGB_565, false);
+            bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize/4].toString()).copy(Bitmap.Config.RGB_565, false);
             holder.image2.setImageBitmap(bitmap);
-            bitmap = BitmapFactory.decodeFile(photoList[photoSize/2].toString()).copy(Bitmap.Config.RGB_565, false);
+            bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize/2].toString()).copy(Bitmap.Config.RGB_565, false);
             holder.image3.setImageBitmap(bitmap);
-            bitmap = BitmapFactory.decodeFile(photoList[photoSize*3/4].toString()).copy(Bitmap.Config.RGB_565, false);
+            bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize*3/4].toString()).copy(Bitmap.Config.RGB_565, false);
             holder.image4.setImageBitmap(bitmap);
         }
     }

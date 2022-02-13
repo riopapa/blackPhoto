@@ -39,21 +39,20 @@ public class SnapSelect extends AppCompatActivity {
         photosView.setLayoutManager(SGL);
         photosView.addItemDecoration(new DividerItemDecoration(this, SGL.getOrientation()));
         photosView.setLayoutManager(SGL);
-        File[] fullFileList = currEventFolder.listFiles((dir, name) ->
+        String[] shortNames = currEventFolder.list((dir, name) ->
                 (name.endsWith("jpg")));
-        if (fullFileList == null) {
+        if (shortNames == null) {
             utils.showToast( "No photos in " + currEventFolder.getName());
             return;
         }
-        Arrays.sort(fullFileList);
+        Arrays.sort(shortNames);
         snapImages = new ArrayList<>();
         String currEventName = currEventFolder.toString();
-        for (File f: fullFileList) {
-            snapImages.add(new SnapImage(currEventName, f.getName(), null));
+        for (String s: shortNames) {
+            snapImages.add(new SnapImage(currEventName, s, null));
         }
         snapImageAdaptor = new SnapImageAdaptor();
         photosView.setAdapter(snapImageAdaptor);
-//        photosView.setBackgroundColor(Color.YELLOW);
         title = currEventFolder.getName().substring(0, 18);
         photosView.scrollToPosition(snapImages.size()*4/10);
     }
