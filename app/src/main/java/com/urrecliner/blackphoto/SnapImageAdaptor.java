@@ -83,9 +83,11 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
         holder.iVImage.setLayoutParams(params);
         if (sna.sumNailMap == null) {
-            sna = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
-            if (sna.sumNailMap != null)
-                snapImages.set(position, sna);
+            SnapImage sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
+            if (sna2 != null && sna2.sumNailMap != null) {
+                snapImages.set(position, sna2);
+                sna = snapImages.get(position);
+            }
         }
         if (sna.sumNailMap != null)
             holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna.sumNailMap));
