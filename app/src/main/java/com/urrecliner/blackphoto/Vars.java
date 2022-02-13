@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.os.Environment;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Vars {
     static Context mContext;
     static Activity mActivity;
 
-    static PhotosAdapter photosAdapter;
+    static SnapImageAdaptor snapImageAdaptor;
     static RecyclerView eventFolderView;
     static File jpgFullFolder =  new File(Environment.getExternalStorageDirectory(),
             "BlackBox/EventJpg");
@@ -31,9 +30,14 @@ public class Vars {
     static int nowPos;
     static int spanWidth;
 
-    static ArrayList<Photo> photos = null;
     static List<File> eventFolders = null;
     static EventFolderAdapter eventFolderAdapter;
     final static int SPAN_COUNT = 1;
-}
 
+    static SnapDataBase snapDB;
+    static SnapDao snapDao;
+    static List<SnapImage> snapImages = null;
+    static BuildDB buildDB;
+
+
+}

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/border_back"
+    android:id="@+id/main_layout"
     tools:context=".MainActivity">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -14,7 +15,7 @@
         android:layout_margin="4dp"
         app:layoutManager="GridLayoutManager"
         android:choiceMode="multipleChoice"
-        style="@style/scrollbar_shape_style"
+        style="@style/up_down_scroll_thumb"
         >
     </androidx.recyclerview.widget.RecyclerView>
 

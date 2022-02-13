@@ -12,7 +12,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
 import static com.urrecliner.blackphoto.Vars.logFullFolder;
 import static com.urrecliner.blackphoto.Vars.mContext;
 
@@ -43,14 +42,6 @@ class Utils {
         return s.substring(s.lastIndexOf(".")+1);
     }
 
-    void logE(String tag, String text) {
-        StackTraceElement[] traces;
-        traces = Thread.currentThread().getStackTrace();
-        String log = traceName(traces[5].getMethodName()) + traceName(traces[4].getMethodName()) + traceClassName(traces[3].getClassName())+"> "+traces[3].getMethodName() + "#" + traces[3].getLineNumber() + " {"+ tag + "} " + text;
-        Log.e("<" + tag + ">" , log);
-        append2file(sdfDateTimeLog.format(new Date())+" : " +log);
-    }
-
     private void append2file(String textLine) {
 
         BufferedWriter bw = null;
@@ -60,7 +51,7 @@ class Utils {
             File file = new File(logFullFolder, PREFIX + sdfDate.format(new Date())+".txt");
             if (!file.exists()) {
                 if (!file.createNewFile()) {
-                    logE("createFile", " Error");
+                    Log.w("createFile", " Error");
                 }
             }
             String outText = "\n"+textLine+"\n";
@@ -85,7 +76,7 @@ class Utils {
             if (!dir.exists() && !dir.mkdirs())
                 Log.e("make dir", "Error");
         } catch (Exception e) {
-            Log.e("creating Folder error", dir + "_" + e.toString());
+            Log.e("creating Folder error", dir + "_" + e);
         }
     }
 

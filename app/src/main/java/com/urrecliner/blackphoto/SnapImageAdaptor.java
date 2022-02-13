@@ -1,11 +1,15 @@
 package com.urrecliner.blackphoto;
 
+import static com.urrecliner.blackphoto.Vars.buildDB;
+import static com.urrecliner.blackphoto.Vars.mActivity;
+import static com.urrecliner.blackphoto.Vars.mContext;
+import static com.urrecliner.blackphoto.Vars.nowPos;
+import static com.urrecliner.blackphoto.Vars.snapDao;
+import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
+import static com.urrecliner.blackphoto.Vars.snapImages;
+import static com.urrecliner.blackphoto.Vars.spanWidth;
+
 import android.content.Intent;
-import android.graphics.Bitmap;
-
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,21 +17,14 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.File;
-import java.util.Random;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
-import static com.urrecliner.blackphoto.Vars.mContext;
-import static com.urrecliner.blackphoto.Vars.mActivity;
-import static com.urrecliner.blackphoto.Vars.nowPos;
-import static com.urrecliner.blackphoto.Vars.photosAdapter;
-import static com.urrecliner.blackphoto.Vars.photos;
-import static com.urrecliner.blackphoto.Vars.spanWidth;
-
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
+public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return photos.size();
+        return snapImages.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -60,17 +57,19 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
         private void showBigPhoto() {
             nowPos = getAbsoluteAdapterPosition();
-            Intent intent = new Intent(mContext, PhotoBigView.class);
+            Intent intent = new Intent(mContext, SnapBigView.class);
             mActivity.startActivity(intent);
         }
 
         private void toggleCheckBox(int position) {
-            Photo photo = photos.get(position);
-            photo.checked = !photo.checked;
-            photosAdapter.notifyItemChanged(position);
+            SnapImage s = snapImages.get(position);
+            s.isChecked = !s.isChecked;
+            snapImages.set(position, s);
+            snapImageAdaptor.notifyItemChanged(position, s);
         }
     }
 
+    @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.photos_item, parent, false);
         return new ViewHolder(view);
@@ -78,22 +77,19 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Photo photo = photos.get(position);
-        if (photo.bitMap == null &&  new Random().nextInt(3) == 0) {
-                photo.bitMap = makeSumNail(photo.fullFileName);
-                photos.set(position, photo);
-        }
-        holder.ivCheck.setImageResource((photo.checked) ? R.mipmap.checked : R.mipmap.unchecked);
+        SnapImage sna = snapImages.get(position);
+        holder.ivCheck.setImageResource((sna.isChecked) ? R.mipmap.checked : R.mipmap.unchecked);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.iVImage.getLayoutParams();
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
         holder.iVImage.setLayoutParams(params);
-        holder.iVImage.setImageBitmap(photo.bitMap);
-        holder.tvName.setText(photo.shortName);
+        if (sna.sumNailMap == null) {
+            sna = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
+            if (sna.sumNailMap != null)
+                snapImages.set(position, sna);
+        }
+        if (sna.sumNailMap != null)
+            holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna.sumNailMap));
+        holder.tvName.setText(sna.photoName);
     }
 
-    static Bitmap makeSumNail(File fullFileName) {
-        Bitmap bitmap = BitmapFactory.decodeFile(fullFileName.toString()).copy(Bitmap.Config.RGB_565, false);
-        return Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 5 / 40,
-                bitmap.getHeight() * 5 / 40, false);
-    }
 }

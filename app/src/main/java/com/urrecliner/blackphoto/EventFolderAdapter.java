@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
@@ -46,22 +46,23 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             image4 = itemView.findViewById(R.id.photoImage4);
             itemView.setOnClickListener(view -> {
                 currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
-                Intent intent = new Intent(mContext, PhotoSelect.class);
+                Intent intent = new Intent(mContext, SnapSelect.class);
                 mActivity.startActivity(intent);
             });
 
             itemView.setOnLongClickListener(view -> {
-                currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
+                int pos = getAbsoluteAdapterPosition();
+                currEventFolder = eventFolders.get(pos);
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                 builder.setTitle("Delete this event?");
                 builder.setMessage(tvEventTIme.getText().toString());
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     utils.deleteFolder(currEventFolder);
                     eventFolders.remove(getAbsoluteAdapterPosition());
-                    eventFolderAdapter.notifyDataSetChanged();
+                    eventFolderAdapter.notifyItemRemoved(pos);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> { });
-                showPopup(builder);
+                showYesNoPopup(builder);
 //                String deleteCmd = "rm -r \"" + currEventFolder.getAbsolutePath() + "\"";
 //                Runtime runtime = Runtime.getRuntime();
 //                try {
@@ -73,7 +74,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             });
         }
     }
-    static void showPopup(AlertDialog.Builder builder) {
+    static void showYesNoPopup(AlertDialog.Builder builder) {
         AlertDialog dialog = builder.create();
         dialog.show();
         Button btn = dialog.getButton(Dialog.BUTTON_POSITIVE);

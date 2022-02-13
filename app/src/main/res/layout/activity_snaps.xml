@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PhotoSelect">
+    tools:context=".SnapSelect">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sumNailView"
@@ -16,8 +16,7 @@
         android:choiceMode="singleChoice"
         android:scrollbars="vertical"
         android:fadeScrollbars="false"
-        android:scrollbarSize="16dp"
-        android:scrollbarStyle="outsideInset"
+        style="@style/up_down_scroll_thumb"
         >
     </androidx.recyclerview.widget.RecyclerView>
 

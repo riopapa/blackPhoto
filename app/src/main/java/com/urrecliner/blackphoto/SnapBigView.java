@@ -1,34 +1,28 @@
 package com.urrecliner.blackphoto;
 
+import static com.urrecliner.blackphoto.Vars.nowPos;
+import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
+import static com.urrecliner.blackphoto.Vars.snapImages;
+
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
-import static com.urrecliner.blackphoto.Vars.mContext;
-import static com.urrecliner.blackphoto.Vars.nowPos;
-import static com.urrecliner.blackphoto.Vars.photos;
-import static com.urrecliner.blackphoto.Vars.photosAdapter;
-import static com.urrecliner.blackphoto.Vars.utils;
+public class SnapBigView extends AppCompatActivity {
 
-public class PhotoBigView extends AppCompatActivity {
-
-    Photo photo;
+    SnapImage sna;
     TextView tvPhotoName;
     ImageView ivPhoto, ivCheck;
 
@@ -50,23 +44,23 @@ public class PhotoBigView extends AppCompatActivity {
         ImageView ivRight = findViewById(R.id.goRight);
         ivRight.setOnClickListener(view -> {
             nowPos++;
-            if (nowPos >= photos.size()) nowPos = photos.size() - 1;
+            if (nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
             showBigImage();
         });
     }
 
     private void showBigImage() {
-        photo = photos.get(nowPos);
-        tvPhotoName.setText(photo.fullFileName.getName());
+        sna = snapImages.get(nowPos);
+        tvPhotoName.setText(sna.photoName);
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
-        Bitmap bitmap = BitmapFactory.decodeFile(photo.fullFileName.getAbsolutePath());
+        Bitmap bitmap = BitmapFactory.decodeFile(new File(sna.fullFolder, sna.photoName).getAbsolutePath());
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
         ivPhoto.setImageBitmap(bitmap);
         PhotoViewAttacher pA;       // to enable zoom
         pA = new PhotoViewAttacher(ivPhoto);
         pA.update();
-        ivCheck.setImageResource((photo.checked ? R.mipmap.checked:R.mipmap.unchecked));
+        ivCheck.setImageResource((sna.isChecked ? R.mipmap.checked:R.mipmap.unchecked));
     }
 
     @Override
@@ -78,24 +72,14 @@ public class PhotoBigView extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.selectPhoto) {
-            photo.checked = !photo.checked;
-            photos.set(nowPos, photo);
-            photosAdapter.notifyItemChanged(nowPos);
+            sna.isChecked = !sna.isChecked;
+            snapImages.set(nowPos, sna);
+            snapImageAdaptor.notifyItemChanged(nowPos);
             nowPos++;
-            if (nowPos >= photos.size()) nowPos = photos.size() - 1;
+            if (nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
             showBigImage();
         }
         return super.onOptionsItemSelected(item);
     }
 
-    static void jpgCopy (File sourcepath) {
-
-        File dest = new File (selectedJpgFolder, sourcepath.getName());
-        try {
-            Files.copy(sourcepath.toPath(), dest.toPath());
-            utils.showToast( sourcepath.getName()+" copied");
-        } catch (IOException e) {
-//            e.printStackTrace();
-        }
-    }
 }

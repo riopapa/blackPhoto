@@ -1,6 +1,7 @@
 package com.urrecliner.blackphoto;
 
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
+import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolderView;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
@@ -9,6 +10,8 @@ import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
+import static com.urrecliner.blackphoto.Vars.snapDB;
+import static com.urrecliner.blackphoto.Vars.snapDao;
 import static com.urrecliner.blackphoto.Vars.spanWidth;
 import static com.urrecliner.blackphoto.Vars.utils;
 
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,17 +44,26 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         mActivity = this;
         askPermission();
-        File[] fullFileList = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
-        if (fullFileList == null) {
+        utils = new Utils();
+        File[] eventFolderList = jpgFullFolder.listFiles();
+
+//        File[] eventFolderList = jpgFullFolder.listFiles(file -> (file.getPath().startsWith("V2"))); // V2022-02-03 ...
+        if (eventFolderList == null) {
             Toast.makeText(this,"No event Jpg Folders",Toast.LENGTH_LONG).show();
             finish();
             return;
         }
-        Arrays.sort(fullFileList);
+        Arrays.sort(eventFolderList);
         eventFolders = new ArrayList<>();
-        eventFolders.addAll(Arrays.asList(fullFileList));
-        utils = new Utils();
-//        utils.log("blackPhoto", "Start--");
+        eventFolders.addAll(Arrays.asList(eventFolderList));
+
+        snapDB = Room.databaseBuilder(getApplicationContext(), SnapDataBase.class, "snapImage-db")
+                .fallbackToDestructiveMigration()   // schema changeable
+                .allowMainThreadQueries()           // main thread 에서 IO
+                .build();
+        snapDao = snapDB.snapDao();
+
+        utils.log("blackPhoto", "Start--");
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -59,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         eventFolderAdapter = new EventFolderAdapter();
         eventFolderView.setAdapter(eventFolderAdapter);
         utils.readyPackageFolder(selectedJpgFolder);
+        buildDB = new BuildDB();
+        buildDB.fillUp(findViewById(R.id.main_layout));
     }
 
     @Override
@@ -77,14 +92,14 @@ public class MainActivity extends AppCompatActivity {
             builder.setMessage("Delete Old Event Files?");
             builder.setPositiveButton("Yes",
                     (dialog, which) -> {
-                        File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().contains("mp4")));
+                        File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().endsWith("mp4")));
                         if (mp4Files != null && mp4Files.length > 0) {
                             for (File mp4: mp4Files) {
                                 mp4.delete();
                             }
                             utils.showToast( mp4Files.length+" event mp4 deleted ");
                         }
-                        File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().contains("V2")));
+                        File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().startsWith("V2")));
                         if (jpgFolders != null && jpgFolders.length > 0) {
                             for (File fJpg: jpgFolders) {
                                 utils.deleteFolder(fJpg);

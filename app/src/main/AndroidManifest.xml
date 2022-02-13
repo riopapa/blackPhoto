@@ -26,9 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".PhotoBigView">
+        <activity android:name=".SnapBigView">
         </activity>
-        <activity android:name=".PhotoSelect" />
+        <activity android:name=".SnapSelect" />
     </application>
 
 </manifest>
