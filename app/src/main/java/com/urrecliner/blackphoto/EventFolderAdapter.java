@@ -1,14 +1,20 @@
 package com.urrecliner.blackphoto;
 
+import static com.urrecliner.blackphoto.Vars.currEventFolder;
+import static com.urrecliner.blackphoto.Vars.eventBitmaps;
+import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
+import static com.urrecliner.blackphoto.Vars.eventFolders;
+import static com.urrecliner.blackphoto.Vars.mActivity;
+import static com.urrecliner.blackphoto.Vars.mContext;
+import static com.urrecliner.blackphoto.Vars.utils;
+
 import android.app.Dialog;
 import android.content.Intent;
-
-import androidx.appcompat.app.AlertDialog;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +22,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
+import androidx.appcompat.app.AlertDialog;
+import androidx.recyclerview.widget.RecyclerView;
 
-import static com.urrecliner.blackphoto.Vars.currEventFolder;
-import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
-import static com.urrecliner.blackphoto.Vars.eventFolders;
-import static com.urrecliner.blackphoto.Vars.mActivity;
-import static com.urrecliner.blackphoto.Vars.mContext;
-import static com.urrecliner.blackphoto.Vars.utils;
+import java.io.File;
 
 public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.ViewHolder> {
 
@@ -35,15 +37,12 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvEventTIme;
-        ImageView image1, image2, image3, image4;
+        ImageView image1;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tvEventTIme = itemView.findViewById(R.id.eventTime);
             image1 = itemView.findViewById(R.id.photoImage1);
-            image2 = itemView.findViewById(R.id.photoImage2);
-            image3 = itemView.findViewById(R.id.photoImage3);
-            image4 = itemView.findViewById(R.id.photoImage4);
             itemView.setOnClickListener(view -> {
                 currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
                 Intent intent = new Intent(mContext, SnapSelect.class);
@@ -121,15 +120,34 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         int photoSize = photoList.length;
         String showName = folderName.substring(38, 56) + " / "+photoSize;
         holder.tvEventTIme.setText(showName);
-        if (photoList.length > 50) {
-            Bitmap bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize/8].toString()).copy(Bitmap.Config.RGB_565, false);
-            holder.image1.setImageBitmap(bitmap);
-            bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize/4].toString()).copy(Bitmap.Config.RGB_565, false);
-            holder.image2.setImageBitmap(bitmap);
-            bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize/2].toString()).copy(Bitmap.Config.RGB_565, false);
-            holder.image3.setImageBitmap(bitmap);
-            bitmap = BitmapFactory.decodeFile(folderName+"/"+photoList[photoSize*3/4].toString()).copy(Bitmap.Config.RGB_565, false);
-            holder.image4.setImageBitmap(bitmap);
+        if (eventBitmaps.get(position) ==  null && photoList.length > 30) {
+            Bitmap bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize / 8]).copy(Bitmap.Config.RGB_565, false);
+            int width = bitmap.getWidth() / 4;
+            int height = bitmap.getHeight() / 4;
+            int bigWidth = width * 22 / 10;
+            int bigHeight = height * 22 / 10;
+            int dWidth = bigWidth - width * 2;
+            int dHeight = bigHeight - height * 2;
+            Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
+            Canvas canvas = new Canvas(mergedBitmap);
+            Paint paint = new Paint();
+            paint.setColor(Color.WHITE);
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawPaint(paint);
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+            canvas.drawBitmap(bitmap, 0f, 0f, null);
+            bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize / 4]).copy(Bitmap.Config.RGB_565, false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+            canvas.drawBitmap(bitmap, bigWidth-width-dWidth/2, dHeight/2, null);
+            bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize / 2]).copy(Bitmap.Config.RGB_565, false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+            canvas.drawBitmap(bitmap, dWidth/4, height+dHeight*3/4, null);
+            bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize * 3 / 4]).copy(Bitmap.Config.RGB_565, false);
+            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+            canvas.drawBitmap(bitmap, bigWidth-width, bigHeight-height, null);
+            eventBitmaps.set(position,mergedBitmap);
         }
+        if (eventBitmaps.get(position) != null)
+            holder.image1.setImageBitmap(eventBitmaps.get(position));
     }
 }

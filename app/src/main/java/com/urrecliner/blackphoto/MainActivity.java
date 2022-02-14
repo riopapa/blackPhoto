@@ -5,6 +5,7 @@ import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolderView;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
+import static com.urrecliner.blackphoto.Vars.eventBitmaps;
 import static com.urrecliner.blackphoto.Vars.eventMP4Folder;
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
 import static com.urrecliner.blackphoto.Vars.mActivity;
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
         Arrays.sort(eventFolderList);
         eventFolders = new ArrayList<>();
         eventFolders.addAll(Arrays.asList(eventFolderList));
+        eventBitmaps = new ArrayList<>();
+        for (int i = 0; i < eventFolders.size(); i++)
+            eventBitmaps.add(null);
 
         snapDB = Room.databaseBuilder(getApplicationContext(), SnapDataBase.class, "snapImage-db")
                 .fallbackToDestructiveMigration()   // schema changeable

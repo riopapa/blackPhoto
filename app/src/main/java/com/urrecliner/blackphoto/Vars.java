@@ -5,6 +5,7 @@ import android.content.Context;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
 import android.os.Environment;
 
 import java.io.File;
@@ -31,6 +32,7 @@ public class Vars {
     static int spanWidth;
 
     static List<File> eventFolders = null;
+    static List<Bitmap> eventBitmaps = null;
     static EventFolderAdapter eventFolderAdapter;
     final static int SPAN_COUNT = 1;
 
