@@ -58,6 +58,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     utils.deleteFolder(currEventFolder);
                     eventFolders.remove(getAbsoluteAdapterPosition());
+                    eventBitmaps.remove(getAbsoluteAdapterPosition());
                     eventFolderAdapter.notifyItemRemoved(pos);
                 });
                 builder.setNegativeButton("No", (dialog, which) -> { });

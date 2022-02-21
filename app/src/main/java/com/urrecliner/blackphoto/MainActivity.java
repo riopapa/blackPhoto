@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                             }
                             utils.showToast( mp4Files.length+" event mp4 deleted ");
                         }
-                        File[] jpgFolders = jpgFullFolder.listFiles(file -> (file.getPath().startsWith("V2")));
+                        File[] jpgFolders = jpgFullFolder.listFiles();
                         if (jpgFolders != null && jpgFolders.length > 0) {
                             for (File fJpg: jpgFolders) {
                                 utils.deleteFolder(fJpg);
