@@ -41,5 +41,5 @@ public class Vars {
     static List<SnapImage> snapImages = null;
     static BuildDB buildDB;
 
-
+    final static String header = "header";
 }

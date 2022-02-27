@@ -32,8 +32,8 @@
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:text="aaa.jpg"
-        android:textColor="#00ff00"
-        android:textSize="28sp"
+        android:textColor="#447744"
+        android:textSize="20sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toRightOf="@id/checkState"
         />

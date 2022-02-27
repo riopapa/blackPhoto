@@ -12,7 +12,7 @@ public class SnapImage {
     public String fullFolder;
 
     @NonNull
-    @ColumnInfo (name = "photoName")    // D22-02-13 08.59.S456.jpg
+    @ColumnInfo (name = "photoName")    // D22-02-13 08.59.S456.jpg     "h" if header
     public String photoName;
 
     public boolean isChecked;

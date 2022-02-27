@@ -51,7 +51,7 @@ class BuildDB {
         @Override
         protected void onPreExecute() {
             mainLayout.setBackgroundColor(Color.CYAN);
-            String s = "Building SumNails for "+eventFolders.size()+" snaps";
+            String s = "Building SumNails for "+eventFolders.size()+" events";
             snackBar = Snackbar.make(mainLayout, s, Snackbar.LENGTH_INDEFINITE);
             snackBar.setAction("Hide", v -> {
                 snackBar.dismiss();
@@ -60,8 +60,6 @@ class BuildDB {
             });
             snackBar.show();
         }
-
-        final String SAY_COUNT = "sc";
         @Override
         protected String doInBackground(String... inputParams) {
 
@@ -74,18 +72,25 @@ class BuildDB {
                     utils.showToast( "No photos in " + thisEventFolder.getName());
                 } else {
                     Arrays.sort(fullFileList);
-                    for (File f : fullFileList) {
-                        String snapName = f.getName();
-                        SnapImage snapOut = snapDao.getByPhotoName(thisEventString, snapName);
-                        if (snapOut == null)
-                            createSnapImage(thisEventFolder.toString(), f);
+                    File lastF = fullFileList[fullFileList.length-1];
+                    String snapName = lastF.getName();
+                    SnapImage snapOut = snapDao.getByPhotoName(thisEventString, snapName);
+                    if (snapOut == null) {
+                        for (File f : fullFileList) {
+                            snapName = f.getName();
+                            snapOut = snapDao.getByPhotoName(thisEventString, snapName);
+                            if (snapOut == null) {
+                                createSnapImage(thisEventFolder.toString(), f);
+                            }
+                        }
                     }
+
                 }
                 int finalEvCnt = evCnt + 1;
                 mActivity.runOnUiThread(() -> {
                     Snackbar refreshingSnackBar = Snackbar
-                            .make(mainLayout, "creating room database .."+ finalEvCnt +" / "+eventFolders.size()+" events",
-                                    Snackbar.LENGTH_LONG);
+                            .make(mainLayout, "creating room database .."
+                                    + finalEvCnt + " / " + eventFolders.size() + " events", Snackbar.LENGTH_LONG);
                     refreshingSnackBar.show();
                 });
             }
@@ -97,7 +102,7 @@ class BuildDB {
 
             stopSnackBar();
             mainLayout.setBackgroundColor(Color.WHITE);
-            new SqueezeDB().run();
+//            new SqueezeDB().run();
         }
     }
 
@@ -110,10 +115,9 @@ class BuildDB {
         snapDao.insert(snapOut);
     }
 
-
     String bitMapToString(Bitmap bitmap){
         ByteArrayOutputStream baos= new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,40, baos);
         byte [] b=baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }

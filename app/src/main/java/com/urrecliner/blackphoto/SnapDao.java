@@ -30,4 +30,7 @@ public interface SnapDao {
     @Delete
     void delete(SnapImage snapImage);
 
+    @Query("DELETE FROM snapImage WHERE fullFolder LIKE :fullFolder ")
+    void deleteFolder(String fullFolder);
+
 }

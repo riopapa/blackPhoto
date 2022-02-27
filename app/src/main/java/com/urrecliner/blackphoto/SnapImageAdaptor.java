@@ -79,19 +79,16 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         SnapImage sna = snapImages.get(position);
         holder.ivCheck.setImageResource((sna.isChecked) ? R.mipmap.checked : R.mipmap.unchecked);
+        holder.tvName.setText(sna.photoName);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.iVImage.getLayoutParams();
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
         holder.iVImage.setLayoutParams(params);
-        if (sna.sumNailMap == null) {
-            SnapImage sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
-            if (sna2 != null && sna2.sumNailMap != null) {
-                snapImages.set(position, sna2);
-                sna = snapImages.get(position);
-            }
+        SnapImage sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
+        if (sna2 != null && sna2.sumNailMap != null) {
+            holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna2.sumNailMap));
         }
-        if (sna.sumNailMap != null)
-            holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna.sumNailMap));
-        holder.tvName.setText(sna.photoName);
+//        if (sna.sumNailMap != null)
+//            holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna.sumNailMap));
     }
 
 }

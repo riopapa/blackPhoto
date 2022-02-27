@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                         if (jpgFolders != null && jpgFolders.length > 0) {
                             for (File fJpg: jpgFolders) {
                                 utils.deleteFolder(fJpg);
+                                snapDao.deleteFolder(fJpg.toString());
                             }
                             utils.showToast( " image folders folder cleared");
                         }

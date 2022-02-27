@@ -1,11 +1,14 @@
 package com.urrecliner.blackphoto;
 
+import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.eventBitmaps;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolders;
+import static com.urrecliner.blackphoto.Vars.header;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
+import static com.urrecliner.blackphoto.Vars.snapDao;
 import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.app.Dialog;
@@ -15,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +26,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -60,6 +65,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
                     eventFolders.remove(getAbsoluteAdapterPosition());
                     eventBitmaps.remove(getAbsoluteAdapterPosition());
                     eventFolderAdapter.notifyItemRemoved(pos);
+                    snapDao.deleteFolder(currEventFolder.toString());
                 });
                 builder.setNegativeButton("No", (dialog, which) -> { });
                 showYesNoPopup(builder);
@@ -106,6 +112,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
 //    }
 //
 
+    @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folders_item, parent, false);
         return new ViewHolder(view);
@@ -118,37 +125,61 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         String folderName = oneEventFolder.toString();
         String [] photoList = oneEventFolder.list();
         assert photoList != null;
-        int photoSize = photoList.length;
-        String showName = folderName.substring(38, 56) + " / "+photoSize;
+        String showName = folderName.substring(38, 56) + " / "+photoList.length;
         holder.tvEventTIme.setText(showName);
-        if (eventBitmaps.get(position) ==  null && photoList.length > 30) {
-            Bitmap bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize / 8]).copy(Bitmap.Config.RGB_565, false);
-            int width = bitmap.getWidth() / 4;
-            int height = bitmap.getHeight() / 4;
-            int bigWidth = width * 22 / 10;
-            int bigHeight = height * 22 / 10;
-            int dWidth = bigWidth - width * 2;
-            int dHeight = bigHeight - height * 2;
-            Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(mergedBitmap);
-            Paint paint = new Paint();
-            paint.setColor(Color.WHITE);
-            paint.setStyle(Paint.Style.FILL);
-            canvas.drawPaint(paint);
-            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-            canvas.drawBitmap(bitmap, 0f, 0f, null);
-            bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize / 4]).copy(Bitmap.Config.RGB_565, false);
-            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-            canvas.drawBitmap(bitmap, bigWidth-width-dWidth/2, dHeight/2, null);
-            bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize / 2]).copy(Bitmap.Config.RGB_565, false);
-            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-            canvas.drawBitmap(bitmap, dWidth/4, height+dHeight*3/4, null);
-            bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize * 3 / 4]).copy(Bitmap.Config.RGB_565, false);
-            bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
-            canvas.drawBitmap(bitmap, bigWidth-width, bigHeight-height, null);
-            eventBitmaps.set(position,mergedBitmap);
+
+        if (eventBitmaps.get(position) ==  null) {
+            Log.w("dao "+position,"folderName="+folderName+" header="+header);
+            SnapImage snapHead = snapDao.getByPhotoName(folderName, header);
+            if (snapHead == null) {
+                snapHead = new SnapImage(folderName, header, "");
+                Bitmap mergedBitmap = makeBitmap(folderName, photoList);
+                snapHead.sumNailMap = buildDB.bitMapToString(mergedBitmap);
+                Log.w("bitmap ","length="+snapHead.sumNailMap.length());
+                snapDao.insert(snapHead);
+                eventBitmaps.set(position,mergedBitmap);
+            } else
+                eventBitmaps.set(position,buildDB.stringToBitMap(snapHead.sumNailMap));
         }
-        if (eventBitmaps.get(position) != null)
-            holder.image1.setImageBitmap(eventBitmaps.get(position));
+        holder.image1.setImageBitmap(eventBitmaps.get(position));
+    }
+
+    private Bitmap makeBitmap(String folderName, String[] photoList) {
+        int photoSize = photoList.length;
+        if (photoSize < 30) {
+            return BitmapFactory.decodeFile(folderName + "/" + photoList[1]).copy(Bitmap.Config.RGB_565, false);
+        }
+        Bitmap bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *2/12]).copy(Bitmap.Config.RGB_565, false);
+        int width = bitmap.getWidth() / 12;
+        int height = bitmap.getHeight() / 12;
+        int bigWidth = width * 32 / 10;
+        int bigHeight = height * 22 / 10;
+        int dWidth = (bigWidth - width * 3) / 7;
+        int dHeight = (bigHeight - height * 2) / 5;
+        Log.w("makeBitmap "+folderName,width+"x"+height+", "+bigWidth+"x"+bigHeight+", "+dWidth+"x"+dHeight);
+        Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(mergedBitmap);
+        Paint paint = new Paint();
+        paint.setColor(Color.YELLOW);
+        paint.setStyle(Paint.Style.FILL);
+        canvas.drawPaint(paint);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        canvas.drawBitmap(bitmap, dWidth, dHeight, null);    // x--
+        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *4/12]).copy(Bitmap.Config.RGB_565, false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        canvas.drawBitmap(bitmap, width+dWidth*2, dHeight*2, null);   // -x-
+        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize*6/12]).copy(Bitmap.Config.RGB_565, false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        canvas.drawBitmap(bitmap, width*2+dWidth*3, dHeight*3, null);  // --x
+        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize*7/12]).copy(Bitmap.Config.RGB_565, false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        canvas.drawBitmap(bitmap, dWidth+dWidth, height+dHeight*2, null);    // y--
+        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize*8/12]).copy(Bitmap.Config.RGB_565, false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        canvas.drawBitmap(bitmap, width+dWidth*3, height+dHeight*3, null);  // -y-
+        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *10/12]).copy(Bitmap.Config.RGB_565, false);
+        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        canvas.drawBitmap(bitmap, width*2+dWidth*4, height+dHeight*4, null);  // --y
+        return mergedBitmap;
     }
 }
