@@ -7,7 +7,7 @@
         android:id="@+id/action_sending"
         android:orderInCategory="100"
         android:title="@string/setting"
-        android:icon="@mipmap/airplane_red"
+        android:icon="@mipmap/airplane_black"
         app:showAsAction="always" />
 
 </menu>

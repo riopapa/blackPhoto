@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-
     // ↓ ↓ ↓ P E R M I S S I O N   RELATED /////// ↓ ↓ ↓ ↓  BEST CASE 20/09/27 with no lambda
     private final static int ALL_PERMISSIONS_RESULT = 101;
     ArrayList permissionsToRequest;

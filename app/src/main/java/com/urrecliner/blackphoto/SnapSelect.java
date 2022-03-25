@@ -2,18 +2,19 @@ package com.urrecliner.blackphoto;
 
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
+import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
 import static com.urrecliner.blackphoto.Vars.snapImages;
 import static com.urrecliner.blackphoto.Vars.utils;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -23,11 +24,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class SnapSelect extends AppCompatActivity {
 
     static RecyclerView photosView;
     String title;
+    Menu mainMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,6 +63,7 @@ public class SnapSelect extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        mainMenu = menu;
         getMenuInflater().inflate(R.menu.photos_menu, menu);
         return true;
     }
@@ -67,6 +72,7 @@ public class SnapSelect extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_sending) {
+            item.setIcon(ContextCompat.getDrawable(mContext, R.mipmap.airplane_red_black));
             for (int i = 0; i < snapImages.size(); i++) {
                 SnapImage snapImage = snapImages.get(i);
                 if (snapImage.isChecked) {
@@ -79,6 +85,12 @@ public class SnapSelect extends AppCompatActivity {
                     }
                 }
             }
+            new Timer().schedule(new TimerTask() {
+                public void run() {
+                    runOnUiThread(() -> item.setIcon(ContextCompat.getDrawable(mContext, R.mipmap.airplane_black)));
+                }
+            }, 2000);
+
             return true;
         }
         return super.onOptionsItemSelected(item);

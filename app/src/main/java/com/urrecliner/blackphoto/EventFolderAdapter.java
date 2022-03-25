@@ -94,24 +94,6 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         btn.requestFocus();
     }
 
-//    public static void deleteRecursive(File fileOrDirectory) {
-//        if (fileOrDirectory.isDirectory())
-//            deleteFolder(fileOrDirectory);
-////            for (File child : fileOrDirectory.listFiles())
-////                deleteRecursive(child);
-//        else
-//            fileOrDirectory.delete();
-//    }
-
-//    public static void deleteFolder(File file) {
-//        String deleteCmd = "rm -r " + file.toString();
-//        Runtime runtime = Runtime.getRuntime();
-//        try {
-//            runtime.exec(deleteCmd);
-//        } catch (IOException e) { }
-//    }
-//
-
     @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.folders_item, parent, false);
@@ -129,13 +111,11 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         holder.tvEventTIme.setText(showName);
 
         if (eventBitmaps.get(position) ==  null) {
-            Log.w("dao "+position,"folderName="+folderName+" header="+header);
             SnapImage snapHead = snapDao.getByPhotoName(folderName, header);
             if (snapHead == null) {
                 snapHead = new SnapImage(folderName, header, "");
                 Bitmap mergedBitmap = makeBitmap(folderName, photoList);
                 snapHead.sumNailMap = buildDB.bitMapToString(mergedBitmap);
-                Log.w("bitmap ","length="+snapHead.sumNailMap.length());
                 snapDao.insert(snapHead);
                 eventBitmaps.set(position,mergedBitmap);
             } else
