@@ -37,14 +37,22 @@ public class SnapBigView extends AppCompatActivity {
         showBigImage();
         ImageView ivLeft = findViewById(R.id.goLeft);
         ivLeft.setOnClickListener(view -> {
-            nowPos--;
-            if (nowPos < 0) nowPos = 0;
+            if (--nowPos < 0) nowPos = 0;
             showBigImage();
         });
         ImageView ivRight = findViewById(R.id.goRight);
         ivRight.setOnClickListener(view -> {
-            nowPos++;
-            if (nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
+            if (++nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
+            showBigImage();
+        });
+        ImageView ivPrev = findViewById(R.id.go2Prv);
+        ivPrev.setOnClickListener(view -> {
+            if (--nowPos < 0) nowPos = 0;
+            showBigImage();
+        });
+        ImageView ivNxt = findViewById(R.id.go2Nxt);
+        ivNxt.setOnClickListener(view -> {
+            if (++nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
             showBigImage();
         });
     }

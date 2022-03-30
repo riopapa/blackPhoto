@@ -49,6 +49,18 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="8dp"
         />
+    <ImageView
+        android:id="@+id/go2Prv"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:rotation="90"
+        android:src="@mipmap/arrow_prev"
+        android:contentDescription="@string/photo"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="24dp"
+        />
 
     <ImageView
         android:id="@+id/goRight"
@@ -59,6 +71,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_margin="8dp"
+        />
+
+    <ImageView
+        android:id="@+id/go2Nxt"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@mipmap/arrow_next"
+        android:rotation="90"
+        android:contentDescription="@string/photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_margin="8dp"
         />
 
