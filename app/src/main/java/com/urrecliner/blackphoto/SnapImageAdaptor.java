@@ -71,7 +71,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
     @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.photos_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.snap_item, parent, false);
         return new ViewHolder(view);
     }
 

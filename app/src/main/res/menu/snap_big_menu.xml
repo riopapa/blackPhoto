@@ -4,10 +4,10 @@
     tools:context=".MainActivity">
 
     <item
-        android:id="@+id/selectPhoto"
-        android:icon="@mipmap/select"
+        android:id="@+id/action_send"
         android:orderInCategory="100"
-        android:title="@string/rename_file"
+        android:title="@string/setting"
+        android:icon="@mipmap/airplane_black"
         app:showAsAction="always" />
 
 </menu>

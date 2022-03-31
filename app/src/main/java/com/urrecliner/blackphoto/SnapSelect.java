@@ -36,7 +36,7 @@ public class SnapSelect extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_snaps);
+        setContentView(R.layout.activity_snaps_list);
         photosView = findViewById(R.id.sumNailView);
         StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
 
@@ -64,7 +64,7 @@ public class SnapSelect extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         mainMenu = menu;
-        getMenuInflater().inflate(R.menu.photos_menu, menu);
+        getMenuInflater().inflate(R.menu.snaps_list_menu, menu);
         return true;
     }
 
