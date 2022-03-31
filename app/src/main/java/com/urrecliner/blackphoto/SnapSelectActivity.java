@@ -5,7 +5,7 @@ import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
-import static com.urrecliner.blackphoto.Vars.snapImages;
+import static com.urrecliner.blackphoto.Vars.snapEntities;
 import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.os.Bundle;
@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class SnapSelect extends AppCompatActivity {
+public class SnapSelectActivity extends AppCompatActivity {
 
     static RecyclerView photosView;
     String title;
@@ -50,15 +50,15 @@ public class SnapSelect extends AppCompatActivity {
             return;
         }
         Arrays.sort(shortNames);
-        snapImages = new ArrayList<>();
+        snapEntities = new ArrayList<>();
         String currEventName = currEventFolder.toString();
         for (String s: shortNames) {
-            snapImages.add(new SnapImage(currEventName, s, null));
+            snapEntities.add(new SnapEntity(currEventName, s, null));
         }
         snapImageAdaptor = new SnapImageAdaptor();
         photosView.setAdapter(snapImageAdaptor);
         title = currEventFolder.getName().substring(0, 18);
-        photosView.scrollToPosition(snapImages.size()*4/10);
+        photosView.scrollToPosition(snapEntities.size()*4/10);
     }
 
     @Override
@@ -73,13 +73,13 @@ public class SnapSelect extends AppCompatActivity {
 
         if (item.getItemId() == R.id.action_sending) {
             item.setIcon(ContextCompat.getDrawable(mContext, R.mipmap.airplane_red_black));
-            for (int i = 0; i < snapImages.size(); i++) {
-                SnapImage snapImage = snapImages.get(i);
-                if (snapImage.isChecked) {
-                    File dest = new File (selectedJpgFolder, snapImage.photoName);
+            for (int i = 0; i < snapEntities.size(); i++) {
+                SnapEntity snapEntity = snapEntities.get(i);
+                if (snapEntity.isChecked) {
+                    File dest = new File (selectedJpgFolder, snapEntity.photoName);
                     try {
-                        Files.copy(new File(snapImage.fullFolder, snapImage.photoName).toPath(), dest.toPath());
-                        utils.showToast( snapImage.photoName+" copied");
+                        Files.copy(new File(snapEntity.fullFolder, snapEntity.photoName).toPath(), dest.toPath());
+                        utils.showToast( snapEntity.photoName+" copied");
                     } catch (IOException e) {
 //            e.printStackTrace();
                     }

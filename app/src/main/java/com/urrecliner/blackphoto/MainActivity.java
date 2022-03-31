@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < eventFolders.size(); i++)
             eventBitmaps.add(null);
 
-        snapDB = Room.databaseBuilder(getApplicationContext(), SnapDataBase.class, "snapImage-db")
+        snapDB = Room.databaseBuilder(getApplicationContext(), SnapDataBase.class, "snapEntity-db")
                 .fallbackToDestructiveMigration()   // schema changeable
                 .allowMainThreadQueries()           // main thread 에서 IO
                 .build();

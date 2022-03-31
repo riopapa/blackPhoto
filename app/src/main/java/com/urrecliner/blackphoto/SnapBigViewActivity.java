@@ -4,7 +4,7 @@ import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.nowPos;
 import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
-import static com.urrecliner.blackphoto.Vars.snapImages;
+import static com.urrecliner.blackphoto.Vars.snapEntities;
 import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.graphics.Bitmap;
@@ -28,9 +28,9 @@ import java.util.TimerTask;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
-public class SnapBigView extends AppCompatActivity {
+public class SnapBigViewActivity extends AppCompatActivity {
 
-    SnapImage sna;
+    SnapEntity sna;
     TextView tvPhotoName;
     ImageView ivPhoto, ivCheck;
 
@@ -50,7 +50,7 @@ public class SnapBigView extends AppCompatActivity {
         });
         ImageView ivRight = findViewById(R.id.goRight);
         ivRight.setOnClickListener(view -> {
-            if (++nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
+            if (++nowPos >= snapEntities.size()) nowPos = snapEntities.size() - 1;
             showBigImage();
         });
         ImageView ivPrev = findViewById(R.id.go2Prv);
@@ -60,13 +60,13 @@ public class SnapBigView extends AppCompatActivity {
         });
         ImageView ivNxt = findViewById(R.id.go2Nxt);
         ivNxt.setOnClickListener(view -> {
-            if (++nowPos >= snapImages.size()) nowPos = snapImages.size() - 1;
+            if (++nowPos >= snapEntities.size()) nowPos = snapEntities.size() - 1;
             showBigImage();
         });
     }
 
     private void showBigImage() {
-        sna = snapImages.get(nowPos);
+        sna = snapEntities.get(nowPos);
         tvPhotoName.setText(sna.photoName);
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
@@ -90,7 +90,7 @@ public class SnapBigView extends AppCompatActivity {
         if (item.getItemId() == R.id.action_send) {
             item.setIcon(ContextCompat.getDrawable(mContext, R.mipmap.airplane_red_black));
             sna.isChecked = !sna.isChecked;
-            snapImages.set(nowPos, sna);
+            snapEntities.set(nowPos, sna);
             snapImageAdaptor.notifyItemChanged(nowPos);
             File dest = new File (selectedJpgFolder, sna.photoName);
             try {

@@ -38,7 +38,7 @@ public class Vars {
 
     static SnapDataBase snapDB;
     static SnapDao snapDao;
-    static List<SnapImage> snapImages = null;
+    static List<SnapEntity> snapEntities = null;
     static BuildDB buildDB;
 
     final static String header = "header";

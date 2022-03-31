@@ -12,25 +12,25 @@ import java.util.List;
 public interface SnapDao {
 
     /* query by unique full path name */
-    @Query("SELECT * FROM snapImage WHERE fullFolder LIKE :fullFolder AND "
+    @Query("SELECT * FROM SnapEntity WHERE fullFolder LIKE :fullFolder AND "
             + "photoName LIKE :photoName LIMIT 1 ")
-    SnapImage getByPhotoName(String fullFolder, String photoName);
+    SnapEntity getByPhotoName(String fullFolder, String photoName);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(SnapImage snapImage);
+    void insert(SnapEntity snapEntity);
 
     /* query by unique full path name */
-    @Query("SELECT * FROM snapImage GROUP BY fullFolder ")
-    List<SnapImage> getFolderList();
+    @Query("SELECT * FROM SnapEntity GROUP BY fullFolder ")
+    List<SnapEntity> getFolderList();
 
     /* query within one folder */
-    @Query("SELECT * FROM snapImage WHERE fullFolder LIKE :fullFolder ")
-    List<SnapImage> getWithinFolder(String fullFolder);
+    @Query("SELECT * FROM SnapEntity WHERE fullFolder LIKE :fullFolder ")
+    List<SnapEntity> getWithinFolder(String fullFolder);
 
     @Delete
-    void delete(SnapImage snapImage);
+    void delete(SnapEntity snapEntity);
 
-    @Query("DELETE FROM snapImage WHERE fullFolder LIKE :fullFolder ")
+    @Query("DELETE FROM SnapEntity WHERE fullFolder LIKE :fullFolder ")
     void deleteFolder(String fullFolder);
 
 }

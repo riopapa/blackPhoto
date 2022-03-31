@@ -9,8 +9,8 @@ import java.util.TimerTask;
 
 class SqueezeDB {
 
-    private List<SnapImage> snapFolders;
-    private List<SnapImage> delSnaps;
+    private List<SnapEntity> snapFolders;
+    private List<SnapEntity> delSnaps;
     Timer timer = null;
 
     void run() {
@@ -22,11 +22,11 @@ class SqueezeDB {
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
-                for (SnapImage delFolder: snapFolders) {
+                for (SnapEntity delFolder: snapFolders) {
                     File file = new File(delFolder.fullFolder);
                     if (!file.exists()) {
                         delSnaps = snapDao.getWithinFolder(delFolder.fullFolder);
-                        for (SnapImage sna: delSnaps) {
+                        for (SnapEntity sna: delSnaps) {
                             snapDao.delete(sna);
                         }
                     }

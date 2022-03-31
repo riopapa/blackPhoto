@@ -50,7 +50,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             image1 = itemView.findViewById(R.id.photoImage1);
             itemView.setOnClickListener(view -> {
                 currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
-                Intent intent = new Intent(mContext, SnapSelect.class);
+                Intent intent = new Intent(mContext, SnapSelectActivity.class);
                 mActivity.startActivity(intent);
             });
 
@@ -111,9 +111,9 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         holder.tvEventTIme.setText(showName);
 
         if (eventBitmaps.get(position) ==  null) {
-            SnapImage snapHead = snapDao.getByPhotoName(folderName, header);
+            SnapEntity snapHead = snapDao.getByPhotoName(folderName, header);
             if (snapHead == null) {
-                snapHead = new SnapImage(folderName, header, "");
+                snapHead = new SnapEntity(folderName, header, "");
                 Bitmap mergedBitmap = makeBitmap(folderName, photoList);
                 snapHead.sumNailMap = buildDB.bitMapToString(mergedBitmap);
                 snapDao.insert(snapHead);
@@ -136,7 +136,6 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         int bigHeight = height * 22 / 10;
         int dWidth = (bigWidth - width * 3) / 7;
         int dHeight = (bigHeight - height * 2) / 5;
-        Log.w("makeBitmap "+folderName,width+"x"+height+", "+bigWidth+"x"+bigHeight+", "+dWidth+"x"+dHeight);
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);
         Paint paint = new Paint();

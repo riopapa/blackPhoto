@@ -74,7 +74,7 @@ class BuildDB {
                     Arrays.sort(fullFileList);
                     File lastF = fullFileList[fullFileList.length-1];
                     String snapName = lastF.getName();
-                    SnapImage snapOut = snapDao.getByPhotoName(thisEventString, snapName);
+                    SnapEntity snapOut = snapDao.getByPhotoName(thisEventString, snapName);
                     if (snapOut == null) {
                         for (File f : fullFileList) {
                             snapName = f.getName();
@@ -111,7 +111,7 @@ class BuildDB {
         Bitmap bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
         bitmap =  Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 5 / 40,
                 bitmap.getHeight() * 5 / 40, false);
-        SnapImage snapOut = new SnapImage(eventFolder, f.getName(), bitMapToString(bitmap));
+        SnapEntity snapOut = new SnapEntity(eventFolder, f.getName(), bitMapToString(bitmap));
         snapDao.insert(snapOut);
     }
 

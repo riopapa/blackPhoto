@@ -6,7 +6,7 @@ import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.nowPos;
 import static com.urrecliner.blackphoto.Vars.snapDao;
 import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
-import static com.urrecliner.blackphoto.Vars.snapImages;
+import static com.urrecliner.blackphoto.Vars.snapEntities;
 import static com.urrecliner.blackphoto.Vars.spanWidth;
 
 import android.content.Intent;
@@ -24,7 +24,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
     @Override
     public int getItemCount() {
-        return snapImages.size();
+        return snapEntities.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -57,14 +57,14 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
         private void showBigPhoto() {
             nowPos = getAbsoluteAdapterPosition();
-            Intent intent = new Intent(mContext, SnapBigView.class);
+            Intent intent = new Intent(mContext, SnapBigViewActivity.class);
             mActivity.startActivity(intent);
         }
 
         private void toggleCheckBox(int position) {
-            SnapImage s = snapImages.get(position);
+            SnapEntity s = snapEntities.get(position);
             s.isChecked = !s.isChecked;
-            snapImages.set(position, s);
+            snapEntities.set(position, s);
             snapImageAdaptor.notifyItemChanged(position, s);
         }
     }
@@ -77,13 +77,13 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        SnapImage sna = snapImages.get(position);
+        SnapEntity sna = snapEntities.get(position);
         holder.ivCheck.setImageResource((sna.isChecked) ? R.mipmap.checked : R.mipmap.unchecked);
         holder.tvName.setText(sna.photoName);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.iVImage.getLayoutParams();
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
         holder.iVImage.setLayoutParams(params);
-        SnapImage sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
+        SnapEntity sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
         if (sna2 != null && sna2.sumNailMap != null) {
             holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna2.sumNailMap));
         }
