@@ -8,15 +8,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_back.xml" value="0.198" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_folder.xml" value="0.198" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_thumb.xml" value="0.28802083333333334" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_track.xml" value="0.28802083333333334" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_main.xml" value="0.13221884498480244" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_photo.xml" value="0.12639311043566362" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_photos.xml" value="0.271875" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_snaps.xml" value="0.2630208333333333" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_snaps_list.xml" value="0.1585144927536232" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/event_folder_line.xml" value="0.12639311043566362" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/folders_item.xml" value="0.12639311043566362" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/photos_item.xml" value="0.271875" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/snap_item.xml" value="0.1585144927536232" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/main_menu.xml" value="0.271875" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/photo_menu.xml" value="0.271875" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/photos_menu.xml" value="0.271875" />

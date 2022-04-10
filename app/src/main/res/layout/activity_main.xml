@@ -15,7 +15,7 @@
         android:layout_margin="4dp"
         app:layoutManager="GridLayoutManager"
         android:choiceMode="multipleChoice"
-        style="@style/up_down_scroll_thumb"
+        style="@style/up_down_scroll_folder"
         >
     </androidx.recyclerview.widget.RecyclerView>
 

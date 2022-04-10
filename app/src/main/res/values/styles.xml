@@ -31,5 +31,13 @@
         <item name="android:scrollbarThumbVertical">@drawable/up_down</item>
     </style>
 
+    <style name="up_down_scroll_folder">
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadeScrollbars">false</item>
+        <item name="android:scrollbarThumbVertical">@drawable/up_down_folder</item>
+    </style>
+
 
 </resources>

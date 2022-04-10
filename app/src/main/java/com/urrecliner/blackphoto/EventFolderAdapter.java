@@ -139,7 +139,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);
         Paint paint = new Paint();
-        paint.setColor(Color.YELLOW);
+        paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
         bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
