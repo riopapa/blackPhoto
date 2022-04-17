@@ -2,9 +2,10 @@ package com.urrecliner.blackphoto;
 
 import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
-import static com.urrecliner.blackphoto.Vars.eventBitmaps;
+import static com.urrecliner.blackphoto.Vars.eventFolderBitmaps;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
-import static com.urrecliner.blackphoto.Vars.eventFolders;
+import static com.urrecliner.blackphoto.Vars.eventFolderFiles;
+import static com.urrecliner.blackphoto.Vars.eventFolderFlag;
 import static com.urrecliner.blackphoto.Vars.header;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
@@ -18,12 +19,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -36,46 +37,41 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
 
     @Override
     public int getItemCount() {
-        return eventFolders.size();
+        return eventFolderFiles.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvEventTIme;
         ImageView image1;
+        LinearLayout linearLayout;
 
         ViewHolder(final View itemView) {
             super(itemView);
             tvEventTIme = itemView.findViewById(R.id.eventTime);
             image1 = itemView.findViewById(R.id.photoImage1);
+            linearLayout = itemView.findViewById(R.id.folderLayout);
             itemView.setOnClickListener(view -> {
-                currEventFolder = eventFolders.get(getAbsoluteAdapterPosition());
+                currEventFolder = eventFolderFiles.get(getAbsoluteAdapterPosition());
                 Intent intent = new Intent(mContext, SnapSelectActivity.class);
                 mActivity.startActivity(intent);
             });
 
             itemView.setOnLongClickListener(view -> {
                 int pos = getAbsoluteAdapterPosition();
-                currEventFolder = eventFolders.get(pos);
+                currEventFolder = eventFolderFiles.get(pos);
                 AlertDialog.Builder builder = new AlertDialog.Builder(mActivity);
                 builder.setTitle("Delete this event?");
                 builder.setMessage(tvEventTIme.getText().toString());
                 builder.setPositiveButton("Yes", (dialog, which) -> {
                     utils.deleteFolder(currEventFolder);
-                    eventFolders.remove(getAbsoluteAdapterPosition());
-                    eventBitmaps.remove(getAbsoluteAdapterPosition());
+                    eventFolderFiles.remove(getAbsoluteAdapterPosition());
+                    eventFolderBitmaps.remove(getAbsoluteAdapterPosition());
                     eventFolderAdapter.notifyItemRemoved(pos);
                     snapDao.deleteFolder(currEventFolder.toString());
                 });
                 builder.setNegativeButton("No", (dialog, which) -> { });
                 showYesNoPopup(builder);
-//                String deleteCmd = "rm -r \"" + currEventFolder.getAbsolutePath() + "\"";
-//                Runtime runtime = Runtime.getRuntime();
-//                try {
-//                    runtime.exec(deleteCmd);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
                 return true;
             });
         }
@@ -103,25 +99,26 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 
-        File oneEventFolder = eventFolders.get(position);
+        File oneEventFolder = eventFolderFiles.get(position);
         String folderName = oneEventFolder.toString();
         String [] photoList = oneEventFolder.list();
         assert photoList != null;
         String showName = folderName.substring(38, 56) + " / "+photoList.length;
         holder.tvEventTIme.setText(showName);
 
-        if (eventBitmaps.get(position) ==  null) {
+        if (eventFolderBitmaps.get(position) ==  null) {
             SnapEntity snapHead = snapDao.getByPhotoName(folderName, header);
             if (snapHead == null) {
                 snapHead = new SnapEntity(folderName, header, "");
                 Bitmap mergedBitmap = makeBitmap(folderName, photoList);
                 snapHead.sumNailMap = buildDB.bitMapToString(mergedBitmap);
                 snapDao.insert(snapHead);
-                eventBitmaps.set(position,mergedBitmap);
+                eventFolderBitmaps.set(position,mergedBitmap);
             } else
-                eventBitmaps.set(position,buildDB.stringToBitMap(snapHead.sumNailMap));
+                eventFolderBitmaps.set(position,buildDB.stringToBitMap(snapHead.sumNailMap));
         }
-        holder.image1.setImageBitmap(eventBitmaps.get(position));
+        holder.image1.setImageBitmap(eventFolderBitmaps.get(position));
+        holder.linearLayout.setBackgroundColor((eventFolderFlag.get(position) ? Color.WHITE : Color.CYAN));
     }
 
     private Bitmap makeBitmap(String folderName, String[] photoList) {

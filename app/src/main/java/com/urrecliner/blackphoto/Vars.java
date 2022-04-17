@@ -31,8 +31,9 @@ public class Vars {
     static int nowPos;
     static int spanWidth;
 
-    static List<File> eventFolders = null;
-    static List<Bitmap> eventBitmaps = null;
+    static List<File> eventFolderFiles = null;
+    static List<Bitmap> eventFolderBitmaps = null;
+    static List<Boolean> eventFolderFlag = null;
     static EventFolderAdapter eventFolderAdapter;
     final static int SPAN_COUNT = 1;
 

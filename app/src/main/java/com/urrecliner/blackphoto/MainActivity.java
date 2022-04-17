@@ -3,9 +3,10 @@ package com.urrecliner.blackphoto;
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
+import static com.urrecliner.blackphoto.Vars.eventFolderFlag;
 import static com.urrecliner.blackphoto.Vars.eventFolderView;
-import static com.urrecliner.blackphoto.Vars.eventFolders;
-import static com.urrecliner.blackphoto.Vars.eventBitmaps;
+import static com.urrecliner.blackphoto.Vars.eventFolderFiles;
+import static com.urrecliner.blackphoto.Vars.eventFolderBitmaps;
 import static com.urrecliner.blackphoto.Vars.eventMP4Folder;
 import static com.urrecliner.blackphoto.Vars.jpgFullFolder;
 import static com.urrecliner.blackphoto.Vars.mActivity;
@@ -55,11 +56,14 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         Arrays.sort(eventFolderList);
-        eventFolders = new ArrayList<>();
-        eventFolders.addAll(Arrays.asList(eventFolderList));
-        eventBitmaps = new ArrayList<>();
-        for (int i = 0; i < eventFolders.size(); i++)
-            eventBitmaps.add(null);
+        eventFolderFiles = new ArrayList<>();
+        eventFolderFiles.addAll(Arrays.asList(eventFolderList));
+        eventFolderBitmaps = new ArrayList<>();
+        for (int i = 0; i < eventFolderFiles.size(); i++)
+            eventFolderBitmaps.add(null);
+        eventFolderFlag = new ArrayList<>();
+        for (int i = 0; i < eventFolderFiles.size(); i++)
+            eventFolderFlag.add(false);
 
         snapDB = Room.databaseBuilder(getApplicationContext(), SnapDataBase.class, "snapEntity-db")
                 .fallbackToDestructiveMigration()   // schema changeable

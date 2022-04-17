@@ -34,7 +34,7 @@ class SqueezeDB {
                 timer.cancel();
             }
         };
-        timer.schedule(timerTask, 100, 100);
+        timer.schedule(timerTask, 100);
     }
 
 }

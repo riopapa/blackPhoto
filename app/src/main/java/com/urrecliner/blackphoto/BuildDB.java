@@ -1,6 +1,8 @@
 package com.urrecliner.blackphoto;
 
-import static com.urrecliner.blackphoto.Vars.eventFolders;
+import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
+import static com.urrecliner.blackphoto.Vars.eventFolderFiles;
+import static com.urrecliner.blackphoto.Vars.eventFolderFlag;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.snapDao;
@@ -51,7 +53,7 @@ class BuildDB {
         @Override
         protected void onPreExecute() {
             mainLayout.setBackgroundColor(Color.CYAN);
-            String s = "Building SumNails for "+eventFolders.size()+" events";
+            String s = "Building SumNails for "+ eventFolderFiles.size()+" events";
             snackBar = Snackbar.make(mainLayout, s, Snackbar.LENGTH_INDEFINITE);
             snackBar.setAction("Hide", v -> {
                 snackBar.dismiss();
@@ -63,8 +65,8 @@ class BuildDB {
         @Override
         protected String doInBackground(String... inputParams) {
 
-            for (int evCnt = 0; evCnt < eventFolders.size(); evCnt++) {
-                File thisEventFolder = eventFolders.get(evCnt);
+            for (int evCnt = 0; evCnt < eventFolderFiles.size(); evCnt++) {
+                File thisEventFolder = eventFolderFiles.get(evCnt);
                 String thisEventString = thisEventFolder.toString();
                 File[] fullFileList = thisEventFolder.listFiles((dir, name) ->
                         (name.endsWith("jpg")));
@@ -86,11 +88,13 @@ class BuildDB {
                     }
 
                 }
-                int finalEvCnt = evCnt + 1;
+                eventFolderFlag.set(evCnt, true);   // this folder image is ready
+                int finalEvCnt = evCnt;
                 mActivity.runOnUiThread(() -> {
+                    eventFolderAdapter.notifyItemChanged(finalEvCnt);
                     Snackbar refreshingSnackBar = Snackbar
                             .make(mainLayout, "creating room database .."
-                                    + finalEvCnt + " / " + eventFolders.size() + " events", Snackbar.LENGTH_LONG);
+                                    + (finalEvCnt+1) + " / " + eventFolderFiles.size() + " events", Snackbar.LENGTH_LONG);
                     refreshingSnackBar.show();
                 });
             }
@@ -102,7 +106,7 @@ class BuildDB {
 
             stopSnackBar();
             mainLayout.setBackgroundColor(Color.WHITE);
-//            new SqueezeDB().run();
+            new SqueezeDB().run();
         }
     }
 

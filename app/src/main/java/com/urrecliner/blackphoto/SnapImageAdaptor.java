@@ -35,23 +35,29 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         ViewHolder(final View itemView) {
             super(itemView);
             iVImage = itemView.findViewById(R.id.photosImage);
-            iVImage.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
             iVImage.setOnLongClickListener(view -> {
-                    showBigPhoto();
+                toggleCheckBox(getAbsoluteAdapterPosition());
                 return true;
+            });
+            iVImage.setOnClickListener(view -> {
+                    showBigPhoto();
             });
 
             ivCheck = itemView.findViewById(R.id.checked);
-            ivCheck.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
             ivCheck.setOnLongClickListener(view -> {
-                showBigPhoto();
+                toggleCheckBox(getAbsoluteAdapterPosition());
                 return true;
             });
-            tvName = itemView.findViewById(R.id.photoName);
-            tvName.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
-            tvName.setOnLongClickListener(view -> {
+            ivCheck.setOnClickListener(view -> {
                 showBigPhoto();
+            });
+            tvName = itemView.findViewById(R.id.photoName);
+            tvName.setOnLongClickListener(view -> {
+                toggleCheckBox(getAbsoluteAdapterPosition());
                 return true;
+            });
+            tvName.setOnClickListener(view -> {
+                showBigPhoto();
             });
         }
 
