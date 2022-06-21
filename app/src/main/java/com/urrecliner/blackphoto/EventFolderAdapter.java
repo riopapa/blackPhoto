@@ -118,7 +118,8 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
                 eventFolderBitmaps.set(position,buildDB.stringToBitMap(snapHead.sumNailMap));
         }
         holder.image1.setImageBitmap(eventFolderBitmaps.get(position));
-        holder.linearLayout.setBackgroundColor((eventFolderFlag.get(position) ? Color.WHITE : Color.CYAN));
+        holder.linearLayout.setBackgroundColor((eventFolderFlag.get(position) ?
+                mActivity.getColor(R.color.folderDone) : mActivity.getColor(R.color.folderMake)));
     }
 
     private Bitmap makeBitmap(String folderName, String[] photoList) {
@@ -136,7 +137,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);
         Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
+        paint.setColor(mActivity.getColor(R.color.folderDone));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
         bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);

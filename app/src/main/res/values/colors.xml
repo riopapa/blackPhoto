@@ -2,5 +2,7 @@
 <resources>
     <color name="colorPrimary">#6361bf</color>
     <color name="xorColor">#ccCAD8AA</color>
+    <color name="folderDone">#CCA3E312</color>
+    <color name="folderMake">#CC57BEE6</color>
 
 </resources>

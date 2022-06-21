@@ -52,7 +52,7 @@ class BuildDB {
 
         @Override
         protected void onPreExecute() {
-            mainLayout.setBackgroundColor(Color.CYAN);
+            mainLayout.setBackgroundColor(mActivity.getColor(R.color.folderMake));
             String s = "Building SumNails for "+ eventFolderFiles.size()+" events";
             snackBar = Snackbar.make(mainLayout, s, Snackbar.LENGTH_INDEFINITE);
             snackBar.setAction("Hide", v -> {
@@ -105,7 +105,7 @@ class BuildDB {
         protected void onPostExecute(String doI) {
 
             stopSnackBar();
-            mainLayout.setBackgroundColor(Color.WHITE);
+            mainLayout.setBackgroundColor(mActivity.getColor(R.color.folderDone));
             new SqueezeDB().run();
         }
     }
