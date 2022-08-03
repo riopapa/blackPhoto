@@ -19,6 +19,7 @@ import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -30,6 +31,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         mContext = getApplicationContext();
         mActivity = this;
+        ActionBar actionBar = this.getSupportActionBar();
         askPermission();
         utils = new Utils();
         File[] eventFolderList = jpgFullFolder.listFiles();
@@ -71,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         snapDao = snapDB.snapDao();
 
-        utils.log("blackPhoto", "Start--");
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         eventFolderView.setAdapter(eventFolderAdapter);
         utils.readyPackageFolder(selectedJpgFolder);
         buildDB = new BuildDB();
-        buildDB.fillUp(findViewById(R.id.main_layout));
+        buildDB.fillUp(findViewById(R.id.main_layout), actionBar);
     }
 
     @Override
@@ -130,6 +132,13 @@ public class MainActivity extends AppCompatActivity {
             dialog.show();
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
             dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
+        } else if (item.getItemId() == R.id.blackBox) {
+            Intent sendIntent = getPackageManager().getLaunchIntentForPackage("com.urrecliner.blackbox");
+            assert sendIntent != null;
+            sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(sendIntent);
+            android.os.Process.killProcess(android.os.Process.myPid());
+            System.exit(0);
         }
         return false;
     }

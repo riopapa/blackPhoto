@@ -1,34 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="3dp"
+    android:orientation="vertical"
     android:layout_marginRight="3dp"
     android:layout_marginTop="3dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/checked"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@mipmap/unchecked" />
+        <TextView
+            android:id="@+id/photoName"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16sp"
+            android:textSize="16sp"
+            android:textColor="#094355"
+            />
+        <ImageView
+            android:id="@+id/send"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:src="@mipmap/airplane_red" />
+
+    </LinearLayout>
     <ImageView
         android:id="@+id/photosImage"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="4"
         android:layout_height="match_parent"
-        android:layout_below="@id/photoName"
-        android:layout_centerHorizontal="true"
         android:contentDescription="@string/todo" />
 
-    <TextView
-        android:id="@+id/photoName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:textColor="#094355"
-        android:layout_toEndOf="@+id/checked"
-        />
-
-    <ImageView
-        android:id="@+id/checked"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_margin="8dp"
-        android:src="@mipmap/unchecked" />
-
-</RelativeLayout>
+</LinearLayout>

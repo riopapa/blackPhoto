@@ -2,8 +2,8 @@ package com.urrecliner.blackphoto;
 
 import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
-import static com.urrecliner.blackphoto.Vars.eventFolderBitmaps;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
+import static com.urrecliner.blackphoto.Vars.eventFolderBitmaps;
 import static com.urrecliner.blackphoto.Vars.eventFolderFiles;
 import static com.urrecliner.blackphoto.Vars.eventFolderFlag;
 import static com.urrecliner.blackphoto.Vars.header;
@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;

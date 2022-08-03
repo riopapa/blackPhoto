@@ -4,19 +4,15 @@ import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolderFiles;
 import static com.urrecliner.blackphoto.Vars.eventFolderFlag;
 import static com.urrecliner.blackphoto.Vars.mActivity;
-import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.snapDao;
 import static com.urrecliner.blackphoto.Vars.utils;
 
+import androidx.appcompat.app.ActionBar;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.View;
-import android.widget.Toast;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -25,14 +21,13 @@ import java.util.Arrays;
 
 class BuildDB {
 
-    private static boolean isCanceled = false;
-    private static Snackbar snackBar = null;
-    private static View mainLayout;
+    View mainLayout;
+    ActionBar actionBar;
 
-    void fillUp(View view) {
+    void fillUp(View view, ActionBar actionBar) {
 
-        isCanceled = false;
         mainLayout = view;
+        this.actionBar = actionBar;
         try {
             new buildSumNailDB().execute("start");
         } catch (Exception e) {
@@ -40,27 +35,13 @@ class BuildDB {
         }
     }
 
-    void stopSnackBar() {
-        isCanceled = true;
-        if (snackBar != null) {
-            snackBar.dismiss();
-            snackBar = null;
-        }
-    }
-
     class buildSumNailDB extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
+            actionBar.setTitle("Black Photo");
+            actionBar.setSubtitle("0 / "+eventFolderFiles.size());
             mainLayout.setBackgroundColor(mActivity.getColor(R.color.folderMake));
-            String s = "Building SumNails for "+ eventFolderFiles.size()+" events";
-            snackBar = Snackbar.make(mainLayout, s, Snackbar.LENGTH_INDEFINITE);
-            snackBar.setAction("Hide", v -> {
-                snackBar.dismiss();
-                snackBar = null;
-                Toast.makeText(mContext, "Status Bar hidden", Toast.LENGTH_LONG).show();
-            });
-            snackBar.show();
         }
         @Override
         protected String doInBackground(String... inputParams) {
@@ -86,16 +67,14 @@ class BuildDB {
                             }
                         }
                     }
-
                 }
                 eventFolderFlag.set(evCnt, true);   // this folder image is ready
                 int finalEvCnt = evCnt;
                 mActivity.runOnUiThread(() -> {
                     eventFolderAdapter.notifyItemChanged(finalEvCnt);
-                    Snackbar refreshingSnackBar = Snackbar
-                            .make(mainLayout, "creating room database .."
-                                    + (finalEvCnt+1) + " / " + eventFolderFiles.size() + " events", Snackbar.LENGTH_LONG);
-                    refreshingSnackBar.show();
+                    String s = ((finalEvCnt+1) == eventFolderFiles.size()) ? "All "+(finalEvCnt+1)+" Done"
+                            : (finalEvCnt+1) + " / " + eventFolderFiles.size();
+                    actionBar.setSubtitle(s);
                 });
             }
             return "done";
@@ -104,7 +83,6 @@ class BuildDB {
         @Override
         protected void onPostExecute(String doI) {
 
-            stopSnackBar();
             mainLayout.setBackgroundColor(mActivity.getColor(R.color.folderDone));
             new SqueezeDB().run();
         }
@@ -120,9 +98,9 @@ class BuildDB {
     }
 
     String bitMapToString(Bitmap bitmap){
-        ByteArrayOutputStream baos= new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG,40, baos);
-        byte [] b=baos.toByteArray();
+        ByteArrayOutputStream bOut= new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG,40, bOut);
+        byte [] b=bOut.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
@@ -131,9 +109,8 @@ class BuildDB {
             byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch(Exception e) {
-            utils.log("utils", " StringToBitMap Error "+e.toString());
+            utils.log("utils", " StringToBitMap Error "+e);
             return null;
         }
     }
-
 }

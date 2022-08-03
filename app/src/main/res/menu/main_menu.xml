@@ -4,6 +4,13 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/blackBox"
+        android:icon="@mipmap/black_box"
+        android:orderInCategory="100"
+        android:title="@string/rename_file"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/erase"
         android:icon="@mipmap/rubber"
         android:orderInCategory="100"

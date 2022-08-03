@@ -4,21 +4,27 @@ import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.nowPos;
+import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.snapDao;
-import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
 import static com.urrecliner.blackphoto.Vars.snapEntities;
+import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
 import static com.urrecliner.blackphoto.Vars.spanWidth;
+import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.ViewHolder> {
 
@@ -29,7 +35,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView iVImage, ivCheck;
+        ImageView iVImage, ivCheck, ivSend;
         TextView tvName;
 
         ViewHolder(final View itemView) {
@@ -39,26 +45,30 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
                 toggleCheckBox(getAbsoluteAdapterPosition());
                 return true;
             });
-            iVImage.setOnClickListener(view -> {
-                    showBigPhoto();
-            });
+            iVImage.setOnClickListener(view -> showBigPhoto());
 
             ivCheck = itemView.findViewById(R.id.checked);
             ivCheck.setOnLongClickListener(view -> {
                 toggleCheckBox(getAbsoluteAdapterPosition());
                 return true;
             });
-            ivCheck.setOnClickListener(view -> {
-                showBigPhoto();
+            ivCheck.setOnClickListener(view -> showBigPhoto());
+            ivSend = itemView.findViewById(R.id.send);
+            ivSend.setOnClickListener(view -> {
+                SnapEntity snapEntity = snapEntities.get(getAbsoluteAdapterPosition());
+                File dest = new File (selectedJpgFolder, snapEntity.photoName);
+                try {
+                    Files.copy(new File(snapEntity.fullFolder, snapEntity.photoName).toPath(), dest.toPath());
+                    utils.showToast( snapEntity.photoName+" copied");
+                } catch (IOException e) {}
             });
+
             tvName = itemView.findViewById(R.id.photoName);
             tvName.setOnLongClickListener(view -> {
                 toggleCheckBox(getAbsoluteAdapterPosition());
                 return true;
             });
-            tvName.setOnClickListener(view -> {
-                showBigPhoto();
-            });
+            tvName.setOnClickListener(view -> showBigPhoto());
         }
 
         private void showBigPhoto() {
@@ -86,7 +96,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         SnapEntity sna = snapEntities.get(position);
         holder.ivCheck.setImageResource((sna.isChecked) ? R.mipmap.checked : R.mipmap.unchecked);
         holder.tvName.setText(sna.photoName);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) holder.iVImage.getLayoutParams();
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.iVImage.getLayoutParams();
         params.width = spanWidth; params.height = spanWidth* 9 / 16;
         holder.iVImage.setLayoutParams(params);
         SnapEntity sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
