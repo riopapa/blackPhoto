@@ -18,11 +18,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Arrays;
 
-
 class BuildDB {
 
-    View mainLayout;
-    ActionBar actionBar;
+    static View mainLayout;
+    static ActionBar actionBar;
 
     void fillUp(View view, ActionBar actionBar) {
 
@@ -35,7 +34,7 @@ class BuildDB {
         }
     }
 
-    class buildSumNailDB extends AsyncTask<String, String, String> {
+    static class buildSumNailDB extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -88,7 +87,7 @@ class BuildDB {
         }
     }
 
-    void createSnapImage(String eventFolder, File f) {
+    static void createSnapImage(String eventFolder, File f) {
 
         Bitmap bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
         bitmap =  Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 5 / 40,
@@ -97,14 +96,14 @@ class BuildDB {
         snapDao.insert(snapOut);
     }
 
-    String bitMapToString(Bitmap bitmap){
+    static String bitMapToString(Bitmap bitmap){
         ByteArrayOutputStream bOut= new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,40, bOut);
         byte [] b=bOut.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
-    Bitmap stringToBitMap(String encodedString){
+    static Bitmap stringToBitMap(String encodedString){
         try {
             byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);

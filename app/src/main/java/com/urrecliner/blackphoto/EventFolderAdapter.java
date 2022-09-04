@@ -1,6 +1,5 @@
 package com.urrecliner.blackphoto;
 
-import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolderBitmaps;
@@ -33,6 +32,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 
 public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.ViewHolder> {
+
+    int width = 320, height = 240;
+    int bigWidth = width * 32 / 10;
+    int bigHeight = height * 22 / 10;
+    int dWidth = (bigWidth - width * 3) / 4;
+    int dHeight = (bigHeight - height * 2) / 3;
 
     @Override
     public int getItemCount() {
@@ -109,30 +114,24 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             SnapEntity snapHead = snapDao.getByPhotoName(folderName, header);
             if (snapHead == null) {
                 snapHead = new SnapEntity(folderName, header, "");
-                Bitmap mergedBitmap = makeBitmap(folderName, photoList);
-                snapHead.sumNailMap = buildDB.bitMapToString(mergedBitmap);
+                Bitmap merged6Bitmap = make6PhotoBitmap(folderName, photoList);
+                snapHead.sumNailMap = BuildDB.bitMapToString(merged6Bitmap);
                 snapDao.insert(snapHead);
-                eventFolderBitmaps.set(position,mergedBitmap);
+                eventFolderBitmaps.set(position,merged6Bitmap);
             } else
-                eventFolderBitmaps.set(position,buildDB.stringToBitMap(snapHead.sumNailMap));
+                eventFolderBitmaps.set(position,BuildDB.stringToBitMap(snapHead.sumNailMap));
         }
         holder.image1.setImageBitmap(eventFolderBitmaps.get(position));
         holder.linearLayout.setBackgroundColor((eventFolderFlag.get(position) ?
                 mActivity.getColor(R.color.folderDone) : mActivity.getColor(R.color.folderMake)));
     }
 
-    private Bitmap makeBitmap(String folderName, String[] photoList) {
+    private Bitmap make6PhotoBitmap(String folderName, String[] photoList) {
         int photoSize = photoList.length;
         if (photoSize < 30) {
             return BitmapFactory.decodeFile(folderName + "/" + photoList[1]).copy(Bitmap.Config.RGB_565, false);
         }
         Bitmap bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *2/12]).copy(Bitmap.Config.RGB_565, false);
-        int width = bitmap.getWidth() / 12;
-        int height = bitmap.getHeight() / 12;
-        int bigWidth = width * 32 / 10;
-        int bigHeight = height * 22 / 10;
-        int dWidth = (bigWidth - width * 3) / 7;
-        int dHeight = (bigHeight - height * 2) / 5;
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);
         Paint paint = new Paint();
