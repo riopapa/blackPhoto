@@ -25,6 +25,8 @@
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/main_menu.xml" value="0.271875" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/photo_menu.xml" value="0.271875" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/photos_menu.xml" value="0.271875" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/snap_big_menu.xml" value="0.2640625" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/menu/snaps_list_menu.xml" value="0.2640625" />
       </map>
     </option>
   </component>

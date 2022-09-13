@@ -2,6 +2,7 @@ package com.urrecliner.blackphoto;
 
 import static com.urrecliner.blackphoto.Vars.SPAN_COUNT;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
+import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.mContext;
 import static com.urrecliner.blackphoto.Vars.selectedJpgFolder;
 import static com.urrecliner.blackphoto.Vars.snapImageAdaptor;
@@ -10,7 +11,12 @@ import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -68,11 +74,46 @@ public class SnapSelectActivity extends AppCompatActivity {
         return true;
     }
 
+//    ImageView locButton;
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        mainMenu = menu;
+//        getMenuInflater().inflate(R.menu.snaps_list_menu, menu);
+//        locButton = (ImageView) menu.findItem(R.id.action_sending).getActionView();
+//        if (locButton != null) {
+////            locButton.setImageResource(R.mipmap.airplane_black);
+////            locButton.setScaleX(IMAGE_SCALE);
+////            locButton.setScaleY(IMAGE_SCALE);
+//            locButton.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    locButton.setImageResource(R.mipmap.airplane_red);
+//                    Animation rotation = AnimationUtils.loadAnimation(mActivity, R.anim.flight_ani);
+//                    rotation.setRepeatCount(3);
+//                    view.startAnimation(rotation);
+//
+//                    for (int i = 0; i < snapEntities.size(); i++) {
+//                        SnapEntity snapEntity = snapEntities.get(i);
+//                        if (snapEntity.isChecked) {
+//                            File dest = new File(selectedJpgFolder, snapEntity.photoName);
+//                            try {
+//                                Files.copy(new File(snapEntity.fullFolder, snapEntity.photoName).toPath(), dest.toPath());
+//                                utils.showToast(snapEntity.photoName + " copied");
+//                            } catch (IOException e) {
+////            e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//                }
+//            });
+//        }
+//        return true;
+//    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.action_sending) {
-            item.setIcon(ContextCompat.getDrawable(mContext, R.mipmap.airplane_red_black));
             for (int i = 0; i < snapEntities.size(); i++) {
                 SnapEntity snapEntity = snapEntities.get(i);
                 if (snapEntity.isChecked) {
