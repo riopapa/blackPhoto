@@ -9,6 +9,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_back.xml" value="0.198" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_confirm.xml" value="0.1985" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_folder.xml" value="0.198" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_thumb.xml" value="0.28802083333333334" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_track.xml" value="0.28802083333333334" />
@@ -18,6 +19,7 @@
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_snap_big.xml" value="0.20516304347826086" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_snaps.xml" value="0.2630208333333333" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_snaps_list.xml" value="0.1585144927536232" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/clear_all_events.xml" value="0.1598731884057971" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/event_folder_line.xml" value="0.12639311043566362" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/folders_item.xml" value="0.12639311043566362" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/photos_item.xml" value="0.271875" />

@@ -28,6 +28,8 @@ import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -97,41 +99,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == R.id.erase) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Old Events");
-            builder.setMessage("Delete Old Event Files?");
-            builder.setPositiveButton("Yes",
-                    (dialog, which) -> {
-                        File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().endsWith("mp4")));
-                        if (mp4Files != null && mp4Files.length > 0) {
-                            for (File mp4: mp4Files) {
-                                mp4.delete();
-                            }
-                            utils.showToast( mp4Files.length+" event mp4 deleted ");
-                        }
-                        File[] jpgFolders = jpgFullFolder.listFiles();
-                        if (jpgFolders != null && jpgFolders.length > 0) {
-                            for (File fJpg: jpgFolders) {
-                                utils.deleteFolder(fJpg);
-                                snapDao.deleteFolder(fJpg.toString());
-                            }
-                            utils.showToast( " image folders folder cleared");
-                        }
-                        File[] jpgFiles = selectedJpgFolder.listFiles();
-                        if (jpgFiles != null && jpgFiles.length > 0) {
-                            for (File jpgFile: jpgFiles) {
-                                jpgFile.delete();
-                            }
-                            utils.showToast( jpgFiles.length+" selected Jpgs deleted ");
-                        }
-                        finish();
-                    });
-            builder.setNegativeButton("No, not Now",
-                    (dialog, which) -> finish());
-            AlertDialog dialog = builder.create();
-            dialog.show();
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setAllCaps(false);
-            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setAllCaps(false);
+            confirm_delete();
         } else if (item.getItemId() == R.id.blackBox) {
             Intent sendIntent = getPackageManager().getLaunchIntentForPackage("com.urrecliner.blackbox");
             assert sendIntent != null;
@@ -141,6 +109,46 @@ public class MainActivity extends AppCompatActivity {
             System.exit(0);
         }
         return false;
+    }
+
+    public void confirm_delete() {
+        View dialogView = getLayoutInflater().inflate(R.layout.confirm_delete, null);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(dialogView.getContext());
+        builder.setView(dialogView);
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        Button ok_btn = dialogView.findViewById(R.id.ok_btn);
+        ok_btn.setOnClickListener(v -> {
+            File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().endsWith("mp4")));
+            if (mp4Files != null && mp4Files.length > 0) {
+                for (File mp4: mp4Files) {
+                    mp4.delete();
+                }
+                utils.showToast( mp4Files.length+" event mp4 deleted ");
+            }
+            File[] jpgFolders = jpgFullFolder.listFiles();
+            if (jpgFolders != null && jpgFolders.length > 0) {
+                for (File fJpg: jpgFolders) {
+                    utils.deleteFolder(fJpg);
+                    snapDao.deleteFolder(fJpg.toString());
+                }
+                utils.showToast( " image folders folder cleared");
+            }
+            File[] jpgFiles = selectedJpgFolder.listFiles();
+            if (jpgFiles != null && jpgFiles.length > 0) {
+                for (File jpgFile: jpgFiles) {
+                    jpgFile.delete();
+                }
+                utils.showToast( jpgFiles.length+" selected Jpgs deleted ");
+            }
+            alertDialog.dismiss();
+        });
+
+        Button cancle_btn = dialogView.findViewById(R.id.cancle_btn);
+        cancle_btn.setOnClickListener(v -> alertDialog.dismiss());
     }
 
     // ↓ ↓ ↓ P E R M I S S I O N   RELATED /////// ↓ ↓ ↓ ↓  BEST CASE 20/09/27 with no lambda
