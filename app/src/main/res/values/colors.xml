@@ -3,6 +3,6 @@
     <color name="colorPrimary">#6361bf</color>
     <color name="xorColor">#ccCAD8AA</color>
     <color name="folderDone">#CCA3E312</color>
-    <color name="folderMake">#CC57BEE6</color>
-
+    <color name="folderMake">#CC910E56</color>
+    <color name="backFolder">#FFFF5266</color>
 </resources>

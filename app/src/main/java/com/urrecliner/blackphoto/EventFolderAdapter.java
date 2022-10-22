@@ -115,6 +115,8 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
             if (snapHead == null) {
                 snapHead = new SnapEntity(folderName, header, "");
                 Bitmap merged6Bitmap = make6PhotoBitmap(folderName, photoList);
+                if (merged6Bitmap == null)
+                    return;
                 snapHead.sumNailMap = BuildDB.bitMapToString(merged6Bitmap);
                 snapDao.insert(snapHead);
                 eventFolderBitmaps.set(position,merged6Bitmap);
@@ -128,9 +130,13 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
 
     private Bitmap make6PhotoBitmap(String folderName, String[] photoList) {
         int photoSize = photoList.length;
-        if (photoSize < 30) {
-            return BitmapFactory.decodeFile(folderName + "/" + photoList[1]).copy(Bitmap.Config.RGB_565, false);
-        }
+        if (photoSize < 30)
+            return null;
+//            if (photoSize > 1)
+//                return BitmapFactory.decodeFile(folderName + "/" + photoList[1]).copy(Bitmap.Config.RGB_565, false);
+//            else
+//                return BitmapFactory.decodeResource(mActivity.getResources(),R.mipmap.black_photo);
+//        }
         Bitmap bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *2/12]).copy(Bitmap.Config.RGB_565, false);
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);

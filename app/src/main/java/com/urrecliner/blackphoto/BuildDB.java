@@ -13,10 +13,12 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicInteger;
 
 class BuildDB {
 
@@ -50,20 +52,35 @@ class BuildDB {
                 String thisEventString = thisEventFolder.toString();
                 File[] fullFileList = thisEventFolder.listFiles((dir, name) ->
                         (name.endsWith("jpg")));
-                if (fullFileList == null) {
-                    utils.showToast( "No photos in " + thisEventFolder.getName());
+                ProgressBar pb = mActivity.findViewById(R.id.progress);
+                if (fullFileList == null || fullFileList.length < 30) {
+                    continue;
+//                    utils.showToast( "No photos in " + thisEventFolder.getName());
                 } else {
                     Arrays.sort(fullFileList);
                     File lastF = fullFileList[fullFileList.length-1];
                     String snapName = lastF.getName();
                     SnapEntity snapOut = snapDao.getByPhotoName(thisEventString, snapName);
                     if (snapOut == null) {
+                        final int nbrPhotos = fullFileList.length;
+                        final String abTitle = "Black Photo ("+(evCnt+1)+"/"+eventFolderFiles.size()+")";
+                        final String lastFName = thisEventFolder.getName();
+                        mActivity.runOnUiThread(() -> {
+                            actionBar.setTitle(abTitle);
+                        });
+                        int cnt = 0;
+                        pb.setMax(nbrPhotos);
+                        pb.setProgress(0);
+                        actionBar.setSubtitle(lastFName+", "+nbrPhotos);
                         for (File f : fullFileList) {
+                            cnt++;
                             snapName = f.getName();
                             snapOut = snapDao.getByPhotoName(thisEventString, snapName);
                             if (snapOut == null) {
                                 createSnapImage(thisEventFolder.toString(), f);
                             }
+                            if (cnt%3 == 0)
+                                pb.setProgress(cnt);
                         }
                     }
                 }
@@ -71,8 +88,9 @@ class BuildDB {
                 int finalEvCnt = evCnt;
                 mActivity.runOnUiThread(() -> {
                     eventFolderAdapter.notifyItemChanged(finalEvCnt);
-                    String s = ((finalEvCnt+1) == eventFolderFiles.size()) ? "All "+(finalEvCnt+1)+" Done"
+                    String s = ((finalEvCnt+1) == eventFolderFiles.size()) ? "All "+(finalEvCnt+1)+"  Folders Done"
                             : (finalEvCnt+1) + " / " + eventFolderFiles.size();
+                    actionBar.setTitle("Black Photo DB ready");
                     actionBar.setSubtitle(s);
                 });
             }

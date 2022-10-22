@@ -11,6 +11,7 @@
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_back.xml" value="0.198" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_confirm.xml" value="0.1985" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/border_folder.xml" value="0.198" />
+        <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/confirm_delete.xml" value="0.1275" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_thumb.xml" value="0.28802083333333334" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/drawable/scrollbar_vertical_track.xml" value="0.28802083333333334" />
         <entry key="..\:/@ANDROID/BlackPhoto/app/src/main/res/layout/activity_main.xml" value="0.13221884498480244" />

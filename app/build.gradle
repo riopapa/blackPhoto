@@ -48,7 +48,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    annotationProcessor 'androidx.room:room-compiler:2.4.2' // room db related , compileSDK should be 31
-    implementation 'androidx.room:room-runtime:2.4.2'
+    annotationProcessor 'androidx.room:room-compiler:2.4.3' // room db related , compileSDK should be 31
+    implementation 'androidx.room:room-runtime:2.4.3'
 
 }

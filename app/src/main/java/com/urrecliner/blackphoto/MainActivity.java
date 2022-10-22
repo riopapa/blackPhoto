@@ -64,11 +64,11 @@ public class MainActivity extends AppCompatActivity {
         eventFolderFiles = new ArrayList<>();
         eventFolderFiles.addAll(Arrays.asList(eventFolderList));
         eventFolderBitmaps = new ArrayList<>();
-        for (int i = 0; i < eventFolderFiles.size(); i++)
-            eventFolderBitmaps.add(null);
         eventFolderFlag = new ArrayList<>();
-        for (int i = 0; i < eventFolderFiles.size(); i++)
+        for (int i = 0; i < eventFolderFiles.size(); i++) {
+            eventFolderBitmaps.add(null);
             eventFolderFlag.add(false);
+        }
 
         snapDB = Room.databaseBuilder(getApplicationContext(), SnapDataBase.class, "snapEntity-db")
                 .fallbackToDestructiveMigration()   // schema changeable
@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button ok_btn = dialogView.findViewById(R.id.ok_btn);
         ok_btn.setOnClickListener(v -> {
+            alertDialog.dismiss();
+
             File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().endsWith("mp4")));
             if (mp4Files != null && mp4Files.length > 0) {
                 for (File mp4: mp4Files) {
@@ -144,7 +146,9 @@ public class MainActivity extends AppCompatActivity {
                 }
                 utils.showToast( jpgFiles.length+" selected Jpgs deleted ");
             }
-            alertDialog.dismiss();
+            finish();
+            System.exit(0);
+            android.os.Process.killProcess(android.os.Process.myPid());
         });
 
         Button cancle_btn = dialogView.findViewById(R.id.cancle_btn);
