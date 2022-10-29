@@ -8,17 +8,16 @@ import static com.urrecliner.blackphoto.Vars.snapDao;
 import static com.urrecliner.blackphoto.Vars.utils;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.exifinterface.media.ExifInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.view.View;
-import android.widget.ProgressBar;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicInteger;
 
 class BuildDB {
 
@@ -36,7 +35,7 @@ class BuildDB {
         }
     }
 
-    static class buildSumNailDB extends AsyncTask<String, String, String> {
+    class buildSumNailDB extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -52,7 +51,6 @@ class BuildDB {
                 String thisEventString = thisEventFolder.toString();
                 File[] fullFileList = thisEventFolder.listFiles((dir, name) ->
                         (name.endsWith("jpg")));
-                ProgressBar pb = mActivity.findViewById(R.id.progress);
                 if (fullFileList == null || fullFileList.length < 30) {
                     continue;
 //                    utils.showToast( "No photos in " + thisEventFolder.getName());
@@ -61,26 +59,18 @@ class BuildDB {
                     File lastF = fullFileList[fullFileList.length-1];
                     String snapName = lastF.getName();
                     SnapEntity snapOut = snapDao.getByPhotoName(thisEventString, snapName);
-                    if (snapOut == null) {
+                    if (snapOut == null) {  // this event folder not handled
                         final int nbrPhotos = fullFileList.length;
                         final String abTitle = "Black Photo ("+(evCnt+1)+"/"+eventFolderFiles.size()+")";
                         final String lastFName = thisEventFolder.getName();
-                        mActivity.runOnUiThread(() -> {
-                            actionBar.setTitle(abTitle);
-                        });
-                        int cnt = 0;
-                        pb.setMax(nbrPhotos);
-                        pb.setProgress(0);
+                        mActivity.runOnUiThread(() -> actionBar.setTitle(abTitle));
                         actionBar.setSubtitle(lastFName+", "+nbrPhotos);
                         for (File f : fullFileList) {
-                            cnt++;
                             snapName = f.getName();
                             snapOut = snapDao.getByPhotoName(thisEventString, snapName);
                             if (snapOut == null) {
                                 createSnapImage(thisEventFolder.toString(), f);
                             }
-                            if (cnt%3 == 0)
-                                pb.setProgress(cnt);
                         }
                     }
                 }
@@ -105,15 +95,31 @@ class BuildDB {
         }
     }
 
-    static void createSnapImage(String eventFolder, File f) {
+    static Bitmap bitmap = null;
+    static ExifInterface exif;
+    void createSnapImage(String eventFolder, File f) {
 
-        Bitmap bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
-        bitmap =  Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 5 / 40,
-                bitmap.getHeight() * 5 / 40, false);
+        Bitmap bitmap = buildThumNail(f);
         SnapEntity snapOut = new SnapEntity(eventFolder, f.getName(), bitMapToString(bitmap));
         snapDao.insert(snapOut);
     }
 
+    Bitmap buildThumNail (File f) {
+        try {
+            exif = new ExifInterface(f);
+            byte[] imageData=exif.getThumbnail();
+            if (imageData != null && imageData.length > 1) {
+                bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 20 / 40,
+                        bitmap.getHeight() * 20 / 40, false);
+            }
+        } catch (IOException e) {
+        }
+        if (bitmap == null) {
+            bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
+        }
+        return bitmap;
+    }
     static String bitMapToString(Bitmap bitmap){
         ByteArrayOutputStream bOut= new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG,40, bOut);

@@ -1,5 +1,6 @@
 package com.urrecliner.blackphoto;
 
+import static com.urrecliner.blackphoto.Vars.buildDB;
 import static com.urrecliner.blackphoto.Vars.currEventFolder;
 import static com.urrecliner.blackphoto.Vars.eventFolderAdapter;
 import static com.urrecliner.blackphoto.Vars.eventFolderBitmaps;
@@ -137,29 +138,37 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
 //            else
 //                return BitmapFactory.decodeResource(mActivity.getResources(),R.mipmap.black_photo);
 //        }
-        Bitmap bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *2/12]).copy(Bitmap.Config.RGB_565, false);
+        Bitmap bitmap = null;
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);
         Paint paint = new Paint();
         paint.setColor(mActivity.getColor(R.color.folderDone));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+                        new File(folderName + "/" + photoList[photoSize *2/12])),
+                        width, height, false);
         canvas.drawBitmap(bitmap, dWidth, dHeight, null);    // x--
-        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *4/12]).copy(Bitmap.Config.RGB_565, false);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+                        new File(folderName + "/" + photoList[photoSize *4/12])),
+                width, height, false);
         canvas.drawBitmap(bitmap, width+dWidth*2, dHeight*2, null);   // -x-
-        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize*6/12]).copy(Bitmap.Config.RGB_565, false);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+                        new File(folderName + "/" + photoList[photoSize *6/12])),
+                width, height, false);
         canvas.drawBitmap(bitmap, width*2+dWidth*3, dHeight*3, null);  // --x
-        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize*7/12]).copy(Bitmap.Config.RGB_565, false);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+                        new File(folderName + "/" + photoList[photoSize *7/12])),
+                width, height, false);
         canvas.drawBitmap(bitmap, dWidth+dWidth, height+dHeight*2, null);    // y--
-        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize*8/12]).copy(Bitmap.Config.RGB_565, false);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+                        new File(folderName + "/" + photoList[photoSize *8/12])),
+                width, height, false);
         canvas.drawBitmap(bitmap, width+dWidth*3, height+dHeight*3, null);  // -y-
-        bitmap = BitmapFactory.decodeFile(folderName + "/" + photoList[photoSize *10/12]).copy(Bitmap.Config.RGB_565, false);
-        bitmap = Bitmap.createScaledBitmap(bitmap, width, height, false);
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+                        new File(folderName + "/" + photoList[photoSize *10/12])),
+                width, height, false);
         canvas.drawBitmap(bitmap, width*2+dWidth*4, height+dHeight*4, null);  // --y
         return mergedBitmap;
     }

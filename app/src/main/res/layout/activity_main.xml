@@ -7,17 +7,9 @@
     android:id="@+id/main_layout"
     tools:context=".MainActivity">
 
-    <ProgressBar
-        android:id="@+id/progress"
-        style="@android:style/Widget.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:progress="0" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/eventView"
         style="@style/up_down_scroll_folder"
-        android:layout_below="@id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="4dp"
