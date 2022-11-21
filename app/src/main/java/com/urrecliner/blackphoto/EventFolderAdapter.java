@@ -15,7 +15,6 @@ import static com.urrecliner.blackphoto.Vars.utils;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.view.LayoutInflater;
@@ -146,27 +145,27 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
 
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *2/12])),
                         width, height, false);
         canvas.drawBitmap(bitmap, dWidth, dHeight, null);    // x--
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *4/12])),
                 width, height, false);
         canvas.drawBitmap(bitmap, width+dWidth*2, dHeight*2, null);   // -x-
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *6/12])),
                 width, height, false);
         canvas.drawBitmap(bitmap, width*2+dWidth*3, dHeight*3, null);  // --x
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *7/12])),
                 width, height, false);
         canvas.drawBitmap(bitmap, dWidth+dWidth, height+dHeight*2, null);    // y--
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *8/12])),
                 width, height, false);
         canvas.drawBitmap(bitmap, width+dWidth*3, height+dHeight*3, null);  // -y-
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumNail(
+        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *10/12])),
                 width, height, false);
         canvas.drawBitmap(bitmap, width*2+dWidth*4, height+dHeight*4, null);  // --y

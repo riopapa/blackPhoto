@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -99,23 +100,30 @@ class BuildDB {
     static ExifInterface exif;
     void createSnapImage(String eventFolder, File f) {
 
-        Bitmap bitmap = buildThumNail(f);
+        Bitmap bitmap = buildThumbNail(f);
         SnapEntity snapOut = new SnapEntity(eventFolder, f.getName(), bitMapToString(bitmap));
         snapDao.insert(snapOut);
     }
 
-    Bitmap buildThumNail (File f) {
+    Bitmap buildThumbNail(File f) {
         try {
             exif = new ExifInterface(f);
             byte[] imageData=exif.getThumbnail();
             if (imageData != null && imageData.length > 1) {
+                Log.w("size "+imageData.length,f.toString());
                 bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
                 bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 20 / 40,
                         bitmap.getHeight() * 20 / 40, false);
+            } else {
+                Log.e("Size error ", f.toString());
+                bitmap = null;
             }
         } catch (IOException e) {
+            bitmap = null;
+            Log.e("IOException", f.toString()+", "+e);
         }
         if (bitmap == null) {
+            Log.w("buildThumBNail", f.toString()+" image");
             bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
         }
         return bitmap;

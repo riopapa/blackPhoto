@@ -125,28 +125,29 @@ public class MainActivity extends AppCompatActivity {
             alertDialog.dismiss();
 
             File[] mp4Files = eventMP4Folder.listFiles(file -> (file.getPath().endsWith("mp4")));
+            String fNames = "";
             if (mp4Files != null && mp4Files.length > 0) {
                 for (File mp4: mp4Files) {
                     mp4.delete();
+                    fNames += mp4.getName()+", ";
                 }
-                utils.showToast( mp4Files.length+" event mp4 deleted ");
+                Toast.makeText(mContext, fNames+ " files deleted ", Toast.LENGTH_SHORT).show();
             }
             File[] jpgFolders = jpgFullFolder.listFiles();
             if (jpgFolders != null && jpgFolders.length > 0) {
                 for (File fJpg: jpgFolders) {
                     utils.deleteFolder(fJpg);
                     snapDao.deleteFolder(fJpg.toString());
+                    Toast.makeText(mContext, fJpg.getName()+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
                 }
-                utils.showToast( " image folders folder cleared");
             }
             File[] jpgFiles = selectedJpgFolder.listFiles();
             if (jpgFiles != null && jpgFiles.length > 0) {
                 for (File jpgFile: jpgFiles) {
                     jpgFile.delete();
                 }
-                utils.showToast( jpgFiles.length+" selected Jpgs deleted ");
+                Toast.makeText(mContext, jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
             }
-            finish();
             System.exit(0);
             android.os.Process.killProcess(android.os.Process.myPid());
         });
