@@ -47,7 +47,7 @@ class Utils {
         BufferedWriter bw = null;
         FileWriter fw = null;
         try {
-            String PREFIX = "log_";
+            String PREFIX = "logPhoto_";
             File file = new File(logFullFolder, PREFIX + sdfDate.format(new Date())+".txt");
             if (!file.exists()) {
                 if (!file.createNewFile()) {

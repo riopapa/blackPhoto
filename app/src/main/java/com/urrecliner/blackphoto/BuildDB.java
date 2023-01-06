@@ -64,8 +64,13 @@ class BuildDB {
                         final int nbrPhotos = fullFileList.length;
                         final String abTitle = "Black Photo ("+(evCnt+1)+"/"+eventFolderFiles.size()+")";
                         final String lastFName = thisEventFolder.getName();
-                        mActivity.runOnUiThread(() -> actionBar.setTitle(abTitle));
-                        actionBar.setSubtitle(lastFName+", "+nbrPhotos);
+                        mActivity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                actionBar.setTitle(abTitle);
+                                actionBar.setSubtitle(lastFName+", "+nbrPhotos);
+                            }
+                        });
                         for (File f : fullFileList) {
                             snapName = f.getName();
                             snapOut = snapDao.getByPhotoName(thisEventString, snapName);
@@ -106,25 +111,24 @@ class BuildDB {
     }
 
     Bitmap buildThumbNail(File f) {
+
         try {
             exif = new ExifInterface(f);
             byte[] imageData=exif.getThumbnail();
             if (imageData != null && imageData.length > 1) {
-                Log.w("size "+imageData.length,f.toString());
+//                Log.w("size "+imageData.length,f.toString());
                 bitmap = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
                 bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() * 20 / 40,
                         bitmap.getHeight() * 20 / 40, false);
             } else {
-                Log.e("Size error ", f.toString());
-                bitmap = null;
+                bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
             }
         } catch (IOException e) {
             bitmap = null;
-            Log.e("IOException", f.toString()+", "+e);
         }
         if (bitmap == null) {
-            Log.w("buildThumBNail", f.toString()+" image");
-            bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
+            Log.e("blackPhoto ", f + " image");
+            utils.log("blackPhoto", " buildThumbNail  error " + f);
         }
         return bitmap;
     }

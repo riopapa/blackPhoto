@@ -23,15 +23,13 @@ import androidx.core.content.ContextCompat;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class SnapBigViewActivity extends AppCompatActivity {
 
     SnapEntity sna;
-    TextView tvPhotoName;
+    TextView tvPhotoName1, tvPhotoName2;
     ImageView ivPhoto, ivCheck;
 
     @Override
@@ -39,7 +37,8 @@ public class SnapBigViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snap_big);
 
-        tvPhotoName = findViewById(R.id.photoName);
+        tvPhotoName1 = findViewById(R.id.photoName1);
+        tvPhotoName2 = findViewById(R.id.photoName2);
         ivPhoto = findViewById(R.id.photoImage);
         ivCheck = findViewById(R.id.checkState);
         showBigImage();
@@ -67,7 +66,8 @@ public class SnapBigViewActivity extends AppCompatActivity {
 
     private void showBigImage() {
         sna = snapEntities.get(nowPos);
-        tvPhotoName.setText(sna.photoName);
+        tvPhotoName1.setText(sna.photoName);
+        tvPhotoName2.setText(sna.photoName);
         Matrix matrix = new Matrix();
         matrix.postRotate(90);
         Bitmap bitmap = BitmapFactory.decodeFile(new File(sna.fullFolder, sna.photoName).getAbsolutePath());
@@ -76,7 +76,7 @@ public class SnapBigViewActivity extends AppCompatActivity {
         PhotoViewAttacher pA;       // to enable zoom
         pA = new PhotoViewAttacher(ivPhoto);
         pA.update();
-        ivCheck.setImageResource((sna.isChecked ? R.mipmap.checked:R.mipmap.unchecked));
+        ivCheck.setImageResource((sna.isChecked ? R.drawable.checked:R.drawable.unchecked));
     }
 
     @Override
@@ -99,11 +99,6 @@ public class SnapBigViewActivity extends AppCompatActivity {
             } catch (IOException e) {
     //            e.printStackTrace();
             }
-            new Timer().schedule(new TimerTask() {
-                public void run() {
-                    runOnUiThread(() -> item.setIcon(ContextCompat.getDrawable(mContext, R.mipmap.airplane_black)));
-                }
-            }, 2000);
 
             return true;
         }

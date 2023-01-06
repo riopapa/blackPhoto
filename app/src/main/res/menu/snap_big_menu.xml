@@ -8,7 +8,6 @@
         android:orderInCategory="100"
         android:title="@string/setting"
         android:icon="@mipmap/airplane_black"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.ImageView" />
+        app:showAsAction="always" />
 
 </menu>
