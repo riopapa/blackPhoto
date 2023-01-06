@@ -64,7 +64,7 @@ public class SnapSelectActivity extends AppCompatActivity {
         snapImageAdaptor = new SnapImageAdaptor();
         photosView.setAdapter(snapImageAdaptor);
         title = currEventFolder.getName().substring(0, 18);
-        photosView.scrollToPosition(snapEntities.size()*45/100);
+        photosView.scrollToPosition(snapEntities.size()*41/100);
     }
 
     @Override
