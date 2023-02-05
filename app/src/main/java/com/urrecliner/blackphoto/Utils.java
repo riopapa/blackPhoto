@@ -28,8 +28,7 @@ class Utils {
     }
 
     private String traceName (String s) {
-        if (s.equals("performResume") || s.equals("performCreate") || s.equals("callActivityOnResume") || s.equals("access$1200")
-                || s.equals("access$000") || s.equals("handleReceiver") || s.equals("handleMessage") || s.equals("dispatchMessage"))
+        if (s.equals("performResume") || s.equals("performCreate") || s.equals("callActivityOnResume") || s.equals("access$1200") || s.equals("access$000") || s.equals("handleReceiver") || s.equals("handleMessage") || s.equals("dispatchMessage"))
             return "";
         else
             return s + "> ";
@@ -47,8 +46,8 @@ class Utils {
         BufferedWriter bw = null;
         FileWriter fw = null;
         try {
-            String PREFIX = "logPhoto_";
-            File file = new File(logFullFolder, PREFIX + sdfDate.format(new Date())+".txt");
+            String PREFIX = "log_";
+            File file = new File(logFullFolder, PREFIX + sdfDate.format(new Date())+"Photo.txt");
             if (!file.exists()) {
                 if (!file.createNewFile()) {
                     Log.w("createFile", " Error");

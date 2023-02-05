@@ -113,8 +113,6 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         if (sna2 != null && sna2.sumNailMap != null) {
             holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna2.sumNailMap));
         }
-//        if (sna.sumNailMap != null)
-//            holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna.sumNailMap));
     }
 
 }

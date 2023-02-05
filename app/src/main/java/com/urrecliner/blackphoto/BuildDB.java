@@ -124,12 +124,12 @@ class BuildDB {
                 bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
             }
         } catch (IOException e) {
-            bitmap = null;
+            bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
         }
-        if (bitmap == null) {
-            Log.e("blackPhoto ", f + " image");
-            utils.log("blackPhoto", " buildThumbNail  error " + f);
-        }
+//        if (bitmap == null) {
+//            Log.e("blackPhoto", f + " image");
+//            utils.log("blackPhoto", " buildThumbNail  error " + f);
+//        }
         return bitmap;
     }
     static String bitMapToString(Bitmap bitmap){
@@ -144,7 +144,7 @@ class BuildDB {
             byte [] encodeByte=Base64.decode(encodedString,Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
         } catch(Exception e) {
-            utils.log("utils", " StringToBitMap Error "+e);
+//            utils.log("utils", " StringToBitMap Error "+e);
             return null;
         }
     }
