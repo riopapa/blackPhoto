@@ -1,9 +1,9 @@
 
-# MarkUp Photo
+# Photo Tag
 
-With this application, you can create memory file with place, time stamp based on the file you selected
+With this application, you can create place, date time taged photo from native photo
 
-It retrieves GPS, date time stamp fro Exif  of photo and add them into photo into new photo file. It can save place and address information also.
+It retrieves exif info from your photo and ask you right POI places based on that GPS info.
 
 This application is useful if you want to memorize where you visited in photo
 
@@ -74,7 +74,7 @@ Run this program, and it shows all the photos in your Camera directory.
 - Making sumNails will be processed at the background with showing progress at the bottom
 
 
-## What I have learned with this app
+## What I have learned while developing this app
 
 - RecyclerView
 - Masking imageView
@@ -83,8 +83,7 @@ Run this program, and it shows all the photos in your Camera directory.
 
 ## Comments
 
-- Android SDK API 27 or above 
-- Signature png file is required
+- Android SDK API 30 or above 
 - secrete.xml should be provided by yourself for google maps api key
 ```
 <?xml version="1.0" encoding="utf-8"?>

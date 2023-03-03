@@ -328,8 +328,8 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="efa110" />
-                            <entry key="outputName" value="unchecked" />
+                            <entry key="color" value="ffffff" />
+                            <entry key="outputName" value="check_selected" />
                             <entry key="sourceFile" value="D:\@ANDROID\Markup Photo" />
                           </map>
                         </option>

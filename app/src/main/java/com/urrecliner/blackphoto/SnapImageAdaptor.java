@@ -12,9 +12,11 @@ import static com.urrecliner.blackphoto.Vars.spanWidth;
 import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -48,11 +50,22 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
             iVImage.setOnClickListener(view -> showBigPhoto());
 
             ivCheck = itemView.findViewById(R.id.checked);
-            ivCheck.setOnLongClickListener(view -> {
-                toggleCheckBox(getAbsoluteAdapterPosition());
-                return true;
+//            ivCheck.setOnLongClickListener(view -> {
+//                toggleCheckBox(getAbsoluteAdapterPosition());
+//                return true;
+//            });
+//            ivCheck.setOnClickListener(view -> showBigPhoto());
+
+            ivCheck.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ivCheck.setBackgroundResource(R.drawable.check_animation);
+                    AnimationDrawable animation = (AnimationDrawable) ivCheck.getBackground();
+                    toggleCheckBox(getAbsoluteAdapterPosition());
+                    animation.start();
+                }
             });
-            ivCheck.setOnClickListener(view -> showBigPhoto());
+
             ivSend = itemView.findViewById(R.id.send);
             ivSend.setOnClickListener(view -> {
 
@@ -97,7 +110,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
     @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.snap_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_snap_item, parent, false);
         return new ViewHolder(view);
     }
 
