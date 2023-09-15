@@ -12,6 +12,7 @@ import static com.urrecliner.blackphoto.Vars.spanWidth;
 import static com.urrecliner.blackphoto.Vars.utils;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,12 +120,13 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         SnapEntity sna = snapEntities.get(position);
         holder.ivCheck.setImageResource((sna.isChecked) ? R.mipmap.checked : R.mipmap.unchecked);
         holder.tvName.setText(sna.photoName);
-        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.iVImage.getLayoutParams();
-        params.width = spanWidth; params.height = spanWidth* 9 / 16;
-        holder.iVImage.setLayoutParams(params);
         SnapEntity sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
         if (sna2 != null && sna2.sumNailMap != null) {
-            holder.iVImage.setImageBitmap(buildDB.stringToBitMap(sna2.sumNailMap));
+            Bitmap bitmap = buildDB.stringToBitMap(sna2.sumNailMap);
+            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) holder.iVImage.getLayoutParams();
+            params.width = spanWidth; params.height = spanWidth * bitmap.getHeight() / bitmap.getWidth();
+            holder.iVImage.setLayoutParams(params);
+            holder.iVImage.setImageBitmap(bitmap);
         }
     }
 
