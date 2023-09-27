@@ -15,11 +15,11 @@
         app:layoutManager="GridLayoutManager"
         app:spanCount="2"
         android:choiceMode="singleChoice"
-        android:scrollbars="vertical"
         android:fadeScrollbars="false"
         style="@style/up_down_scroll_thumb"
         >
     </androidx.recyclerview.widget.RecyclerView>
 
 </RelativeLayout>
+<!--    android:scrollbars="vertical"-->
 <!--    style="@style/scrollbar_shape_photos"-->

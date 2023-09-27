@@ -70,15 +70,17 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
             ivSend = itemView.findViewById(R.id.send);
             ivSend.setOnClickListener(view -> {
 
-                ivSend.animate().scaleX(2.6f).scaleY(2.6f).setDuration(2500).withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-                        ivSend.setImageResource(R.mipmap.airplane_black);
-                        ivSend.setScaleX(1.5f);
-                        ivSend.setScaleY(1.5f);
-                        ivSend.setRotation(130f);
-                    }
-                }).start();
+                ivSend.animate().scaleX(2.6f).scaleY(2.6f)
+                            .setDuration(300)
+                            .withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivSend.setImageResource(R.mipmap.airplane_black);
+                                ivSend.setScaleX(1.5f);
+                                ivSend.setScaleY(1.5f);
+                                ivSend.setRotation(130f);
+                            }
+                    }).start();
 
                 SnapEntity snapEntity = snapEntities.get(getAbsoluteAdapterPosition());
                 File dest = new File (selectedJpgFolder, snapEntity.photoName);
