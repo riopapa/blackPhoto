@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(mContext, fNames+ " files deleted ", Toast.LENGTH_SHORT).show();
             }
             File[] jpgFolders = jpgFullFolder.listFiles();
-            if (jpgFolders != null && jpgFolders.length > 0) {
+            if (jpgFolders != null) {
                 for (File fJpg: jpgFolders) {
                     utils.deleteFolder(fJpg);
                     snapDao.deleteFolder(fJpg.toString());

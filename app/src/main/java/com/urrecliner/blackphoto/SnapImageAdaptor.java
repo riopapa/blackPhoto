@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -51,36 +52,18 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
             iVImage.setOnClickListener(view -> showBigPhoto());
 
             ivCheck = itemView.findViewById(R.id.checked);
-//            ivCheck.setOnLongClickListener(view -> {
-//                toggleCheckBox(getAbsoluteAdapterPosition());
-//                return true;
-//            });
-//            ivCheck.setOnClickListener(view -> showBigPhoto());
-
-            ivCheck.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ivCheck.setBackgroundResource(R.drawable.check_animation);
-                    AnimationDrawable animation = (AnimationDrawable) ivCheck.getBackground();
-                    toggleCheckBox(getAbsoluteAdapterPosition());
-                    animation.start();
-                }
+            ivCheck.setOnClickListener(v -> {
+                ivCheck.setBackgroundResource(R.drawable.check_animation);
+                AnimationDrawable animation = (AnimationDrawable) ivCheck.getBackground();
+                toggleCheckBox(getAbsoluteAdapterPosition());
+                animation.start();
             });
 
             ivSend = itemView.findViewById(R.id.send);
             ivSend.setOnClickListener(view -> {
-
-                ivSend.animate().scaleX(2.6f).scaleY(2.6f)
-                            .setDuration(300)
-                            .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivSend.setImageResource(R.mipmap.airplane_black);
-                                ivSend.setScaleX(1.5f);
-                                ivSend.setScaleY(1.5f);
-                                ivSend.setRotation(130f);
-                            }
-                    }).start();
+                ivSend.setImageResource(R.mipmap.airplane_black);
+                Animation rotation = AnimationUtils.loadAnimation(mContext, R.anim.flight_ani);
+                ivSend.startAnimation(rotation);
 
                 SnapEntity snapEntity = snapEntities.get(getAbsoluteAdapterPosition());
                 File dest = new File (selectedJpgFolder, snapEntity.photoName);

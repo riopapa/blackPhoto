@@ -5,16 +5,16 @@ import static com.urrecliner.blackphoto.Vars.eventFolderFiles;
 import static com.urrecliner.blackphoto.Vars.eventFolderFlag;
 import static com.urrecliner.blackphoto.Vars.mActivity;
 import static com.urrecliner.blackphoto.Vars.snapDao;
-import static com.urrecliner.blackphoto.Vars.utils;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.exifinterface.media.ExifInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.exifinterface.media.ExifInterface;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -64,12 +64,9 @@ class BuildDB {
                         final int nbrPhotos = fullFileList.length;
                         final String abTitle = "Black Photo ("+(evCnt+1)+"/"+eventFolderFiles.size()+")";
                         final String lastFName = thisEventFolder.getName();
-                        mActivity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                actionBar.setTitle(abTitle);
-                                actionBar.setSubtitle(lastFName+", "+nbrPhotos);
-                            }
+                        mActivity.runOnUiThread(() -> {
+                            actionBar.setTitle(abTitle);
+                            actionBar.setSubtitle(lastFName+", "+nbrPhotos);
                         });
                         for (File f : fullFileList) {
                             snapName = f.getName();
@@ -126,10 +123,6 @@ class BuildDB {
         } catch (IOException e) {
             bitmap = BitmapFactory.decodeFile(f.toString()).copy(Bitmap.Config.RGB_565, false);
         }
-//        if (bitmap == null) {
-//            Log.e("blackPhoto", f + " image");
-//            utils.log("blackPhoto", " buildThumbNail  error " + f);
-//        }
         return bitmap;
     }
     static String bitMapToString(Bitmap bitmap){

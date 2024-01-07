@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.List;
 
 public class Vars {
+
     static Context mContext;
     static Activity mActivity;
 

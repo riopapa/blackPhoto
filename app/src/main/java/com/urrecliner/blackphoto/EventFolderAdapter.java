@@ -137,7 +137,6 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
 //            else
 //                return BitmapFactory.decodeResource(mActivity.getResources(),R.mipmap.black_photo);
 //        }
-        Bitmap bitmap = null;
         Bitmap mergedBitmap = Bitmap.createBitmap(bigWidth, bigHeight, Bitmap.Config.RGB_565);
         Canvas canvas = new Canvas(mergedBitmap);
         Paint paint = new Paint();
@@ -145,7 +144,7 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         paint.setStyle(Paint.Style.FILL);
         canvas.drawPaint(paint);
 
-        bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
+        Bitmap bitmap = Bitmap.createScaledBitmap(buildDB.buildThumbNail(
                         new File(folderName + "/" + photoList[photoSize *2/12])),
                         width, height, false);
         canvas.drawBitmap(bitmap, dWidth, dHeight, null);    // x--

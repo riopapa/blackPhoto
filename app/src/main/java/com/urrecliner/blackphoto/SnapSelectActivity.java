@@ -37,7 +37,7 @@ public class SnapSelectActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snaps_list);
-        photosView = findViewById(R.id.sumNailView);
+        photosView = findViewById(R.id.snaps_view);
         StaggeredGridLayoutManager SGL = new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL);
 
         photosView.setLayoutManager(SGL);
