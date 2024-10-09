@@ -1,21 +1,29 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 31    /* version 30 makes error for room db */
+    compileSdk 34
+//    buildFeatures {
+//        buildConfig = true
+//    }
+
+    defaultConfig {
+        minSdkVersion 30
+        targetSdkVersion 33
+    }
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    defaultConfig {
-        applicationId "com.urrecliner.blackphoto"
-        minSdkVersion 29
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-    }
+//    defaultConfig {
+//        applicationId "com.urrecliner.blackphoto"
+//        minSdkVersion 29
+//        targetSdkVersion 30
+//        versionCode 1
+//        versionName "1.0"
+//        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+//    }
 
     buildTypes {
         release {
@@ -29,26 +37,26 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation "com.google.android.material:material:1.4.0"
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation "com.google.android.material:material:1.12.0"
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.exifinterface:exifinterface:1.3.3'
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
-//    implementation 'com.google.android.gms:play-services-auth:20.0.0'
-//    implementation 'com.google.android.gms:play-services-maps:18.0.1'
-//    implementation 'com.google.android.gms:play-services-location:19.0.0'
-    implementation 'com.google.android.gms:play-services-places:17.0.0'
-    implementation 'com.commit451:PhotoView:1.2.4'
-    implementation "androidx.preference:preference:1.2.0"
+    implementation 'androidx.exifinterface:exifinterface:1.3.7'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.android.gms:play-services-places:17.1.0'
+
+    implementation "androidx.preference:preference:1.2.1"
     implementation group: 'org.apache.commons', name: 'commons-io', version: '1.3.2'
+
+    implementation "com.github.chrisbanes:PhotoView:2.3.0"
+
     // Places library
 //    implementation 'com.google.android.libraries.places:places:2.5.0'
 
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 
-    annotationProcessor 'androidx.room:room-compiler:2.4.3' // room db related , compileSDK should be 31
-    implementation 'androidx.room:room-runtime:2.4.3'
+    annotationProcessor 'androidx.room:room-compiler:2.6.1' // room db related , compileSDK should be 31
+    implementation 'androidx.room:room-runtime:2.6.1'
 
 }

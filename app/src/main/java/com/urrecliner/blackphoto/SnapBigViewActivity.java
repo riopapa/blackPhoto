@@ -20,11 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-
-import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class SnapBigViewActivity extends AppCompatActivity {
 

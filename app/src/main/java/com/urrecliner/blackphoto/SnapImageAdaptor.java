@@ -14,6 +14,7 @@ import static com.urrecliner.blackphoto.Vars.utils;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.AnimationDrawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
@@ -41,6 +41,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
         ImageView iVImage, ivCheck, ivSend;
         TextView tvName;
+        SnapEntity sna;
 
         ViewHolder(final View itemView) {
             super(itemView);
@@ -61,22 +62,22 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
 
             ivSend = itemView.findViewById(R.id.send);
             ivSend.setOnClickListener(view -> {
-                ivSend.setImageResource(R.mipmap.airplane_black);
-                Animation rotation = AnimationUtils.loadAnimation(mContext, R.anim.flight_ani);
-                ivSend.startAnimation(rotation);
-
-                SnapEntity snapEntity = snapEntities.get(getAbsoluteAdapterPosition());
-                File dest = new File (selectedJpgFolder, snapEntity.photoName);
+                toggleSentBox(getAbsoluteAdapterPosition());
+                if (sna.isSent) {
+                    Animation rotation = AnimationUtils.loadAnimation(mContext, R.anim.flight_ani);
+                    ivSend.startAnimation(rotation);
+                }
+                File dest = new File (selectedJpgFolder, sna.photoName);
                 try {
-                    Files.copy(new File(snapEntity.fullFolder, snapEntity.photoName).toPath(), dest.toPath());
-                    utils.showToast( snapEntity.photoName+" copied");
-                } catch (IOException e) {}
+                    Files.copy(new File(sna.fullFolder, sna.photoName).toPath(), dest.toPath());
+                    utils.showToast( sna.photoName+" copied");
+                } catch (IOException e) {
+                    Log.e("Copy Error", "Copy Error "+e);
+                }
             });
 
             tvName = itemView.findViewById(R.id.photoName);
-            tvName.setOnClickListener(view -> {
-                toggleCheckBox(getAbsoluteAdapterPosition());
-            });
+            tvName.setOnClickListener(view -> toggleCheckBox(getAbsoluteAdapterPosition()));
             tvName.setOnLongClickListener(view -> {showBigPhoto(); return true;});
         }
 
@@ -87,14 +88,20 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         }
 
         private void toggleCheckBox(int position) {
-            SnapEntity s = snapEntities.get(position);
-            s.isChecked = !s.isChecked;
-            snapEntities.set(position, s);
-            snapImageAdaptor.notifyItemChanged(position, s);
+            sna = snapEntities.get(position);
+            sna.isChecked = !sna.isChecked;
+            snapEntities.set(position, sna);
+            snapImageAdaptor.notifyItemChanged(position, sna);
+        }
+
+        private void toggleSentBox(int position) {
+            sna = snapEntities.get(position);
+            sna.isSent = !sna.isSent;
+            snapEntities.set(position, sna);
+            snapImageAdaptor.notifyItemChanged(position, sna);
         }
     }
 
-    @NonNull
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_snap_item, parent, false);
         return new ViewHolder(view);
@@ -105,6 +112,8 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
         SnapEntity sna = snapEntities.get(position);
         holder.ivCheck.setImageResource((sna.isChecked) ? R.mipmap.checked : R.mipmap.unchecked);
         holder.tvName.setText(sna.photoName);
+        holder.ivSend.setImageResource((sna.isSent)? R.mipmap.airplane_black:R.mipmap.airplane_red);
+
         SnapEntity sna2 = snapDao.getByPhotoName(sna.fullFolder, sna.photoName);
         if (sna2 != null && sna2.sumNailMap != null) {
             Bitmap bitmap = buildDB.stringToBitMap(sna2.sumNailMap);
