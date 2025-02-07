@@ -46,7 +46,7 @@ public class SnapSelectActivity extends AppCompatActivity {
         String[] shortNames = currEventFolder.list((dir, name) ->
                 (name.endsWith("jpg")));
         if (shortNames == null) {
-            utils.showToast( "No photos in " + currEventFolder.getName());
+            utils.showToast(this, "No photos in " + currEventFolder.getName());
             return;
         }
         Arrays.sort(shortNames);
@@ -77,7 +77,7 @@ public class SnapSelectActivity extends AppCompatActivity {
                     File dest = new File (selectedJpgFolder, snapEntity.photoName);
                     try {
                         Files.copy(new File(snapEntity.fullFolder, snapEntity.photoName).toPath(), dest.toPath());
-                        utils.showToast( snapEntity.photoName+" copied");
+                        utils.showToast(this, snapEntity.photoName+" copied");
                     } catch (IOException e) {
 //            e.printStackTrace();
                     }

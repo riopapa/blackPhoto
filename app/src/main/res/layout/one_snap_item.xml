@@ -22,10 +22,10 @@
         <TextView
             android:id="@+id/photoName"
             android:layout_width="0dp"
-            android:layout_weight="10"
+            android:layout_weight="14"
             android:layout_height="match_parent"
             android:layout_marginStart="16sp"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textColor="#094355"
             />
         <ImageView

@@ -1,5 +1,6 @@
 package com.urrecliner.blackphoto;
 
+import android.app.Activity;
 import android.util.Log;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -79,10 +80,10 @@ class Utils {
         }
     }
 
-    void showToast(String text) {
-        Toast toast = Toast.makeText(mContext,text, Toast.LENGTH_LONG);
-        toast.setGravity(Gravity.CENTER_VERTICAL|Gravity.CENTER_HORIZONTAL,0,200);
-        toast.show();
+    void showToast(Activity activity, String text) {
+
+        CustomToast.showCustomToast(activity, text, R.drawable.checked);
+
     }
 
     void deleteFolder (File file) {

@@ -95,7 +95,7 @@ public class SnapBigViewActivity extends AppCompatActivity {
             File dest = new File (selectedJpgFolder, sna.photoName);
             try {
                 Files.copy(new File(sna.fullFolder, sna.photoName).toPath(), dest.toPath());
-                utils.showToast( sna.photoName+" copied");
+                utils.showToast(this, sna.photoName+" copied");
             } catch (IOException e) {
     //            e.printStackTrace();
             }

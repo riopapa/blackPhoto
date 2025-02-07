@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-
         eventFolderFiles = new ArrayList<>();
         eventFolderFiles.addAll(Arrays.asList(eventFolderList));
         eventFolderBitmaps = new ArrayList<>();
@@ -107,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
         utils.readyPackageFolder(selectedJpgFolder);
         buildDB = new BuildDB();
         buildDB.fillUp(findViewById(R.id.main_layout), actionBar);
+
     }
 
     @Override
@@ -152,14 +152,16 @@ public class MainActivity extends AppCompatActivity {
                     mp4.delete();
                     fNames += mp4.getName()+", ";
                 }
-                Toast.makeText(mContext, fNames+ " files deleted ", Toast.LENGTH_SHORT).show();
+                CustomToast.showCustomToast(mActivity, fNames+ " mp4 files deleted ", R.drawable.checked);
+//                Toast.makeText(mContext, fNames+ " files deleted ", Toast.LENGTH_SHORT).show();
             }
             File[] jpgFolders = jpgFullFolder.listFiles();
             if (jpgFolders != null) {
                 for (File fJpg: jpgFolders) {
                     utils.deleteFolder(fJpg);
                     snapDao.deleteFolder(fJpg.toString());
-                    Toast.makeText(mContext, fJpg.getName()+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
+                    CustomToast.showCustomToast(mActivity, fJpg.getName() + " mp4 files deleted ", R.drawable.checked);
+//                    Toast.makeText(mContext, fJpg.getName()+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
                 }
             }
             File[] jpgFiles = selectedJpgFolder.listFiles();
@@ -167,7 +169,8 @@ public class MainActivity extends AppCompatActivity {
                 for (File jpgFile: jpgFiles) {
                     jpgFile.delete();
                 }
-                Toast.makeText(mContext, jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
+                CustomToast.showCustomToast(mActivity, jpgFiles.length+" selected Jpgs deleted ", R.drawable.check_selected);
+//                Toast.makeText(mContext, jpgFiles.length+" selected Jpgs deleted ", Toast.LENGTH_SHORT).show();
             }
             System.exit(0);
             android.os.Process.killProcess(android.os.Process.myPid());

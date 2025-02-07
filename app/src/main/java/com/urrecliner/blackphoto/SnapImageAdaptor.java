@@ -70,7 +70,7 @@ public class SnapImageAdaptor extends RecyclerView.Adapter<SnapImageAdaptor.View
                 File dest = new File (selectedJpgFolder, sna.photoName);
                 try {
                     Files.copy(new File(sna.fullFolder, sna.photoName).toPath(), dest.toPath());
-                    utils.showToast( sna.photoName+" copied");
+                    utils.showToast(mActivity, sna.photoName+" copied");
                 } catch (IOException e) {
                     Log.e("Copy Error", "Copy Error "+e);
                 }
