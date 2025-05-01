@@ -41,8 +41,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -55,7 +57,13 @@ public class MainActivity extends AppCompatActivity {
         ActionBar actionBar = this.getSupportActionBar();
         askPermission();
         utils = new Utils();
-        File[] eventFolderList = jpgFullFolder.listFiles();
+//        File[] eventFolderList = jpgFullFolder.listFiles();
+        File[] eventFolderList = jpgFullFolder.listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.isDirectory();
+            }
+        });
 
 //        File[] eventFolderList = jpgFullFolder.listFiles(file -> (file.getPath().startsWith("V2"))); // V2022-02-03 ...
         if (eventFolderList == null) {
@@ -158,10 +166,11 @@ public class MainActivity extends AppCompatActivity {
             File[] jpgFolders = jpgFullFolder.listFiles();
             if (jpgFolders != null) {
                 for (File fJpg: jpgFolders) {
-                    utils.deleteFolder(fJpg);
-                    snapDao.deleteFolder(fJpg.toString());
-                    CustomToast.showCustomToast(mActivity, fJpg.getName() + " mp4 files deleted ", R.drawable.checked);
-//                    Toast.makeText(mContext, fJpg.getName()+" event mp4 deleted ", Toast.LENGTH_SHORT).show();
+                    if (fJpg.isDirectory()) {
+                        utils.deleteFolder(fJpg);
+                        snapDao.deleteFolder(fJpg.toString());
+//                        CustomToast.showCustomToast(mActivity, fJpg.getName() + " mp4 files deleted ", R.drawable.checked);
+                    }
                 }
             }
             File[] jpgFiles = selectedJpgFolder.listFiles();

@@ -106,7 +106,8 @@ public class EventFolderAdapter extends RecyclerView.Adapter<EventFolderAdapter.
         File oneEventFolder = eventFolderFiles.get(position);
         String folderName = oneEventFolder.toString();
         String [] photoList = oneEventFolder.list();
-        assert photoList != null;
+        if (photoList == null || photoList.length == 0)
+            return;
         String showName = folderName.substring(38, 56) + " / "+photoList.length;
         holder.tvEventTIme.setText(showName);
 
